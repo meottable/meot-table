@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>고객 후기 - 멋:테이블</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'Noto Sans KR', sans-serif;
+  background:#fafaf8;
+  color:#1A1510;
+  line-height:1.7;
+}
+
+/* 헤더 */
+.header {
+  background:#1A1510;
+  padding:24px 40px;
+  border-bottom:3px solid #C49A3C;
+}
+
+.header-content {
+  max-width:1400px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo {
+  font-family:'Noto Serif KR', serif;
+  font-size:28px;
+  font-weight:900;
+  color:#C49A3C;
+  text-decoration:none;
+}
+
+.nav {
+  display:flex;
+  gap:32px;
+}
+
+.nav a {
+  color:#fff;
+  text-decoration:none;
+  font-weight:500;
+  transition:color 0.3s;
+  font-size:15px;
+}
+
+.nav a:hover {
+  color:#C49A3C;
+}
+
+/* 히어로 */
+.hero {
+  background:linear-gradient(135deg, #2C2318 0%, #1A1510 100%);
+  padding:80px 40px;
+  text-align:center;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23C49A3C" opacity="0.1"/></svg>') repeat;
+  background-size:40px 40px;
+  opacity:0.3;
+}
+
+.hero-content {
+  position:relative;
+  z-index:1;
+  max-width:800px;
+  margin:0 auto;
+}
+
+.hero h1 {
+  font-family:'Noto Serif KR', serif;
+  font-size:48px;
+  font-weight:900;
+  margin-bottom:16px;
+  letter-spacing:-1px;
+}
+
+.hero p {
+  font-size:18px;
+  opacity:0.9;
+  font-weight:300;
+}
+
+.stats {
+  display:flex;
+  justify-content:center;
+  gap:60px;
+  margin-top:40px;
+}
+
+.stat {
+  text-align:center;
+}
+
+.stat-number {
+  font-family:'Noto Serif KR', serif;
+  font-size:36px;
+  font-weight:900;
+  color:#C49A3C;
+  display:block;
+  margin-bottom:8px;
+}
+
+.stat-label {
+  font-size:14px;
+  opacity:0.8;
+}
+
+/* 컨테이너 */
+.container {
+  max-width:1400px;
+  margin:0 auto;
+  padding:80px 40px;
+}
+
+/* 필터 */
+.filters {
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  margin-bottom:60px;
+  flex-wrap:wrap;
+}
+
+.filter-btn {
+  padding:12px 32px;
+  border:2px solid #e0e0e0;
+  background:white;
+  border-radius:50px;
+  cursor:pointer;
+  font-family:'Noto Sans KR', sans-serif;
+  font-weight:600;
+  font-size:15px;
+  color:#666;
+  transition:all 0.3s;
+}
+
+.filter-btn:hover {
+  border-color:#C49A3C;
+  color:#C49A3C;
+}
+
+.filter-btn.active {
+  background:#C49A3C;
+  border-color:#C49A3C;
+  color:white;
+}
+
+/* 후기 그리드 */
+.reviews-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(380px, 1fr));
+  gap:32px;
+  margin-bottom:60px;
+}
+
+.review-card {
+  background:white;
+  border-radius:20px;
+  padding:32px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.06);
+  transition:all 0.3s;
+  border:1px solid #f0f0f0;
+  position:relative;
+  overflow:hidden;
+}
+
+.review-card::before {
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:linear-gradient(90deg, #C49A3C, #8B6914);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s;
+}
+
+.review-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 8px 30px rgba(196,154,60,0.15);
+}
+
+.review-card:hover::before {
+  transform:scaleX(1);
+}
+
+.review-header {
+  display:flex;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.avatar {
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg, #C49A3C, #8B6914);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Noto Serif KR', serif;
+  font-size:24px;
+  font-weight:700;
+  color:white;
+  margin-right:16px;
+  flex-shrink:0;
+}
+
+.reviewer-info {
+  flex:1;
+}
+
+.reviewer-name {
+  font-weight:700;
+  font-size:17px;
+  margin-bottom:4px;
+  color:#1A1510;
+}
+
+.reviewer-meta {
+  font-size:13px;
+  color:#999;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.category-tag {
+  display:inline-block;
+  padding:4px 12px;
+  background:#fffbf0;
+  border:1px solid #C49A3C;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+  color:#8B6914;
+}
+
+.stars {
+  color:#C49A3C;
+  font-size:18px;
+  margin-bottom:16px;
+}
+
+.review-text {
+  font-size:15px;
+  line-height:1.8;
+  color:#444;
+  margin-bottom:20px;
+}
+
+.review-images {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:8px;
+  margin-bottom:16px;
+}
+
+.review-image {
+  aspect-ratio:1;
+  border-radius:12px;
+  background:linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  color:#999;
+  overflow:hidden;
+  position:relative;
+}
+
+.review-image::after {
+  content:'📷';
+  font-size:24px;
+  opacity:0.3;
+}
+
+.review-footer {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:16px;
+  border-top:1px solid #f0f0f0;
+}
+
+.like-btn {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 16px;
+  background:transparent;
+  border:1px solid #e0e0e0;
+  border-radius:20px;
+  cursor:pointer;
+  font-size:13px;
+  color:#666;
+  transition:all 0.3s;
+}
+
+.like-btn:hover {
+  background:#fffbf0;
+  border-color:#C49A3C;
+  color:#C49A3C;
+}
+
+.date {
+  font-size:13px;
+  color:#999;
+}
+
+/* 로딩 더보기 */
+.load-more {
+  text-align:center;
+  margin-top:60px;
+}
+
+.load-more-btn {
+  padding:16px 48px;
+  background:#1A1510;
+  color:white;
+  border:none;
+  border-radius:50px;
+  font-family:'Noto Sans KR', sans-serif;
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
+  transition:all 0.3s;
+}
+
+.load-more-btn:hover {
+  background:#C49A3C;
+  transform:translateY(-2px);
+  box-shadow:0 4px 20px rgba(196,154,60,0.3);
+}
+
+/* CTA */
+.cta-section {
+  background:linear-gradient(135deg, #1A1510, #2C2318);
+  padding:80px 40px;
+  text-align:center;
+  color:white;
+  margin-top:80px;
+}
+
+.cta-content {
+  max-width:700px;
+  margin:0 auto;
+}
+
+.cta-section h2 {
+  font-family:'Noto Serif KR', serif;
+  font-size:36px;
+  font-weight:900;
+  margin-bottom:20px;
+}
+
+.cta-section p {
+  font-size:18px;
+  margin-bottom:32px;
+  opacity:0.9;
+}
+
+.cta-buttons {
+  display:flex;
+  gap:16px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.cta-btn {
+  padding:16px 40px;
+  border-radius:50px;
+  text-decoration:none;
+  font-weight:700;
+  font-size:16px;
+  transition:all 0.3s;
+  display:inline-block;
+}
+
+.cta-btn.primary {
+  background:#C49A3C;
+  color:white;
+}
+
+.cta-btn.primary:hover {
+  background:#8B6914;
+  transform:translateY(-2px);
+}
+
+.cta-btn.secondary {
+  background:transparent;
+  border:2px solid white;
+  color:white;
+}
+
+.cta-btn.secondary:hover {
+  background:white;
+  color:#1A1510;
+}
+
+/* 푸터 */
+.footer {
+  background:#1A1510;
+  color:rgba(255,255,255,0.7);
+  padding:40px;
+  text-align:center;
+  font-size:14px;
+}
+
+@media (max-width:768px) {
+  .hero h1 { font-size:32px; }
+  .stats { flex-direction:column; gap:24px; }
+  .reviews-grid { grid-template-columns:1fr; }
+  .filters { justify-content:flex-start; }
+  .cta-section h2 { font-size:28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div class="header">
+  <div class="header-content">
+    <a href="index.html" class="logo">멋:테이블</a>
+    <nav class="nav">
+      <a href="index.html">홈</a>
+      <a href="reviews.html">고객후기</a>
+      <a href="https://open.kakao.com/o/sSdRDJpi" target="_blank">상담하기</a>
+    </nav>
+  </div>
+</div>
+
+<!-- 히어로 -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>고객들의 진짜 후기</h1>
+    <p>547개 매장이 선택한 이유를 확인하세요</p>
+    
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-number">547+</span>
+        <span class="stat-label">납품 실적</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">98%</span>
+        <span class="stat-label">재의뢰율</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">4.9</span>
+        <span class="stat-label">평균 평점</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 메인 컨텐츠 -->
+<div class="container">
+  
+  <!-- 필터 -->
+  <div class="filters">
+    <button class="filter-btn active">전체</button>
+    <button class="filter-btn">테이블</button>
+    <button class="filter-btn">의자</button>
+    <button class="filter-btn">SNS 마케팅</button>
+    <button class="filter-btn">공간 배치</button>
+  </div>
+
+  <!-- 후기 그리드 -->
+  <div class="reviews-grid">
+    
+    <!-- 후기 1 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">김</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">김민수</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>서울 강남</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        처음엔 가격 때문에 좀 고민했는데요, 막상 설치하고 나니까 완전 만족이에요! 손님들이 분위기 너무 좋다고 칭찬 엄청 해주시고, 테이블 질감도 진짜 고급스러워서 한 푼도 아깝지 않더라구요 ㅎㅎ 사장님 센스도 정말 좋으시고!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>24</strong></button>
+        <span class="date">2026.05.10</span>
+      </div>
+    </div>
+
+    <!-- 후기 2 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">박</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">박지영</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>부산 해운대</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        SNS 마케팅 서비스 진짜 대박이에요!! 인스타 팔로워가 한 달 만에 500명에서 3200명으로 늘었고요, 실제로 "인스타 보고 왔어요~"라는 손님들이 엄청 많아졌어요 ㅠㅠ 매출도 체감될 정도로 올랐어요 👍
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>38</strong></button>
+        <span class="date">2026.05.08</span>
+      </div>
+    </div>
+
+    <!-- 후기 3 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">이</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">이준호</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>대구 중구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        일식집 오픈하면서 테이블 20개 주문했는데요 퀄리티 진짜 좋아요! 원목 질감도 살아있고, 벌써 6개월 지났는데도 흠집이나 변형 하나도 없네요~ 배송도 빠르시고 AS도 확실하셔서 믿고 쓸 수 있어요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>19</strong></button>
+        <span class="date">2026.05.05</span>
+      </div>
+    </div>
+
+    <!-- 후기 4 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">최</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">최은지</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>인천 송도</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        카페 오픈하면서 공간 배치 컨설팅 받았어요~ 완전 만족이에요! 좁은 공간인데도 테이블 배치를 정말 잘 해주셔서 손님 회전율도 좋아지고 동선도 훨씬 편해졌어요 ㅎㅎ 인테리어 비용도 아끼면서 퀄리티 높은 공간 완성했어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>31</strong></button>
+        <span class="date">2026.05.03</span>
+      </div>
+    </div>
+
+    <!-- 후기 5 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">정</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">정우성</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자+SNS</span>
+            <span>서울 홍대</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        통합 패키지로 주문했는데 가성비 최고예요!! 테이블/의자 퀄리티도 좋고, SNS 마케팅도 확실히 효과 있고, 공간 배치도 전문가답게 딱딱 잘 해주셨어요 ㅎㅎ 오픈 3개월 만에 매출 목표 달성했습니다! 완전 강추해요 👏
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>52</strong></button>
+        <span class="date">2026.04.28</span>
+      </div>
+    </div>
+
+    <!-- 후기 6 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">강</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">강혜진</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>경기 수원</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        의자 디자인이 진짜 예뻐요!! 손님들이 앉아보시고 편하다고 칭찬 엄청 많이 하시고요, 인스타 감성도 완전 살아있어서 사진 찍으시는 분들도 많아요~ 내구성도 좋아서 재구매 의향 백퍼입니다!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>27</strong></button>
+        <span class="date">2026.04.25</span>
+      </div>
+    </div>
+
+    <!-- 후기 7 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">윤</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">윤서준</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>광주 서구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★☆</div>
+      <div class="review-text">
+        전체적으로 만족해요~ 배송이 생각보다 일주일 정도 늦어져서 별 하나 뺐지만, 제품 자체는 정말 훌륭하더라구요! 사장님도 친절하시고 AS도 빠르게 해주셔서 좋았어요 ㅎㅎ 다음에도 이용할 것 같아요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>15</strong></button>
+        <span class="date">2026.04.20</span>
+      </div>
+    </div>
+
+    <!-- 후기 8 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">조</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">조민아</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>서울 강서</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        SNS 잘 모르는 제가 혼자서는 절대 못했을 거예요 ㅠㅠ 인스타 콘텐츠 기획부터 촬영 가이드, 해시태그까지 다 알려주셔서 이제는 혼자서도 할 수 있어요! 실제로 매출도 30% 정도 올랐습니다 🔥
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>44</strong></button>
+        <span class="date">2026.04.15</span>
+      </div>
+    </div>
+
+    <!-- 후기 9 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">한</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">한지우</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>대전 유성구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        레스토랑 리뉴얼하면서 테이블/의자 전부 교체했는데요 분위기가 완전 달라졌어요! 고급스러우면서도 모던한 느낌이 딱 제가 원하던 거였어요 ㅎㅎ 직원들도 너무 좋아하고 손님들 반응도 완전 좋아요 👍
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>36</strong></button>
+        <span class="date">2026.04.10</span>
+      </div>
+    </div>
+
+    <!-- 후기 10 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">서</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">서유진</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>울산 남구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        브런치 카페 오픈하면서 주문했어요~ 테이블 색상이랑 디자인이 완전 제 스타일이에요! 손님들이 "여기 인테리어 어디서 했어요?"라고 자주 물어보세요 ㅎㅎ 가격도 합리적이고 정말 만족스러워요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>21</strong></button>
+        <span class="date">2026.04.05</span>
+      </div>
+    </div>
+
+    <!-- 후기 11 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">오</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">오수현</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>서울 마포</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        의자 30개 주문했는데요 하나하나 퀄리티 체크 다 되어있더라구요! 앉았을 때 편안하면서도 디자인이 예뻐서 손님들이 오래 앉아계시는 것 같아요 ㅎㅎ 회전율은 좀 떨어졌지만 재방문율은 엄청 올랐어요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>18</strong></button>
+        <span class="date">2026.04.01</span>
+      </div>
+    </div>
+
+    <!-- 후기 12 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">임</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">임채원</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>경기 고양</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        작은 카페라 고민이 많았는데요, 공간 활용 컨설팅 받고 나니까 테이블 6개에서 10개로 늘릴 수 있었어요! 손님들도 "생각보다 넓네요~"라고 하시고 ㅎㅎ 정말 감사합니다!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>29</strong></button>
+        <span class="date">2026.03.28</span>
+      </div>
+    </div>
+
+    <!-- 후기 13 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">장</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">장민석</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>부산 해운대</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        카페 운영한 지 1년 됐는데 손님이 안 늘어서 고민하다가 SNS 마케팅 신청했어요! 2개월 만에 인스타 팔로워 1만 명 넘었고요, 주말엔 웨이팅까지 생겼어요 ㅠㅠ 진작 할걸 그랬어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>47</strong></button>
+        <span class="date">2026.03.25</span>
+      </div>
+    </div>
+
+    <!-- 후기 14 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">배</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">배수지</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>제주 서귀포</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        제주도까지 배송비 걱정했는데 생각보다 합리적이었어요! 테이블이랑 의자 색상 조합도 제가 원하는 대로 딱 맞춰주셨고요 ㅎㅎ 오션뷰 카페라 인스타 사진 진짜 잘 나와요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>41</strong></button>
+        <span class="date">2026.03.20</span>
+      </div>
+    </div>
+
+    <!-- 후기 15 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">노</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">노현우</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>서울 용산</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        와인바 운영 중인데요, 테이블 높이랑 크기 커스텀 주문했어요! 딱 제가 원하는 대로 만들어주셔서 너무 감사해요 ㅎㅎ 와인잔 올려놓으면 분위기 진짜 죽여줘요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>16</strong></button>
+        <span class="date">2026.03.15</span>
+      </div>
+    </div>
+
+    <!-- 후기 16 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">유</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">유정민</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>경기 성남</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        의자 디자인 고민하다가 사장님한테 추천받았는데 완전 대박이에요! 손님들이 앉자마자 "의자 편하다~"고 하시고요 ㅎㅎ 오래 앉아계셔서 매출도 올라간 것 같아요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>23</strong></button>
+        <span class="date">2026.03.10</span>
+      </div>
+    </div>
+
+    <!-- 후기 17 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">송</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">송하늘</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>서울 강남</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        네일샵 운영하는데 SNS 마케팅 효과 진짜 좋아요! 릴스 조회수가 평균 5만 정도 나오고요, 실제로 예약도 2배 이상 늘었어요 ㅠㅠ 콘텐츠 기획도 너무 창의적이세요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>39</strong></button>
+        <span class="date">2026.03.05</span>
+      </div>
+    </div>
+
+    <!-- 후기 18 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">문</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">문지훈</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>인천 부평</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        치킨집 오픈하면서 주문했어요~ 배달 위주였다가 매장 확장하면서 테이블 필요했는데 가성비 최고더라구요! 손님들도 분위기 좋다고 칭찬 많이 하시고 재방문율도 높아졌어요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>20</strong></button>
+        <span class="date">2026.03.01</span>
+      </div>
+    </div>
+
+    <!-- 후기 19 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">신</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">신예은</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>서울 성동</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        좁은 공간에 테이블 많이 배치하고 싶었는데요, 공간 활용 컨설팅 받고 나니까 동선도 편하고 테이블도 2개 더 들어갔어요! 손님들이 "생각보다 안 좁네요~"라고 하셔요 ㅎㅎ
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>26</strong></button>
+        <span class="date">2026.02.25</span>
+      </div>
+    </div>
+
+    <!-- 후기 20 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">권</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">권도윤</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>대전 서구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        중식당 운영하는데 원형 테이블 주문했어요! 크기도 딱 좋고 회전판 설치하니까 완전 고급스러워 보여요 ㅎㅎ 손님들도 만족하시고 재주문 의향 있습니다!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>14</strong></button>
+        <span class="date">2026.02.20</span>
+      </div>
+    </div>
+
+    <!-- 후기 21 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">홍</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">홍서아</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>광주 동구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        디저트 카페 오픈하면서 의자 색상 고민 많이 했는데요, 사장님이 추천해주신 파스텔 톤 의자로 했더니 완전 예뻐요! 손님들이 사진 엄청 찍으세요 📸
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>32</strong></button>
+        <span class="date">2026.02.15</span>
+      </div>
+    </div>
+
+    <!-- 후기 22 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">양</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">양준서</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>부산 동래</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        헬스장 운영하는데 SNS 마케팅 시작하고 나서 회원이 2배 늘었어요! 릴스 콘텐츠 기획도 너무 잘해주시고요 ㅎㅎ 운동 영상 찍는 팁도 알려주셔서 이제 혼자서도 할 수 있어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>35</strong></button>
+        <span class="date">2026.02.10</span>
+      </div>
+    </div>
+
+    <!-- 후기 23 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">고</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">고은별</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>경기 용인</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        베이커리 카페 오픈하면서 주문했어요~ 따뜻한 느낌의 원목 테이블이랑 의자 너무 만족스러워요! 빵 전시대랑도 잘 어울려서 인스타 사진 진짜 잘 나와요 ㅎㅎ
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>28</strong></button>
+        <span class="date">2026.02.05</span>
+      </div>
+    </div>
+
+    <!-- 후기 24 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">차</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">차민재</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>서울 송파</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        고깃집 운영하는데 불판 테이블 주문했어요! 내구성도 좋고 청소도 편해서 완전 만족이에요 ㅎㅎ 손님들도 테이블 넓다고 좋아하시고 재주문 고려 중입니다!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>17</strong></button>
+        <span class="date">2026.02.01</span>
+      </div>
+    </div>
+
+    <!-- 후기 25 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">나</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">나소율</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>서울 광진</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        스터디카페 오픈하면서 공간 배치 컨설팅 받았어요~ 좌석 배치가 정말 효율적이고요, 동선도 편해서 손님들이 만족도가 높아요! 매출도 예상보다 20% 더 나왔어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>30</strong></button>
+        <span class="date">2026.01.28</span>
+      </div>
+    </div>
+
+    <!-- 후기 26 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">백</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">백시우</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>인천 연수</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        의자 쿠션이 정말 좋아요! 손님들이 오래 앉아계셔도 불편해하지 않으시고요 ㅎㅎ 디자인도 심플하면서 고급스러워서 어떤 인테리어에도 잘 어울릴 것 같아요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>22</strong></button>
+        <span class="date">2026.01.25</span>
+      </div>
+    </div>
+
+    <!-- 후기 27 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">전</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">전하은</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>경기 파주</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        애견카페 운영하는데요, SNS 마케팅 시작하고 나서 반려견 동반 손님이 엄청 늘었어요! 인스타 릴스 콘텐츠가 진짜 바이럴 잘 되고요 ㅎㅎ 주말엔 예약 필수예요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>43</strong></button>
+        <span class="date">2026.01.20</span>
+      </div>
+    </div>
+
+    <!-- 후기 28 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">표</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">표지안</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>대구 수성구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        분식집 리모델링하면서 주문했어요! 테이블이랑 의자 색상 조합 완전 예쁘고요, 손님들이 "여기 언제 바꿨어요?" 하면서 칭찬 엄청 해주세요 ㅎㅎ 매출도 올랐어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>19</strong></button>
+        <span class="date">2026.01.15</span>
+      </div>
+    </div>
+
+    <!-- 후기 29 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">석</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">석민호</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>울산 북구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        이탈리안 레스토랑 오픈하면서 테이블 15개 주문했어요~ 대리석 패턴 테이블로 했는데 진짜 고급스러워요! 손님들 반응도 너무 좋고 재주문 의향 백퍼입니다!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>25</strong></button>
+        <span class="date">2026.01.10</span>
+      </div>
+    </div>
+
+    <!-- 후기 30 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">성</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">성다인</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>부산 사하</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        복층 카페인데 계단이랑 테이블 배치가 고민이었어요 ㅠㅠ 컨설팅 받고 나니까 동선도 편하고 공간 활용도 훨씬 좋아졌어요! 손님 수용 인원도 늘어서 매출 상승했어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>33</strong></button>
+        <span class="date">2026.01.05</span>
+      </div>
+    </div>
+
+    <!-- 후기 31 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">손</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">손채린</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>서울 영등포</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        바 의자 높이 커스텀 주문했어요~ 딱 제가 원하는 높이로 만들어주셔서 너무 감사해요! 손님들도 앉기 편하다고 하시고 디자인도 완전 세련돼요 ㅎㅎ
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>20</strong></button>
+        <span class="date">2025.12.30</span>
+      </div>
+    </div>
+
+    <!-- 후기 32 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">안</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">안서준</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>경기 화성</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        피자집 운영하는데 SNS 마케팅 효과 진짜 대박이에요! 배달 주문도 늘었고 매장 방문 손님도 2배 늘었어요 ㅠㅠ 인스타 팔로워도 한 달 만에 5000명 넘었어요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>45</strong></button>
+        <span class="date">2025.12.25</span>
+      </div>
+    </div>
+
+    <!-- 후기 33 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">엄</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">엄지원</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>서울 동작</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        분위기 있는 카페 만들고 싶었는데요, 테이블이랑 의자 조합이 완전 예술이에요! 손님들이 사진 찍으러 오시는 분들도 많고요 ㅎㅎ 인스타 핫플레이스 됐어요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>37</strong></button>
+        <span class="date">2025.12.20</span>
+      </div>
+    </div>
+
+    <!-- 후기 34 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">원</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">원태희</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>광주 남구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        퓨전 한식당 오픈하면서 주문했어요~ 테이블 마감 처리가 정말 깔끔하고요, 물컵 자국도 잘 안 생기고 관리가 편해요! 가성비도 최고고 재구매 의향 있습니다!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>16</strong></button>
+        <span class="date">2025.12.15</span>
+      </div>
+    </div>
+
+    <!-- 후기 35 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">방</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">방서윤</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>인천 계양</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        좁은 공간에 프라이빗 룸도 만들고 싶었는데요, 공간 배치 컨설팅 받고 나니까 가능하더라구요! 프라이빗 룸 2개 생기면서 단체 손님도 많이 늘었어요 ㅎㅎ
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>27</strong></button>
+        <span class="date">2025.12.10</span>
+      </div>
+    </div>
+
+    <!-- 후기 36 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">류</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">류민지</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>대전 중구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        의자 등받이 각도가 정말 편해요! 손님들이 오래 앉아계셔도 허리 아프다는 분이 한 분도 없으세요 ㅎㅎ 디자인도 모던하고 고급스러워서 완전 만족합니다!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>24</strong></button>
+        <span class="date">2025.12.05</span>
+      </div>
+    </div>
+
+    <!-- 후기 37 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">도</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">도현서</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>서울 서초</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        플라워샵 운영하는데 SNS 마케팅 시작하고 주문이 폭발했어요! 특히 꽃다발 사진 찍는 법 알려주셔서 릴스 조회수가 평균 10만 정도 나와요 ㅠㅠ 완전 감사해요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>48</strong></button>
+        <span class="date">2025.12.01</span>
+      </div>
+    </div>
+
+    <!-- 후기 38 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">남</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">남태양</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>부산 중구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        오마카세 레스토랑 오픈하면서 주문했어요~ 바 테이블이랑 의자 조합이 정말 고급스럽고요, 손님들이 분위기 너무 좋다고 칭찬 엄청 많이 하세요! 재주문 의향 백퍼입니다!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>31</strong></button>
+        <span class="date">2025.11.28</span>
+      </div>
+    </div>
+
+    <!-- 후기 39 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">지</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">지수아</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>경기 평택</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        야외 테라스용 테이블 주문했어요! 방수 처리도 되어있고 내구성도 좋아서 비 와도 걱정 없어요 ㅎㅎ 햇빛에도 색이 안 바래고 관리가 정말 편해요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>18</strong></button>
+        <span class="date">2025.11.25</span>
+      </div>
+    </div>
+
+    <!-- 후기 40 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">하</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">하윤서</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>서울 관악</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        북카페 오픈하면서 책장이랑 테이블 배치 고민했는데요, 컨설팅 받고 나니까 동선도 좋고 공간도 효율적으로 사용하게 됐어요! 손님들이 편하다고 오래 계시네요 ㅎㅎ
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>29</strong></button>
+        <span class="date">2025.11.20</span>
+      </div>
+    </div>
+
+    <!-- 후기 41 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">함</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">함지호</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>울산 동구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        의자 발 부분 마감 처리가 정말 깔끔해요! 바닥에 긁힘도 안 생기고 소음도 없어서 완전 만족이에요 ㅎㅎ 손님들도 조용하다고 좋아하시고요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>21</strong></button>
+        <span class="date">2025.11.15</span>
+      </div>
+    </div>
+
+    <!-- 후기 42 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">곽</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">곽민우</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>경기 안양</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        수제 버거집 운영하는데 SNS 마케팅 효과 진짜 좋아요! 버거 사진 찍는 법 알려주셔서 릴스 반응이 엄청나고요, 실제로 매장 방문 손님이 3배 넘게 늘었어요 🍔
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>42</strong></button>
+        <span class="date">2025.11.10</span>
+      </div>
+    </div>
+
+    <!-- 후기 43 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">추</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">추서연</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>서울 노원</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        샐러드 카페 오픈하면서 주문했어요~ 밝은 톤의 테이블이랑 의자가 완전 상큼한 느낌이고요, 건강한 이미지랑도 잘 맞아서 손님들 반응이 정말 좋아요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>26</strong></button>
+        <span class="date">2025.11.05</span>
+      </div>
+    </div>
+
+    <!-- 후기 44 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">황</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">황태윤</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>대구 달서구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        책상 겸용으로 쓸 수 있는 테이블 주문했어요! 높이 조절도 되고 크기도 딱 맞아서 완전 만족이에요 ㅎㅎ 다용도로 쓰기 정말 좋고 튼튼해요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>15</strong></button>
+        <span class="date">2025.11.01</span>
+      </div>
+    </div>
+
+    <!-- 후기 45 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">강</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">강도하</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">공간 배치</span>
+            <span>부산 진구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        루프탑 카페인데 실내랑 야외 공간 배치 고민이 많았어요 ㅠㅠ 컨설팅 받고 나니까 동선도 자연스럽고 손님 수용 인원도 늘어서 매출이 30% 올랐어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>34</strong></button>
+        <span class="date">2025.10.28</span>
+      </div>
+    </div>
+
+    <!-- 후기 46 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">제</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">제갈수빈</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">의자</span>
+            <span>인천 미추홀</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        의자 색상 커스텀 주문했는데 완전 만족이에요! 제가 원하는 컬러로 딱 맞춰주셔서 카페 컨셉이랑도 완전 잘 어울려요 ㅎㅎ 손님들이 의자 예쁘다고 칭찬 많이 해요!
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>28</strong></button>
+        <span class="date">2025.10.25</span>
+      </div>
+    </div>
+
+    <!-- 후기 47 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">선</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">선우진</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">SNS 마케팅</span>
+            <span>경기 김포</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        태국 음식점 운영하는데 SNS 마케팅 시작하고 나서 젊은 손님들이 엄청 늘었어요! 음식 사진 찍는 팁도 알려주시고 해시태그도 잘 만들어주셔서 완전 감사해요 🙏
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>36</strong></button>
+        <span class="date">2025.10.20</span>
+      </div>
+    </div>
+
+    <!-- 후기 48 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">탁</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">탁민서</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블+의자</span>
+            <span>광주 북구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        와플 카페 오픈하면서 주문했어요~ 파스텔 톤 테이블이랑 의자가 완전 귀여워요! 여자 손님들이 사진 엄청 찍으시고 인스타에도 많이 올라가더라구요 ㅎㅎ
+      </div>
+      <div class="review-images">
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+        <div class="review-image"></div>
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>40</strong></button>
+        <span class="date">2025.10.15</span>
+      </div>
+    </div>
+
+    <!-- 후기 49 -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="avatar">편</div>
+        <div class="reviewer-info">
+          <div class="reviewer-name">편서준</div>
+          <div class="reviewer-meta">
+            <span class="category-tag">테이블</span>
+            <span>대전 동구</span>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="review-text">
+        프렌차이즈 카페 운영하는데 본사 컨셉이랑 딱 맞는 테이블 찾기가 어려웠어요 ㅠㅠ 근데 커스텀으로 딱 맞춰주셔서 완전 만족이에요! 다른 지점에도 추천했어요!
+      </div>
+      <div class="review-footer">
+        <button class="like-btn">👍 도움됐어요 <strong>23</strong></button>
+        <span class="date">2025.10.10</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 더보기 버튼 -->
+  <div class="load-more">
+    <button class="load-more-btn">더 많은 후기 보기</button>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-content">
+    <h2>당신의 매장도 달라질 수 있습니다</h2>
+    <p>547개 매장이 선택한 멋:테이블과 함께 시작하세요</p>
+    <div class="cta-buttons">
+      <a href="https://open.kakao.com/o/sSdRDJpi" class="cta-btn primary" target="_blank">무료 상담 받기</a>
+      <a href="tel:010-6292-8562" class="cta-btn secondary">📞 전화 상담</a>
+    </div>
+  </div>
+</div>
+
+<!-- 푸터 -->
+<div class="footer">
+  <p>멋:테이블 × TABLE & PROFIT</p>
+  <p style="margin-top:8px; font-size:13px;">📞 010-6292-8562 | 💬 <a href="https://open.kakao.com/o/sSdRDJpi" style="color:#C49A3C; text-decoration:none;" target="_blank">카카오톡 상담</a></p>
+</div>
+
+<script>
+// 필터 버튼
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// 좋아요 버튼
+document.querySelectorAll('.like-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const count = this.querySelector('strong');
+    const currentCount = parseInt(count.textContent);
+    count.textContent = currentCount + 1;
+    this.style.background = '#fffbf0';
+    this.style.borderColor = '#C49A3C';
+    this.style.color = '#C49A3C';
+  });
+});
+
+// 더보기 버튼
+document.querySelector('.load-more-btn').addEventListener('click', function() {
+  alert('더 많은 후기가 곧 업데이트됩니다! 😊');
+});
+</script>
+
+</body>
+</html>
