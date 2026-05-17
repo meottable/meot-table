@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>멋:테이블 — 업소용 테이블 전문</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#FAF7F2; --cream-dark:#F0EBE3; --cream-darker:#E8E1D5;
+  --beige:#D4C4B0; --beige-dark:#B8A890; --beige-darker:#9C8C70;
+  --brown:#6B5B4F; --brown-dark:#4A3F35; --brown-darker:#2D241C;
+  --accent:#A17856; --accent-dark:#8A6343;
+  --white:#FFFFFF; --black:#1A1410;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Work Sans',sans-serif; color:var(--brown-darker); background:var(--cream); overflow-x:hidden; }
+
+/* ── 네비게이션 ── */
+.nav {
+  position:fixed; top:0; left:0; right:0; z-index:999;
+  background:rgba(250,247,242,0.95); backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(161,120,86,0.12);
+  padding:0 32px; height:72px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo { 
+  font-family:'Playfair Display',serif; 
+  font-size:19px; font-weight:700; 
+  color:var(--brown-darker); text-decoration:none; 
+  letter-spacing:-0.5px;
+}
+.nav-links { display:flex; gap:32px; align-items:center; }
+.nav-links a { 
+  font-size:13px; font-weight:500; 
+  color:var(--brown); text-decoration:none; 
+  transition:color 0.2s; letter-spacing:0.3px;
+}
+.nav-links a:hover { color:var(--accent); }
+.nav-cta { 
+  background:var(--accent) !important; 
+  color:var(--white) !important; 
+  font-weight:600 !important; 
+  padding:10px 24px; border-radius:50px; 
+  font-size:12px !important;
+}
+
+/* ── 히어로 ── */
+.hero {
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:120px 32px 80px;
+  position:relative; overflow:hidden;
+  background:var(--cream);
+}
+
+/* 배경 패턴 */
+.hero-pattern {
+  position:absolute; inset:0; pointer-events:none; opacity:0.4;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(161,120,86,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(161,120,86,0.04) 0%, transparent 50%);
+}
+
+/* 장식 요소 */
+.hero-deco {
+  position:absolute; top:100px; left:50%; transform:translateX(-50%);
+  width:1px; height:60px; background:linear-gradient(to bottom, transparent, var(--accent), transparent);
+  opacity:0.3;
+}
+
+.hero-inner { position:relative; z-index:2; max-width:720px; }
+
+.hero-label {
+  display:inline-block;
+  font-size:11px; font-weight:600; letter-spacing:3px;
+  color:var(--accent); text-transform:uppercase;
+  margin-bottom:24px;
+  animation:fadeUp 0.8s ease both;
+}
+
+.hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(40px,7vw,72px); font-weight:900;
+  color:var(--brown-darker); line-height:1.1; margin-bottom:16px;
+  animation:fadeUp 0.8s ease 0.1s both;
+  letter-spacing:-2px;
+}
+.hero h1 em {
+  font-style:italic; color:var(--accent);
+}
+
+.hero-divider {
+  width:60px; height:2px;
+  background:var(--accent);
+  margin:28px auto;
+  animation:fadeUp 0.8s ease 0.2s both;
+}
+
+.hero-sub {
+  font-size:clamp(14px,2vw,17px); 
+  color:var(--brown); font-weight:400;
+  line-height:1.8; margin-bottom:40px; letter-spacing:0.2px;
+  animation:fadeUp 0.8s ease 0.3s both;
+}
+
+.hero-btn {
+  display:inline-flex; align-items:center; gap:12px;
+  background:var(--accent); color:var(--white);
+  font-size:14px; font-weight:600; letter-spacing:0.3px;
+  padding:18px 40px; border-radius:50px; text-decoration:none;
+  box-shadow:0 6px 24px rgba(161,120,86,0.2);
+  transition:all 0.3s;
+  animation:fadeUp 0.8s ease 0.4s both;
+}
+.hero-btn:hover {
+  transform:translateY(-2px);
+  box-shadow:0 12px 36px rgba(161,120,86,0.3);
+}
+
+.hero-stats {
+  display:flex; gap:48px; flex-wrap:wrap; justify-content:center;
+  margin-top:60px;
+  animation:fadeUp 0.8s ease 0.5s both;
+}
+.hs-item { text-align:center; }
+.hs-num {
+  font-family:'Playfair Display',serif;
+  font-size:32px; font-weight:700; color:var(--accent);
+  display:block; margin-bottom:6px;
+}
+.hs-label { 
+  font-size:11px; font-weight:500; 
+  color:var(--brown); letter-spacing:1px; text-transform:uppercase;
+}
+
+/* ── 공통 섹션 ── */
+section { padding:100px 32px; }
+.section-inner { max-width:1080px; margin:0 auto; }
+.section-label {
+  display:inline-block;
+  font-size:10px; font-weight:600; letter-spacing:3px;
+  color:var(--accent); text-transform:uppercase;
+  margin-bottom:16px;
+}
+.section-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,42px); font-weight:700;
+  line-height:1.2; margin-bottom:16px; color:var(--brown-darker);
+  letter-spacing:-1px;
+}
+.section-desc { 
+  font-size:16px; color:var(--brown); 
+  line-height:1.8; margin-bottom:48px; font-weight:400;
+}
+
+/* ── 테이블 섹션 ── */
+.table-sec { background:var(--white); }
+.table-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.table-card {
+  background:var(--cream); border-radius:12px; overflow:hidden;
+  border:1px solid var(--cream-darker);
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.table-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(107,91,79,0.08);
+}
+.tc-header { 
+  background:var(--brown-darker); 
+  padding:20px 24px; 
+  display:flex; justify-content:space-between; align-items:center;
+}
+.tc-name { font-size:16px; font-weight:600; color:var(--white); }
+.tc-price { font-size:13px; font-weight:600; color:var(--beige); }
+.tc-body { padding:24px; }
+.tc-desc { font-size:14px; color:var(--brown); line-height:1.7; margin-bottom:16px; }
+.tc-spec { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.tc-spec-row { display:flex; gap:12px; font-size:13px; }
+.tc-key { color:var(--brown); width:80px; flex-shrink:0; }
+.tc-val { color:var(--brown-darker); font-weight:500; }
+.tc-tag { 
+  display:inline-block; 
+  background:rgba(161,120,86,0.1); 
+  color:var(--accent-dark); 
+  font-size:11px; font-weight:600; 
+  padding:4px 12px; border-radius:50px;
+}
+
+/* ── 의자 섹션 ── */
+.chair-sec { background:var(--cream); }
+.chair-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+.chair-card { 
+  border-radius:12px; overflow:hidden; 
+  border:1px solid var(--cream-darker);
+  background:var(--white);
+  transition:transform 0.3s;
+}
+.chair-card:hover { transform:translateY(-4px); }
+.cc-header { 
+  background:var(--beige-darker); 
+  padding:16px 20px; 
+  display:flex; justify-content:space-between; align-items:center;
+}
+.cc-name { font-size:14px; font-weight:600; color:var(--white); }
+.cc-price { font-size:12px; font-weight:600; color:var(--cream); }
+.cc-body { padding:20px; background:var(--white); }
+.cc-icon { font-size:32px; margin-bottom:12px; }
+.cc-desc { font-size:13px; color:var(--brown); line-height:1.6; margin-bottom:12px; }
+.cc-tag { 
+  display:inline-block; 
+  font-size:11px; 
+  background:rgba(161,120,86,0.1); 
+  color:var(--accent-dark); 
+  font-weight:600;
+  padding:3px 12px; border-radius:50px;
+}
+
+/* ── 포트폴리오 섹션 ── */
+.portfolio-sec { background:var(--white); }
+.portfolio-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.pf-card {
+  background:var(--cream); border-radius:12px; padding:28px;
+  border:1px solid var(--cream-darker);
+  transition:transform 0.3s;
+}
+.pf-card:hover { transform:translateY(-4px); }
+.pf-badge {
+  display:inline-block; font-size:10px; font-weight:600;
+  color:var(--accent-dark); background:rgba(161,120,86,0.12);
+  padding:5px 14px; border-radius:50px; margin-bottom:14px;
+  letter-spacing:0.5px;
+}
+.pf-title { font-size:17px; font-weight:600; color:var(--brown-darker); margin-bottom:6px; }
+.pf-sub { font-size:13px; color:var(--brown); margin-bottom:12px; }
+.pf-result { font-size:13px; font-weight:600; color:#5A8F5A; }
+
+/* ── 생산과정 섹션 ── */
+.process-sec { background:var(--cream); }
+.process-steps { display:flex; flex-direction:column; gap:0; position:relative; padding-left:40px; }
+.process-steps::before {
+  content:''; position:absolute; left:15px; top:16px; bottom:16px;
+  width:2px; background:linear-gradient(to bottom,var(--accent),transparent);
+}
+.ps-item { padding:20px 0; position:relative; }
+.ps-dot {
+  width:32px; height:32px; border-radius:50%; background:var(--accent);
+  position:absolute; left:-40px; top:24px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; color:var(--white);
+  font-family:'Playfair Display',serif;
+}
+.ps-step { font-size:11px; font-weight:600; color:var(--accent); letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; }
+.ps-title { font-size:18px; font-weight:600; color:var(--brown-darker); margin-bottom:8px; }
+.ps-desc { font-size:14px; color:var(--brown); line-height:1.7; }
+
+/* ── 연락처 + 최종 CTA ── */
+.contact { 
+  background:linear-gradient(135deg,var(--brown-darker),var(--brown-dark)); 
+  padding:100px 32px; text-align:center;
+}
+.contact-title { 
+  font-family:'Playfair Display',serif; 
+  font-size:clamp(28px,5vw,44px); 
+  font-weight:700; color:var(--white); 
+  margin-bottom:16px; line-height:1.3; letter-spacing:-1px;
+}
+.contact-desc { 
+  font-size:16px; color:rgba(255,255,255,0.7); 
+  line-height:1.8; margin-bottom:44px;
+}
+.contact-box {
+  background:rgba(255,255,255,0.08); 
+  border-radius:12px; padding:32px 36px;
+  max-width:460px; margin:0 auto 32px; text-align:left;
+  border:1px solid rgba(255,255,255,0.12);
+}
+.contact-box h3 { 
+  font-size:12px; font-weight:600; 
+  color:rgba(255,255,255,0.5); margin-bottom:16px; 
+  letter-spacing:2px; text-transform:uppercase;
+}
+.cb-row { 
+  display:flex; justify-content:space-between; 
+  margin-bottom:12px; font-size:14px;
+}
+.cb-label { color:rgba(255,255,255,0.6); }
+.cb-val { color:var(--white); font-weight:600; }
+.kakao-btn {
+  display:inline-flex; align-items:center; gap:12px;
+  background:#FEE500; color:var(--brown-darker);
+  font-size:16px; font-weight:700; padding:18px 40px;
+  border-radius:50px; text-decoration:none;
+  box-shadow:0 8px 24px rgba(254,229,0,0.3);
+}
+.back-btn {
+  display:block; text-align:center; margin-top:20px;
+  font-size:13px; color:rgba(255,255,255,0.4); text-decoration:none;
+}
+.back-btn:hover { color:rgba(255,255,255,0.7); }
+
+/* ── 플로팅 ── */
+.floating {
+  position:fixed; bottom:28px; right:24px; z-index:900;
+}
+.fl-btn {
+  display:flex; align-items:center; gap:10px;
+  background:#FEE500; color:var(--brown-darker);
+  font-size:14px; font-weight:700;
+  padding:14px 24px; border-radius:50px;
+  text-decoration:none; 
+  box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* ── 애니메이션 ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(30px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── 모바일 ── */
+@media (max-width:600px) {
+  .nav-links { display:none; }
+  .table-grid, .portfolio-grid { grid-template-columns:1fr; }
+  .chair-grid { grid-template-columns:1fr 1fr; }
+  .hero-stats { gap:32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">멋:테이블</a>
+  <div class="nav-links">
+    <a href="#table">테이블</a>
+    <a href="#chair">의자</a>
+    <a href="#portfolio">포트폴리오</a>
+    <a href="#process">생산과정</a>
+    <a href="https://open.kakao.com/o/sSdRDJpi" target="_blank" class="nav-cta">무료 진단</a>
+  </div>
+</nav>
+
+<!-- 히어로 -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-deco"></div>
+
+  <div class="hero-inner">
+    <div class="hero-label">Table Specialist</div>
+    
+    <h1>
+      테이블 하나로<br>
+      공간의 <em>품격</em>이 달라집니다
+    </h1>
+
+    <div class="hero-divider"></div>
+
+    <p class="hero-sub">
+      56종 텍스처 맞춤 제작 · 공간 배치 설계<br>
+      전국 547건+ 납품 · 2~3주 납품
+    </p>
+
+    <a href="https://open.kakao.com/o/sSdRDJpi" target="_blank" class="hero-btn">
+      무료 매장 진단 받기 →
+    </a>
+
+    <div class="hero-stats">
+      <div class="hs-item">
+        <span class="hs-num">547+</span>
+        <div class="hs-label">납품 건수</div>
+      </div>
+      <div class="hs-item">
+        <span class="hs-num">56</span>
+        <div class="hs-label">텍스처</div>
+      </div>
+      <div class="hs-item">
+        <span class="hs-num">98%</span>
+        <div class="hs-label">재의뢰율</div>
+      </div>
+      <div class="hs-item">
+        <span class="hs-num">2주</span>
+        <div class="hs-label">평균 납품</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 테이블 -->
+<section class="table-sec" id="table">
+  <div class="section-inner">
+    <div class="section-label">TABLE</div>
+    <h2 class="section-title">테이블 종류별 안내</h2>
+    <p class="section-desc">용도와 공간에 따라 최적의 테이블 타입이 다릅니다.</p>
+
+    <div class="table-grid">
+      <div class="table-card">
+        <div class="tc-header"><div class="tc-name">🪑 2인 테이블</div><div class="tc-price">59,000~89,000원</div></div>
+        <div class="tc-body">
+          <div class="tc-desc">카페·브런치·소규모 음식점에 가장 많이 사용되는 사이즈입니다. 혼밥족과 커플 손님을 동시에 수용할 수 있어 회전율이 높아집니다.</div>
+          <div class="tc-spec">
+            <div class="tc-spec-row"><span class="tc-key">기본 사이즈</span><span class="tc-val">600×600 / 700×700mm</span></div>
+            <div class="tc-spec-row"><span class="tc-key">추천 업종</span><span class="tc-val">카페, 브런치, 라멘집</span></div>
+          </div>
+          <div class="tc-tag">⭐ 가장 많이 선택</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="tc-header"><div class="tc-name">👨‍👩‍👧 4인 테이블</div><div class="tc-price">59,000~129,000원</div></div>
+        <div class="tc-body">
+          <div class="tc-desc">가족 단위·친구 모임에 최적화된 기본 테이블입니다. 대부분의 매장에서 주력으로 사용하는 사이즈로 다양한 구성에 활용 가능합니다.</div>
+          <div class="tc-spec">
+            <div class="tc-spec-row"><span class="tc-key">기본 사이즈</span><span class="tc-val">1200×800mm</span></div>
+            <div class="tc-spec-row"><span class="tc-key">추천 업종</span><span class="tc-val">한식, 고깃집, 음식점</span></div>
+          </div>
+          <div class="tc-tag">📦 표준 사이즈</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="tc-header"><div class="tc-name">🍻 6인 이상 단체석</div><div class="tc-price">99,000~129,000원</div></div>
+        <div class="tc-body">
+          <div class="tc-desc">회식·단체 모임을 주요 타겟으로 하는 매장에 적합합니다. 객단가가 높고 예약 중심 운영이 가능해 매출 안정성이 높아집니다.</div>
+          <div class="tc-spec">
+            <div class="tc-spec-row"><span class="tc-key">기본 사이즈</span><span class="tc-val">1800×800 / 2000×800mm</span></div>
+            <div class="tc-spec-row"><span class="tc-key">추천 업종</span><span class="tc-val">이자카야, 고깃집, 포차</span></div>
+          </div>
+          <div class="tc-tag">💰 객단가 최고</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="tc-header"><div class="tc-name">🍺 바 테이블·하이테이블</div><div class="tc-price">69,000~99,000원</div></div>
+        <div class="tc-body">
+          <div class="tc-desc">혼술·혼밥족을 위한 바 좌석용 테이블입니다. 공간 활용도가 높고 SNS 사진 포인트로도 활용됩니다. 입구나 창가에 설치 시 효과적입니다.</div>
+          <div class="tc-spec">
+            <div class="tc-spec-row"><span class="tc-key">기본 사이즈</span><span class="tc-val">높이 900~1050mm</span></div>
+            <div class="tc-spec-row"><span class="tc-key">추천 업종</span><span class="tc-val">이자카야, 바, 카페</span></div>
+          </div>
+          <div class="tc-tag">📸 SNS 포인트</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 테이블 디자인 CTA -->
+<section style="background:#A17856; padding:80px 32px; text-align:center;">
+  <div style="max-width:680px; margin:0 auto;">
+    <div style="font-size:11px; font-weight:600; letter-spacing:3px; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-bottom:16px;">EXPLORE MORE</div>
+    <h2 style="font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,40px); font-weight:700; color:#fff; margin-bottom:16px; line-height:1.3; letter-spacing:-1px;">
+      더 많은 테이블 디자인이<br>궁금하신가요?
+    </h2>
+    <p style="font-size:15px; color:rgba(255,255,255,0.8); line-height:1.8; margin-bottom:36px;">
+      56종 텍스처와 다양한 스타일을 한눈에 확인하세요
+    </p>
+    <a href="http://xn--table-x76u.com/" target="_blank" style="display:inline-flex; align-items:center; gap:12px; background:#fff; color:#6B5B4F; font-size:15px; font-weight:700; padding:18px 40px; border-radius:50px; text-decoration:none; box-shadow:0 8px 24px rgba(0,0,0,0.15); transition:transform 0.3s, box-shadow 0.3s;">
+      🎨 테이블 디자인 전체 보기 →
+    </a>
+  </div>
+</section>
+
+<!-- 의자 -->
+<section class="chair-sec" id="chair">
+  <div class="section-inner">
+    <div class="section-label">CHAIR</div>
+    <h2 class="section-title">의자도 함께 완성하세요</h2>
+    <p class="section-desc">테이블과 어울리는 의자를 등급별로 선택하실 수 있어요. (20,000~80,000원)</p>
+
+    <div class="chair-grid">
+      <div class="chair-card">
+        <div class="cc-header"><div class="cc-name">BASIC</div><div class="cc-price">2~3.5만원</div></div>
+        <div class="cc-body">
+          <div class="cc-icon">🪑</div>
+          <div class="cc-desc">메탈 프레임 / 플라스틱 계열. 가볍고 실용적. 청소가 편해 회전율 높은 매장에 적합.</div>
+          <div class="cc-tag">회전율 중심</div>
+        </div>
+      </div>
+
+      <div class="chair-card">
+        <div class="cc-header"><div class="cc-name">STANDARD</div><div class="cc-price">3.5~5.5만원</div></div>
+        <div class="cc-body">
+          <div class="cc-icon">🪑</div>
+          <div class="cc-desc">원목 래더백 / 패브릭 계열. 따뜻한 감성으로 사진이 잘 나오는 스타일.</div>
+          <div class="cc-tag">SNS 친화적</div>
+        </div>
+      </div>
+
+      <div class="chair-card">
+        <div class="cc-header"><div class="cc-name">PREMIUM</div><div class="cc-price">5.5~8만원</div></div>
+        <div class="cc-body">
+          <div class="cc-icon">🪑</div>
+          <div class="cc-desc">쿠션 / 벨벳 계열. 고급스럽고 오래 앉아도 편안. 체류 시간 늘리는 좌석.</div>
+          <div class="cc-tag">체류 시간 ↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 포트폴리오 -->
+<section class="portfolio-sec" id="portfolio">
+  <div class="section-inner">
+    <div class="section-label">PORTFOLIO</div>
+    <h2 class="section-title">실제 납품 사례</h2>
+    <p class="section-desc">전국 547건 중 일부를 소개합니다.</p>
+
+    <div class="portfolio-grid">
+      <div class="pf-card">
+        <div class="pf-badge">통합형</div>
+        <div class="pf-title">☕ 서울 마포구 · 브런치 카페</div>
+        <div class="pf-sub">낙엽송 텍스처 + 창가 배치 재설계</div>
+        <div class="pf-result">✓ 오픈 2주 만에 주말 웨이팅 발생</div>
+      </div>
+
+      <div class="pf-card">
+        <div class="pf-badge">프리미엄</div>
+        <div class="pf-title">🍶 부산 해운대 · 이자카야</div>
+        <div class="pf-sub">월넛 다크우드 + 조명 연계 배치</div>
+        <div class="pf-result">✓ 저녁 예약률 40% 증가</div>
+      </div>
+
+      <div class="pf-card">
+        <div class="pf-badge">통합형</div>
+        <div class="pf-title">🌊 전남 여수 · 해산물 음식점</div>
+        <div class="pf-sub">바다뷰 창가 테이블 최적 각도 재배치</div>
+        <div class="pf-result">✓ 주말 예약 2~3일 전 마감</div>
+      </div>
+
+      <div class="pf-card">
+        <div class="pf-badge">프리미엄</div>
+        <div class="pf-title">☕ 경기 수원 · 감성 카페</div>
+        <div class="pf-sub">브랜드 방향 + 낙엽송 공간 통일</div>
+        <div class="pf-result">✓ 한 달 인스타 팔로워 +800명</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 생산과정 -->
+<section class="process-sec" id="process">
+  <div class="section-inner">
+    <div class="section-label">PROCESS</div>
+    <h2 class="section-title">이렇게 진행됩니다</h2>
+    <p class="section-desc">복잡하지 않아요. 카카오톡 한 번으로 시작할 수 있습니다.</p>
+
+    <div class="process-steps">
+      <div class="ps-item">
+        <div class="ps-dot">1</div>
+        <div class="ps-step">STEP 01 · 당일~1일</div>
+        <div class="ps-title">무료 매장 진단</div>
+        <div class="ps-desc">사진 2~3장 + 업종·규모를 카카오로 보내주시면 당일 문제점 분석 시작. 어디서부터 바꿔야 할지 바로 알 수 있어요.</div>
+      </div>
+
+      <div class="ps-item">
+        <div class="ps-dot">2</div>
+        <div class="ps-step">STEP 02 · 3~5일</div>
+        <div class="ps-title">공간 배치 도면 + 제안서</div>
+        <div class="ps-desc">최적 배치 도면과 텍스처·수량 제안서를 전달드려요. 샘플 3종도 무료 배송해드립니다.</div>
+      </div>
+
+      <div class="ps-item">
+        <div class="ps-dot">3</div>
+        <div class="ps-step">STEP 03 · 2~3주</div>
+        <div class="ps-title">맞춤 제작</div>
+        <div class="ps-desc">확정된 텍스처·사이즈·수량으로 제작에 들어갑니다. 제작 진행 상황을 중간중간 공유해드려요.</div>
+      </div>
+
+      <div class="ps-item">
+        <div class="ps-dot">4</div>
+        <div class="ps-step">STEP 04 · 납품</div>
+        <div class="ps-title">전국 배송 + 납품 완료</div>
+        <div class="ps-desc">잔금 납부 후 전국 배송. 납품 완료 안내서와 SNS 촬영 포인트 가이드를 함께 전달드립니다.</div>
+      </div>
+
+      <div class="ps-item">
+        <div class="ps-dot">5</div>
+        <div class="ps-step">STEP 05 · 납품 후</div>
+        <div class="ps-title">A/S + 피드백</div>
+        <div class="ps-desc">6개월 무상 A/S + 패키지에 따라 1~3개월 SNS 피드백 채널 운영. 오픈 후에도 함께합니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 최종 CTA -->
+<section class="contact">
+  <div class="contact-title">지금 사진 2~3장만<br>보내주시면 됩니다</div>
+  <div class="contact-desc">비용 없음 · 강요 없음 · 1~2일 내 결과<br>무료 진단으로 우리 매장 문제점을 바로 확인하세요</div>
+  <div class="contact-box">
+    <h3>CONTACT</h3>
+    <div class="cb-row"><div class="cb-label">전화</div><div class="cb-val">010-6292-8562</div></div>
+    <div class="cb-row"><div class="cb-label">카카오톡</div><div class="cb-val">오픈채팅 · 테이블 & 프로핏</div></div>
+    <div class="cb-row"><div class="cb-label">납품 실적</div><div class="cb-val">전국 547건+</div></div>
+    <div class="cb-row"><div class="cb-label">A/S 보증</div><div class="cb-val">납품 후 6개월 무상</div></div>
+  </div>
+  <a href="https://open.kakao.com/o/sSdRDJpi" target="_blank" class="kakao-btn">💬 지금 카카오톡으로 문의하기</a>
+  <a href="index.html" class="back-btn">← 메인으로 돌아가기</a>
+</section>
+
+<!-- 플로팅 버튼 -->
+<div class="floating">
+  <a href="https://open.kakao.com/o/sSdRDJpi" target="_blank" class="fl-btn">💬 카카오 상담</a>
+</div>
+
+</body>
+</html>
