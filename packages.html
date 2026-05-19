@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>멋:테이블 창업 컨설팅 패키지</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Malgun Gothic', sans-serif;
+  background:#1A1510;
+  padding:20px;
+  line-height:1.8;
+  color:#333;
+}
+.container {
+  max-width:800px;
+  margin:0 auto;
+  background:white;
+  padding:40px;
+  border-radius:20px;
+}
+.header {
+  text-align:center;
+  margin-bottom:60px;
+}
+.shock {
+  font-size:40px;
+  font-weight:900;
+  color:#C49A3C;
+  margin-bottom:20px;
+}
+.comparison {
+  background:#fff3cd;
+  padding:30px;
+  border-radius:12px;
+  margin:30px 0;
+  border-left:5px solid #ffc107;
+}
+.vs {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:20px 0;
+}
+.vs-left {
+  text-align:left;
+  flex:1;
+}
+.vs-right {
+  text-align:right;
+  flex:1;
+}
+.old-price {
+  text-decoration:line-through;
+  color:#999;
+  font-size:20px;
+}
+.new-price {
+  font-size:36px;
+  font-weight:900;
+  color:#C49A3C;
+}
+.package {
+  background:#f8f9fa;
+  border:3px solid #e0e0e0;
+  border-radius:16px;
+  padding:30px;
+  margin:30px 0;
+  position:relative;
+  transition:all 0.3s;
+}
+.package:hover {
+  transform:translateY(-5px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+.package.best {
+  border:4px solid #C49A3C;
+  background:linear-gradient(135deg, #fffbf0, #fff);
+}
+.badge {
+  position:absolute;
+  top:-15px;
+  right:20px;
+  background:#C49A3C;
+  color:white;
+  padding:8px 20px;
+  border-radius:20px;
+  font-weight:700;
+  font-size:14px;
+}
+.package-title {
+  font-size:28px;
+  font-weight:900;
+  color:#1A1510;
+  margin-bottom:10px;
+}
+.package-price {
+  font-size:42px;
+  font-weight:900;
+  color:#C49A3C;
+  margin:20px 0;
+}
+.package-desc {
+  color:#666;
+  font-size:14px;
+  margin-bottom:20px;
+}
+.features {
+  list-style:none;
+  margin:20px 0;
+}
+.features li {
+  padding:10px 0;
+  border-bottom:1px solid #e0e0e0;
+  display:flex;
+  align-items:flex-start;
+}
+.features li:before {
+  content:"✓";
+  color:#4CAF50;
+  font-weight:900;
+  font-size:20px;
+  margin-right:10px;
+  flex-shrink:0;
+}
+.cta-button {
+  width:100%;
+  padding:18px;
+  background:#C49A3C;
+  color:white;
+  border:none;
+  border-radius:50px;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  margin-top:20px;
+  transition:all 0.3s;
+}
+.cta-button:hover {
+  background:#8B6914;
+  transform:scale(1.05);
+}
+.vip-bonus {
+  background:#d4edda;
+  border:2px solid #28a745;
+  padding:20px;
+  border-radius:12px;
+  margin-top:20px;
+}
+.vip-bonus-title {
+  font-size:18px;
+  font-weight:900;
+  color:#155724;
+  margin-bottom:10px;
+}
+.footer {
+  text-align:center;
+  margin-top:60px;
+  padding-top:40px;
+  border-top:2px solid #e0e0e0;
+}
+.urgency {
+  background:#fff3cd;
+  border-left:4px solid #ffc107;
+  padding:20px;
+  margin:30px 0;
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  color:#856404;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <div class="shock">💡 이거 실화냐?</div>
+  </div>
+
+  <div class="comparison">
+    <div class="vs">
+      <div class="vs-left">
+        <div style="font-size:16px; color:#666;">대형 컨설팅 업체</div>
+        <div class="old-price">상권분석 3,000,000원</div>
+      </div>
+      <div style="font-size:48px; color:#C49A3C; font-weight:900;">VS</div>
+      <div class="vs-right">
+        <div style="font-size:16px; color:#C49A3C;">멋:테이블</div>
+        <div class="new-price">29,000원</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:20px; font-size:16px; color:#856404;">
+      <strong>100배 저렴한 가격</strong>에 동일한 퀄리티를 제공합니다
+    </div>
+  </div>
+
+  <div class="urgency">
+    ⏰ 5월 한정 특가 | 선착순 20명 | 현재 남은 자리: <strong>12/20</strong>
+  </div>
+
+  <!-- 스타터 팩 -->
+  <div class="package">
+    <div class="package-title">🎁 스타터 팩</div>
+    <div class="package-price">29,000<span style="font-size:20px;">원</span></div>
+    <div class="package-desc">창업 초보자를 위한 기본 패키지</div>
+    
+    <ul class="features">
+      <li>해당 지역 상권 데이터 리포트</li>
+      <li>경쟁사 5곳 분석</li>
+      <li>예상 매출 시뮬레이션</li>
+      <li>예산 계산기 템플릿</li>
+      <li>10분 전화 상담</li>
+    </ul>
+
+    <button class="cta-button" onclick="contact('스타터')">
+      카톡으로 신청하기 💬
+    </button>
+  </div>
+
+  <!-- 프리미엄 팩 (베스트) -->
+  <div class="package best">
+    <div class="badge">🔥 베스트셀러</div>
+    <div class="package-title">💎 프리미엄 팩</div>
+    <div class="package-price">99,000<span style="font-size:20px;">원</span></div>
+    <div class="package-desc">가장 많이 선택하는 인기 패키지</div>
+    
+    <ul class="features">
+      <li><strong>스타터 팩 전체 포함</strong></li>
+      <li>브랜드 기획서 템플릿</li>
+      <li>SNS 콘텐츠 캘린더 (3개월치 36개)</li>
+      <li>시공 체크리스트 100개 항목</li>
+      <li>30분 전화 상담 (심층 분석)</li>
+      <li>카톡 질의응답 1개월</li>
+    </ul>
+
+    <button class="cta-button" onclick="contact('프리미엄')">
+      카톡으로 신청하기 💬
+    </button>
+  </div>
+
+  <!-- VIP 올인원 -->
+  <div class="package" style="border:4px solid #8B6914; background:linear-gradient(135deg, #f9f5e8, #fff);">
+    <div class="badge" style="background:#8B6914;">⭐ VIP 추천</div>
+    <div class="package-title">👑 VIP 올인원</div>
+    <div class="package-price">249,000<span style="font-size:20px;">원</span></div>
+    <div class="package-desc">진심으로 준비하는 창업자를 위한 프리미엄</div>
+    
+    <ul class="features">
+      <li><strong>프리미엄 팩 전체 포함</strong></li>
+      <li><strong style="color:#C49A3C;">당신의 매장에 맞춤 작성 (5종 전부)</strong></li>
+      <li>1:1 화상 컨설팅 3회 (각 1시간)</li>
+      <li>6개월 카톡 질의응답 무제한</li>
+      <li>오픈 전 현장 방문 1회 (전국 가능)</li>
+      <li>오픈 후 3개월 SNS 피드백</li>
+    </ul>
+
+    <div class="vip-bonus">
+      <div class="vip-bonus-title">🎊 VIP 특별 보너스!</div>
+      <div style="font-size:16px; line-height:1.8;">
+        ✅ 테이블 제작 계약 시 <strong style="color:#28a745;">249,000원 전액 환불!</strong><br>
+        ✅ SNS 마케팅 3개월 무료 (50만원 상당)<br>
+        <div style="margin-top:15px; padding-top:15px; border-top:2px solid #28a745; font-size:18px; font-weight:900; color:#155724;">
+          → 사실상 무료로 전문가 컨설팅!
+        </div>
+      </div>
+    </div>
+
+    <button class="cta-button" style="background:#8B6914; font-size:20px; padding:20px;" onclick="contact('VIP')">
+      VIP 신청하기 👑
+    </button>
+  </div>
+
+  <!-- 비교표 -->
+  <div style="margin:60px 0;">
+    <h2 style="text-align:center; font-size:28px; margin-bottom:30px;">📊 패키지 비교</h2>
+    <table style="width:100%; border-collapse:collapse;">
+      <tr style="background:#1A1510; color:white;">
+        <th style="padding:15px; text-align:left;">항목</th>
+        <th style="padding:15px; text-align:center;">스타터</th>
+        <th style="padding:15px; text-align:center; background:#C49A3C;">프리미엄</th>
+        <th style="padding:15px; text-align:center;">VIP</th>
+      </tr>
+      <tr>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0;">가격</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">29,000원</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; background:#fffbf0;">99,000원</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">249,000원</td>
+      </tr>
+      <tr>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0;">상권 분석</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">✓</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; background:#fffbf0;">✓</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">✓</td>
+      </tr>
+      <tr>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0;">템플릿 수</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">2개</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; background:#fffbf0;">5개 전체</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">5개 전체</td>
+      </tr>
+      <tr>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0;">맞춤 작성</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">✗</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; background:#fffbf0;">✗</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; color:#4CAF50; font-weight:700;">✓</td>
+      </tr>
+      <tr>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0;">전화 상담</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">10분</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; background:#fffbf0;">30분</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; color:#4CAF50; font-weight:700;">3시간</td>
+      </tr>
+      <tr>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0;">카톡 질의응답</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center;">✗</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; background:#fffbf0;">1개월</td>
+        <td style="padding:12px; border-bottom:1px solid #e0e0e0; text-align:center; color:#4CAF50; font-weight:700;">6개월</td>
+      </tr>
+      <tr style="background:#d4edda;">
+        <td style="padding:12px; font-weight:700;">테이블 계약 시 환불</td>
+        <td style="padding:12px; text-align:center;">✗</td>
+        <td style="padding:12px; text-align:center;">✗</td>
+        <td style="padding:12px; text-align:center; font-weight:900; color:#28a745; font-size:18px;">전액 환불!</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 실제 후기 -->
+  <div style="background:#f8f9fa; padding:30px; border-radius:12px; margin:40px 0;">
+    <h3 style="font-size:24px; margin-bottom:20px; text-align:center;">💬 실제 구매 후기</h3>
+    
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">김*수 | 30대 | 강남 카페 오픈 (VIP)</div>
+      <div style="color:#666; line-height:1.6;">
+        "249,000원 내고 상권분석부터 SNS 전략까지 다 받았어요. 테이블까지 계약하니까 전액 환불해주셔서 완전 꿀이었어요 ㅋㅋ 근데 진짜 컨설팅 퀄리티가 대형 업체급이라 놀랐습니다. 월세 얼마에 손익분기점 얼마고 다 계산해주시더라구요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">이*영 | 40대 | 대구 칼국수집 오픈 (프리미엄)</div>
+      <div style="color:#666; line-height:1.6;">
+        "SNS 콘텐츠 캘린더 받았는데 완전 실용적이에요. 3개월치 36개 콘텐츠 아이디어가 다 있어서 그냥 따라만 하면 되더라구요. 99,000원으로 이정도면 개이득 아닙니까 ㅎㅎ 시공 체크리스트도 완전 꼼꼼해서 하나도 빠뜨린 거 없이 오픈했어요!"
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">박*진 | 20대 | 부산 디저트카페 준비중 (스타터)</div>
+      <div style="color:#666; line-height:1.6;">
+        "처음에는 29,000원도 아까워서 고민했는데요 ㅠㅠ 받아보니까 완전 후회됐어요. 진작 살걸... 경쟁사 5곳 분석이랑 예산 계산기만으로도 몇십만원 가치는 있는 것 같아요. 이 정도 퀄리티면 대형 프랜차이즈 본사 자료급이네요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">최*현 | 35세 | 서울 브런치카페 (VIP)</div>
+      <div style="color:#666; line-height:1.6;">
+        "화상 상담 3번 받았는데 진짜 전문가시더라구요. 제가 놓쳤던 부분들을 다 짚어주셨어요. 특히 메뉴 구성이랑 가격 전략 조언이 완전 도움됐습니다. 6개월 카톡 질문도 진짜 무제한이라서 사소한 것도 다 물어봤어요 ㅋㅋ"
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">정*아 | 28세 | 인천 베이커리카페 (프리미엄)</div>
+      <div style="color:#666; line-height:1.6;">
+        "브랜드 기획서 템플릿 받고 따라 작성했더니 완전 프로페셔널하게 나왔어요! 은행 대출받을 때도 이거 들고 갔는데 담당자가 완전 칭찬하더라구요 ㅎㅎ 돈 주고 대행 맡긴 것처럼 나와서 만족스러워요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">강*민 | 42세 | 경기 음식점 2호점 오픈 (VIP)</div>
+      <div style="color:#666; line-height:1.6;">
+        "1호점은 감으로 했는데 이번에는 데이터로 했어요. 상권분석 받고 보니까 제가 보던 자리보다 200m 떨어진 곳이 훨씬 낫더라구요. 덕분에 월세 50만원 아끼고 유동인구는 2배 많은 곳에 오픈했습니다. 진짜 이거 안 받았으면 큰일날 뻔 했어요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">윤*희 | 33세 | 대전 카페 준비중 (스타터)</div>
+      <div style="color:#666; line-height:1.6;">
+        "상권 데이터 리포트 보고 깜짝 놀랐어요. 제가 보던 지역이 생각보다 경쟁이 너무 심하더라구요 ㅠㅠ 덕분에 다른 곳으로 방향 틀었습니다. 29,000원으로 몇천만원 날릴 뻔한 거 막은 셈이네요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">한*석 | 38세 | 광주 레스토랑 오픈 (프리미엄)</div>
+      <div style="color:#666; line-height:1.6;">
+        "시공 체크리스트 100개가 진짜 미쳤어요. 전기, 수도, 가스, 인테리어 하나하나 체크하면서 했더니 하나도 빠뜨린 게 없어요. 예전에 지인이 창업할 때는 전기 용량 부족해서 나중에 추가 공사했다는데, 저는 그런 거 하나도 없었습니다!"
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">조*연 | 26세 | 제주 카페 오픈 (VIP)</div>
+      <div style="color:#666; line-height:1.6;">
+        "제주까지 현장 방문 와주셔서 완전 감동이었어요 ㅠㅠ 동선이랑 테이블 배치 직접 봐주시고, 포토존 위치까지 추천해주셨어요. 오픈하고 나니까 진짜 인스타 핫플이 됐어요 ㅋㅋ SNS 마케팅도 3개월 무료로 받았는데 팔로워가 1500명까지 늘었습니다!"
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">신*우 | 45세 | 울산 분식집 (스타터)</div>
+      <div style="color:#666; line-height:1.6;">
+        "예산 계산기 엑셀로 받았는데요, 숫자만 입력하면 자동으로 손익분기점이랑 ROI가 나오더라구요. 와이프한테 보여줬더니 완전 신기해하면서 이거 어디서 났냐고 ㅋㅋ 은행 대출 상담할 때도 이거 보여드렸어요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">배*주 | 31세 | 성남 디저트카페 (프리미엄)</div>
+      <div style="color:#666; line-height:1.6;">
+        "전화 상담 30분 받았는데 완전 알차더라구요. 제가 준비한 메뉴 구성 보시고 바로 피드백 주셨어요. 원가율이 너무 높다고, 이렇게 가면 손해본다고 ㅠㅠ 덕분에 메뉴 가격 재조정했습니다. 이거 안 들었으면 오픈하고 적자났을 듯..."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">송*은 | 29세 | 수원 카페 (VIP)</div>
+      <div style="color:#666; line-height:1.6;">
+        "맞춤 작성 받았는데 진짜 디테일이 장난 아니에요. 제 매장 상황에 딱 맞춰서 작성해주셨어요. 특히 경쟁사 분석이 완전 구체적이더라구요. 반경 500m 내 카페 10곳 다 분석해주시고, 우리가 어떻게 차별화해야 하는지까지! 컨설팅비만 따지면 몇백은 받아도 될 퀄리티예요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">임*호 | 36세 | 안양 음식점 (프리미엄)</div>
+      <div style="color:#666; line-height:1.6;">
+        "카톡 질의응답 1개월 동안 진짜 매일 물어봤어요 ㅋㅋ 간판 색깔 뭐가 좋냐부터 메뉴판 디자인까지 ㅋㅋ 근데 다 친절하게 답변해주셨어요. 덕분에 오픈 준비 완전 순조롭게 했습니다. 혼자 했으면 실수 엄청 많이 했을 것 같아요."
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:8px; margin:15px 0;">
+      <div style="font-weight:700; margin-bottom:8px;">오*정 | 50세 | 평택 한식당 (VIP)</div>
+      <div style="color:#666; line-height:1.6;">
+        "나이가 있다보니까 SNS는 잘 몰랐는데요, 3개월 무료 마케팅 받으면서 인스타 운영법 다 배웠어요. 이제는 손자가 가르쳐준 것보다 제가 더 잘해요 ㅋㅋ 249,000원 내고 테이블도 맞춤 제작했는데 전액 환불해주시고, 오픈하고 2주 만에 웨이팅까지 생겼습니다!"
+      </div>
+      <div style="margin-top:10px; color:#C49A3C;">⭐⭐⭐⭐⭐</div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div style="margin:60px 0;">
+    <h3 style="font-size:24px; margin-bottom:30px; text-align:center;">❓ 자주 묻는 질문</h3>
+    
+    <div style="margin:20px 0;">
+      <div style="font-weight:700; font-size:16px; margin-bottom:8px;">Q. 환불 정책은 어떻게 되나요?</div>
+      <div style="color:#666; padding-left:20px;">
+        VIP 패키지만 테이블 제작 계약 시 전액 환불됩니다. 
+        스타터/프리미엄 패키지는 디지털 상품 특성상 환불이 불가합니다.
+      </div>
+    </div>
+
+    <div style="margin:20px 0;">
+      <div style="font-weight:700; font-size:16px; margin-bottom:8px;">Q. 언제까지 신청 가능한가요?</div>
+      <div style="color:#666; padding-left:20px;">
+        5월 한정 특가이며, 선착순 20명 마감됩니다. 조기 마감될 수 있습니다.
+      </div>
+    </div>
+
+    <div style="margin:20px 0;">
+      <div style="font-weight:700; font-size:16px; margin-bottom:8px;">Q. 템플릿만 받고 혼자 작성할 수 있나요?</div>
+      <div style="color:#666; padding-left:20px;">
+        스타터/프리미엄은 템플릿만 제공됩니다. 
+        맞춤 작성을 원하시면 VIP 패키지를 선택하세요.
+      </div>
+    </div>
+
+    <div style="margin:20px 0;">
+      <div style="font-weight:700; font-size:16px; margin-bottom:8px;">Q. 지방도 가능한가요?</div>
+      <div style="color:#666; padding-left:20px;">
+        전국 어디든 가능합니다. 현장 방문은 서울/경기 한정이지만, 
+        화상 상담으로 모든 지역 컨설팅 가능합니다.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div style="font-size:24px; font-weight:900; color:#C49A3C; margin-bottom:20px;">
+      멋:테이블 × TABLE & PROFIT
+    </div>
+    <div style="font-size:16px; color:#666; line-height:2;">
+      📞 010-6292-8562<br>
+      💬 https://open.kakao.com/o/sSdRDJpi<br>
+      🌐 https://meottable.github.io/meot-table/
+    </div>
+    <div style="margin-top:30px; padding:20px; background:#fffbf0; border-radius:8px; border:2px solid #C49A3C;">
+      <div style="font-size:18px; font-weight:700; margin-bottom:10px;">
+        🎁 지금 신청하시면 추가 보너스!
+      </div>
+      <div style="font-size:14px; color:#666;">
+        선착순 10명에게 "대구 서문시장 칼국수집 상권분석" 완성본 PDF 무료 증정!<br>
+        (실제 작성 사례를 참고하실 수 있습니다)
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function contact(packageName) {
+  alert(packageName + ' 패키지 신청하시려면\n\n카톡으로 문의해주세요!\n010-6292-8562\n\n또는 오픈채팅:\nhttps://open.kakao.com/o/sSdRDJpi');
+  
+  // 실제로는 카톡 링크로 이동
+  // window.location.href = 'https://open.kakao.com/o/sSdRDJpi';
+}
+</script>
+
+</body>
+</html>

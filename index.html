@@ -45,6 +45,107 @@
   .brand-dot { width:4px; height:4px; background:var(--gold); border-radius:50%; opacity:0.5; }
   .brand-sub { font-size:9px; color:rgba(255,255,255,0.2); letter-spacing:3px; }
 
+  /* ── 상단 띠배너 ── */
+  .top-banner {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:linear-gradient(135deg, var(--gold), var(--gold-dark));
+    padding:12px 20px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 2px 15px rgba(196,154,60,0.3);
+    animation:slideDown 0.6s ease both;
+  }
+  @keyframes slideDown {
+    from { transform:translateY(-100%); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
+  }
+  .banner-content {
+    display:flex; align-items:center; gap:20px;
+    max-width:1200px; width:100%;
+  }
+  .banner-text {
+    flex:1;
+    font-size:14px; font-weight:700; color:var(--dark);
+    display:flex; align-items:center; gap:8px;
+    letter-spacing:-0.3px;
+  }
+  .banner-text .emoji { font-size:18px; }
+  .banner-text .highlight {
+    background:rgba(255,255,255,0.9);
+    padding:3px 10px; border-radius:6px;
+    font-size:15px; font-weight:900;
+    color:var(--gold-dark);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform:scale(1); }
+    50% { transform:scale(1.05); }
+  }
+  .banner-btn {
+    background:var(--white);
+    color:var(--gold-dark);
+    padding:8px 24px;
+    border-radius:25px;
+    font-weight:900;
+    font-size:13px;
+    text-decoration:none;
+    transition:all 0.3s;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    white-space:nowrap;
+  }
+  .banner-btn:hover {
+    background:var(--dark);
+    color:var(--gold);
+    transform:translateY(-2px);
+    box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  }
+  .close-banner {
+    background:transparent;
+    border:none;
+    color:var(--dark);
+    font-size:22px;
+    cursor:pointer;
+    padding:0 8px;
+    opacity:0.6;
+    transition:opacity 0.3s;
+    line-height:1;
+  }
+  .close-banner:hover {
+    opacity:1;
+  }
+  .banner-closed {
+    display:none !important;
+  }
+
+  /* 띠배너 있을 때 브랜드 위치 조정 */
+  body:not(.banner-hidden) .brand {
+    top:60px;
+  }
+
+  /* 모바일 띠배너 */
+  @media (max-width: 768px) {
+    .top-banner {
+      padding:10px 15px;
+    }
+    .banner-content {
+      gap:12px;
+    }
+    .banner-text {
+      font-size:12px;
+      flex-wrap:wrap;
+    }
+    .banner-text .highlight {
+      font-size:13px;
+      padding:2px 8px;
+    }
+    .banner-btn {
+      padding:6px 18px;
+      font-size:12px;
+    }
+    .close-banner {
+      font-size:20px;
+    }
+  }
+
   /* ── 중앙 타이틀 ── */
   .main-wrap {
     position:relative; z-index:5;
@@ -286,6 +387,18 @@
 </head>
 <body>
 
+<!-- 상단 띠배너 -->
+<div class="top-banner" id="topBanner">
+  <div class="banner-content">
+    <div class="banner-text">
+      <span class="emoji">🎁</span>
+      <span><span class="highlight">5월 한정!</span> 창업 컨설팅 패키지 <strong>29,000원</strong>부터</span>
+    </div>
+    <a href="packages.html" class="banner-btn">지금 보기 →</a>
+    <button class="close-banner" onclick="closeBanner()" aria-label="닫기">×</button>
+  </div>
+</div>
+
 <div class="bg-overlay"></div>
 
 <!-- 브랜드 -->
@@ -430,7 +543,41 @@
 <!-- 하단 -->
 <div class="bottom">
   <div class="bottom-contact">010-6292-8562 · 카카오톡 오픈채팅 · 테이블 & 프로핏</div>
+  <div style="margin-top:20px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1); font-size:11px; color:rgba(255,255,255,0.3); line-height:1.8; text-align:center;">
+    <div style="margin-bottom:8px;">
+      <strong style="color:rgba(255,255,255,0.4);">영창</strong> | 대표: 권수진 | 사업자등록번호: 143-14-02493
+    </div>
+    <div>
+      경남 김해시 서부로 909-19, 2층 | Tel: 010-6292-8562
+    </div>
+  </div>
 </div>
+
+<script>
+// 띠배너 닫기 기능
+function closeBanner() {
+  const banner = document.getElementById('topBanner');
+  const body = document.body;
+  
+  banner.classList.add('banner-closed');
+  body.classList.add('banner-hidden');
+  
+  // 로컬 스토리지에 저장 (오늘 하루 안 보기)
+  const today = new Date().toDateString();
+  localStorage.setItem('bannerClosed', today);
+}
+
+// 페이지 로드 시 배너 상태 확인
+window.addEventListener('DOMContentLoaded', function() {
+  const today = new Date().toDateString();
+  const bannerClosed = localStorage.getItem('bannerClosed');
+  
+  if (bannerClosed === today) {
+    document.getElementById('topBanner').classList.add('banner-closed');
+    document.body.classList.add('banner-hidden');
+  }
+});
+</script>
 
 </body>
 </html>
