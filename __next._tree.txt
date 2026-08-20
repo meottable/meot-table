@@ -1,0 +1,3 @@
+:HL["/meot-table/_next/static/chunks/0py0hp8be-kju.css","style"]
+:HL["/images/meot-factory-building.jpg","image"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"GFTvX5PiEvkj2U8V0yvS2"}
