@@ -187,67 +187,71 @@
 })();
 </script>
 <style id="meot-market-popup-style">
-  .meot-market-popup[hidden]{display:none!important}
-  .meot-market-popup{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(20,18,15,.56);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-  .meot-market-popup__card{position:relative;width:min(520px,100%);max-height:min(760px,calc(100dvh - 48px));overflow:auto;border:1px solid rgba(175,126,47,.25);border-radius:26px;background:#f7f2e8;color:#171512;box-shadow:0 30px 90px rgba(0,0,0,.34)}
-  .meot-market-popup__head{padding:34px 34px 24px;background:linear-gradient(135deg,#1c1b18,#34302a);color:#fff}
-  .meot-market-popup__eyebrow{margin:0 0 13px;color:#d3a13e;font-size:12px;font-weight:800;letter-spacing:.18em}
-  .meot-market-popup__title{margin:0;font-size:clamp(28px,7vw,42px);font-weight:750;line-height:1.18;letter-spacing:-.045em}
-  .meot-market-popup__title em{color:#e2b24d;font-style:normal}
-  .meot-market-popup__body{padding:28px 34px 34px}
-  .meot-market-popup__lead{margin:0 0 22px;color:#58534b;font-size:16px;line-height:1.72;letter-spacing:-.02em}
-  .meot-market-popup__list{display:grid;gap:10px;margin:0 0 25px;padding:0;list-style:none}
-  .meot-market-popup__list li{display:flex;align-items:center;gap:10px;color:#292621;font-size:14px;font-weight:650}
-  .meot-market-popup__list li:before{content:"✓";display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#e9d7af;color:#6d4b0d;font-size:12px;font-weight:900}
-  .meot-market-popup__cta{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:13px;background:#d39b2f;color:#17120a!important;font-size:16px;font-weight:850;text-decoration:none!important;box-shadow:0 10px 24px rgba(174,120,20,.22)}
-  .meot-market-popup__note{margin:13px 0 0;text-align:center;color:#807a70;font-size:12px;line-height:1.5}
-  .meot-market-popup__close{position:absolute;top:14px;right:14px;z-index:2;width:40px;height:40px;border:1px solid rgba(255,255,255,.3);border-radius:50%;background:rgba(0,0,0,.23);color:#fff;font-size:25px;line-height:1;cursor:pointer}
-  @media(max-width:640px){
-    .meot-market-popup{align-items:flex-end;padding:0}
-    .meot-market-popup__card{width:100%;max-height:88dvh;border-radius:24px 24px 0 0}
-    .meot-market-popup__head{padding:30px 25px 22px}
-    .meot-market-popup__body{padding:24px 25px calc(28px + env(safe-area-inset-bottom))}
-  }
-  @media(prefers-reduced-motion:no-preference){
-    .meot-market-popup__card{animation:meotPopupIn .38s cubic-bezier(.2,.8,.2,1)}
-    @keyframes meotPopupIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
-  }
+.meot-market-popup[hidden]{display:none!important}
+.meot-market-popup{position:fixed;right:24px;bottom:24px;z-index:2147483000;width:min(420px,calc(100vw - 32px));pointer-events:none}
+.meot-market-popup__card{position:relative;overflow:hidden;border:1px solid rgba(175,126,47,.28);border-radius:20px;background:#f7f2e8;color:#171512;box-shadow:0 18px 55px rgba(0,0,0,.27);pointer-events:auto}
+.meot-market-popup__head{padding:24px 62px 17px 24px;background:linear-gradient(135deg,#1c1b18,#34302a);color:#fff}
+.meot-market-popup__eyebrow{margin:0 0 9px;color:#d3a13e;font-size:11px;font-weight:800;letter-spacing:.17em}
+.meot-market-popup__title{margin:0;font-size:28px;font-weight:750;line-height:1.22;letter-spacing:-.045em}
+.meot-market-popup__title em{color:#e2b24d;font-style:normal}
+.meot-market-popup__body{padding:20px 24px 22px}
+.meot-market-popup__lead{margin:0 0 16px;color:#58534b;font-size:14px;line-height:1.65;letter-spacing:-.02em}
+.meot-market-popup__list{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 18px;padding:0;list-style:none}
+.meot-market-popup__list li{padding:7px 10px;border-radius:999px;background:#ece3d3;color:#3b352c;font-size:12px;font-weight:700}
+.meot-market-popup__cta{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:11px;background:#d39b2f;color:#17120a!important;font-size:15px;font-weight:850;text-decoration:none!important}
+.meot-market-popup__note{margin:10px 0 0;text-align:center;color:#807a70;font-size:11px;line-height:1.45}
+.meot-market-popup__close{position:absolute;top:14px;right:14px;z-index:3;width:40px;height:40px;border:1px solid rgba(255,255,255,.38);border-radius:50%;background:#fff;color:#171512;font-size:25px;line-height:1;box-shadow:0 5px 15px rgba(0,0,0,.2);cursor:pointer}
+@media(max-width:640px){
+ .meot-market-popup{right:14px;bottom:calc(98px + env(safe-area-inset-bottom));width:calc(100vw - 28px)}
+ .meot-market-popup__card{max-height:calc(100dvh - 135px);overflow:auto;border-radius:18px}
+ .meot-market-popup__head{padding:21px 58px 15px 20px}
+ .meot-market-popup__title{font-size:24px}
+ .meot-market-popup__body{padding:17px 20px 19px}
+ .meot-market-popup__lead{margin-bottom:13px;font-size:13px;line-height:1.58}
+ .meot-market-popup__list{margin-bottom:14px}
+ .meot-market-popup__cta{min-height:48px}
+}
+@media(prefers-reduced-motion:no-preference){
+ .meot-market-popup__card{animation:meotPopupIn .34s cubic-bezier(.2,.8,.2,1)}
+ @keyframes meotPopupIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+}
 </style>
-<div class="meot-market-popup" id="meot-market-popup" hidden role="dialog" aria-modal="true" aria-labelledby="meot-market-popup-title">
-  <div class="meot-market-popup__card">
-    <button class="meot-market-popup__close" type="button" aria-label="팝업 닫기">×</button>
-    <div class="meot-market-popup__head">
-      <p class="meot-market-popup__eyebrow">NEW CUSTOMER BENEFIT</p>
-      <h2 class="meot-market-popup__title" id="meot-market-popup-title">신규 고객님께<br><em>기본 상권분석 무료</em></h2>
-    </div>
-    <div class="meot-market-popup__body">
-      <p class="meot-market-popup__lead">주소와 업종만 알려주세요. 입지와 주변 수요를 살펴보고 테이블 구성 상담에 활용할 수 있는 기본 분석을 정리해 드립니다.</p>
-      <ul class="meot-market-popup__list">
-        <li>주변 고객층과 유동 특성</li>
-        <li>동종업계 및 경쟁 환경</li>
-        <li>좌석 구성과 운영 포인트</li>
-      </ul>
-      <a class="meot-market-popup__cta" href="https://open.kakao.com/o/sSdRDJpi" target="_blank" rel="noopener noreferrer">무료 상권분석 신청하기 →</a>
-      <p class="meot-market-popup__note">신규 상담 고객 대상 · 기본 분석 기준 · 실제 결과는 현장 조건에 따라 달라질 수 있습니다.</p>
-    </div>
+<div class="meot-market-popup" id="meot-market-popup" hidden role="region" aria-label="신규 고객 무료 상권분석 안내">
+ <div class="meot-market-popup__card">
+  <button class="meot-market-popup__close" type="button" aria-label="안내창 닫기">×</button>
+  <div class="meot-market-popup__head">
+   <p class="meot-market-popup__eyebrow">NEW CUSTOMER BENEFIT</p>
+   <h2 class="meot-market-popup__title">신규 고객님께<br><em>기본 상권분석 무료</em></h2>
   </div>
+  <div class="meot-market-popup__body">
+   <p class="meot-market-popup__lead">주소와 업종만 알려주세요. 주변 수요와 경쟁 환경을 살펴 기본 분석을 정리해 드립니다.</p>
+   <ul class="meot-market-popup__list"><li>고객층·유동 특성</li><li>경쟁 환경</li><li>운영 포인트</li></ul>
+   <a class="meot-market-popup__cta" href="https://open.kakao.com/o/sSdRDJpi" target="_blank" rel="noopener noreferrer">무료 상권분석 신청하기 →</a>
+   <p class="meot-market-popup__note">신규 상담 고객 대상 · 기본 분석 기준</p>
+  </div>
+ </div>
 </div>
 <script id="meot-market-popup-script">
 (function(){
-  var popup=document.getElementById("meot-market-popup");
-  if(!popup)return;
-  var closeButton=popup.querySelector(".meot-market-popup__close");
-  var close=function(){popup.hidden=true;document.documentElement.style.overflow="";try{sessionStorage.setItem("meot-market-popup-closed","1")}catch(e){}};
-  var open=function(){
-    try{if(sessionStorage.getItem("meot-market-popup-closed")==="1")return}catch(e){}
-    popup.hidden=false;
-    document.documentElement.style.overflow="hidden";
-    closeButton.focus();
-  };
-  closeButton.addEventListener("click",close);
-  popup.addEventListener("click",function(e){if(e.target===popup)close()});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!popup.hidden)close()});
-  setTimeout(open,800);
+ var popup=document.getElementById("meot-market-popup");
+ if(!popup)return;
+ var closeButton=popup.querySelector(".meot-market-popup__close");
+ var key="meot-market-popup-v2-closed";
+ document.documentElement.style.overflow="";
+ document.body.style.overflow="";
+ var close=function(){
+  popup.hidden=true;
+  popup.setAttribute("aria-hidden","true");
+  try{sessionStorage.setItem(key,"1")}catch(e){}
+ };
+ var open=function(){
+  var force=new URLSearchParams(location.search).get("showPopup")==="1";
+  try{if(!force&&sessionStorage.getItem(key)==="1")return}catch(e){}
+  popup.hidden=false;
+  popup.setAttribute("aria-hidden","false");
+ };
+ if(closeButton)closeButton.addEventListener("click",close);
+ setTimeout(open,1100);
 })();
 </script></body></html>
 <!-- pages-rebuild: market-analysis-popup-20260824-2230-kst -->
