@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>창업 글 답변 도우미 | 멋:테이블</title>
+<style>
+:root{--ink:#171512;--gold:#ca962d;--bg:#eeeae2;--muted:#716b62;--line:#d5cdc0}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif}
+header{padding:22px 4vw;background:#191713;color:#fff;display:flex;justify-content:space-between;align-items:center}header b{font-size:20px}header a{color:#e9bd60;text-decoration:none}
+main{max-width:1180px;margin:auto;padding:50px 22px}.intro{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:30px}.intro h1{font-size:clamp(34px,5vw,56px);letter-spacing:-.05em;margin:8px 0}.intro p{color:var(--muted);line-height:1.7;max-width:540px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}.panel{background:#fff;border:1px solid var(--line);padding:26px}.panel h2{margin:0 0 20px;font-size:22px}
+label{display:block;font-size:13px;font-weight:750;margin-top:14px}input,select,textarea{width:100%;margin-top:7px;padding:13px;border:1px solid #cbc2b5;background:#fff;font:inherit}textarea{min-height:150px;resize:vertical}
+button,.button{display:inline-block;border:0;background:var(--gold);color:#19130a;padding:14px 18px;font-weight:850;text-decoration:none;cursor:pointer;margin-top:16px}.secondary{background:#ece6dc;margin-left:7px}
+.output{min-height:260px;padding:20px;background:#f7f4ee;border:1px solid var(--line);white-space:pre-wrap;line-height:1.75}.hint{color:var(--muted);font-size:13px;line-height:1.6}.log{margin-top:20px}.log table{width:100%;border-collapse:collapse;font-size:13px}.log th,.log td{text-align:left;padding:11px;border-bottom:1px solid var(--line)}.status{color:#956610;font-weight:800}
+@media(max-width:760px){.intro{display:block}.layout{grid-template-columns:1fr}.panel{padding:20px}.log{overflow:auto}.log table{min-width:650px}}
+</style></head><body><header><b>MEOT : TABLE · LEAD DESK</b><a href="/meot-table/analysis.html" target="_blank">고객 신청 페이지 ↗</a></header>
+<main><section class="intro"><div><small>10-MINUTE DAILY ROUTINE</small><h1>창업 글 답변 도우미</h1></div><p>공개 글을 확인한 뒤 내용을 붙여 넣으세요. 먼저 도움이 되는 답변을 만들고, 마지막 한 문장에만 무료 상권분석을 자연스럽게 안내합니다.</p></section>
+<div class="layout"><section class="panel"><h2>1. 발견한 글 입력</h2>
+<label>글 URL<input id="url" placeholder="https://..."></label><label>글 제목<input id="title" placeholder="예: 고깃집 자리 계약 전인데 고민입니다"></label>
+<label>업종<input id="industry" placeholder="예: 고깃집"></label><label>진행 단계<select id="stage"><option>입지 검토</option><option>계약 전</option><option>인테리어·가구 준비</option><option>오픈 임박</option></select></label>
+<label>글 내용<textarea id="post" placeholder="고객이 작성한 글에서 고민과 질문이 드러나는 부분을 붙여 넣으세요."></textarea></label>
+<button id="generate">답변 초안 만들기</button></section>
+<section class="panel"><h2>2. 검토 후 복사</h2><div id="output" class="output">왼쪽 내용을 입력하면 답변 초안이 여기에 표시됩니다.</div>
+<button id="copy">초안 복사</button><button id="save" class="secondary">처리 목록 저장</button><p class="hint">카페 규칙을 먼저 확인하고, 같은 문구를 반복 게시하지 마세요. 답변은 반드시 글 내용에 맞게 한 번 더 손본 뒤 직접 등록합니다.</p></section></div>
+<section class="panel log"><h2>오늘 처리 목록</h2><table><thead><tr><th>시간</th><th>제목</th><th>업종</th><th>단계</th><th>상태</th></tr></thead><tbody id="rows"></tbody></table></section></main>
+<script>
+const $=id=>document.getElementById(id),key='meot_lead_desk_v1';
+function draft(){const title=$('title').value.trim(),industry=$('industry').value.trim()||'해당 업종',stage=$('stage').value,post=$('post').value.trim();
+let insight='입지는 유동인구 숫자만 보기보다 실제 방문 시간대, 주차·진입 동선, 주변 목적형 수요를 함께 확인하는 게 좋습니다.';
+if(/주차|차량/.test(post))insight='특히 차량 방문 비중이 높은 업종은 주차 대수보다 진입 난이도와 피크타임 회전 가능 여부를 함께 보셔야 합니다.';
+else if(/임대|월세|권리/.test(post))insight='임대 조건은 월세만 보지 말고 예상 객단가와 좌석 회전으로 감당 가능한 고정비 비율부터 역산해보는 편이 안전합니다.';
+else if(/테이블|의자|좌석|동선/.test(post))insight='좌석 수를 무리하게 늘리기보다 직원 동선과 테이블 간격을 먼저 잡아야 실제 회전율과 체감 만족도가 좋아집니다.';
+else if(/경쟁|상권|입지/.test(post))insight='반경 내 동종업체 수보다 각 매장의 가격대·주력 메뉴·피크 시간대가 겹치는지를 비교하는 것이 더 중요합니다.';
+const empathy=stage==='계약 전'?'계약 전이라면 지금이 조건을 다시 점검하기 가장 좋은 시점입니다.':stage==='입지 검토'?'후보지를 비교 중이시라면 기준을 먼저 정해두면 판단이 훨씬 선명해집니다.':'준비가 진행된 만큼 운영 동선과 좌석 구성을 실제 상황에 맞춰 점검해보시면 좋겠습니다.';
+return (title?'“'+title+'” 글 잘 읽었습니다.\n\n':'')+empathy+' '+insight+'\n\n'+industry+'은(는) 예상 고객층과 방문 수단, 피크 시간대가 매출 구조에 미치는 영향이 커서 주소를 기준으로 배후 수요와 경쟁 구도를 같이 보는 것을 권합니다.\n\n필요하시면 멋:테이블에서 후보지 주소와 업종을 기준으로 무료 1차 상권분석을 도와드리고 있습니다. 단순 홍보가 아니라 검토할 항목을 정리해드리는 방식이니 참고만 하셔도 괜찮습니다.\n'+location.origin+'/meot-table/analysis.html';
+}
+$('generate').onclick=()=>{$('output').textContent=draft()};$('copy').onclick=async()=>{await navigator.clipboard.writeText($('output').textContent);$('copy').textContent='복사 완료';setTimeout(()=>$('copy').textContent='초안 복사',1200)};
+function load(){const arr=JSON.parse(localStorage.getItem(key)||'[]');$('rows').innerHTML=arr.map(x=>'<tr><td>'+x.time+'</td><td><a href="'+x.url+'" target="_blank">'+(x.title||'제목 없음')+'</a></td><td>'+x.industry+'</td><td>'+x.stage+'</td><td class="status">검토 완료</td></tr>').join('')}
+$('save').onclick=()=>{const arr=JSON.parse(localStorage.getItem(key)||'[]');arr.unshift({time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}),url:$('url').value,title:$('title').value,industry:$('industry').value,stage:$('stage').value});localStorage.setItem(key,JSON.stringify(arr.slice(0,100)));load()};load();
+</script></body></html>
