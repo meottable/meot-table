@@ -36,5 +36,5 @@ const form=document.getElementById('apply'),toast=document.getElementById('toast
 form.addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(form));
 const text='[무료 상권분석 신청]\n성함: '+d.name+'\n연락처: '+d.phone+'\n후보지: '+d.address+'\n업종: '+d.industry+'\n진행 단계: '+d.stage+'\n예상 평수: '+(d.size||'미정')+'\n오픈 시기: '+(d.opening||'미정')+'\n궁금한 점: '+(d.memo||'없음');
 try{await navigator.clipboard.writeText(text)}catch(_){prompt('아래 신청 내용을 복사해주세요.',text)}
-localStorage.setItem('meot_last_area_application',JSON.stringify({...d,createdAt:new Date().toISOString()}));toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);setTimeout(()=>window.open('https://open.kakao.com/o/sSdRDJpi','_blank'),350)});
+localStorage.setItem('meot_last_area_application',JSON.stringify({...d,createdAt:new Date().toISOString()}));toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);setTimeout(()=>window.open('https://pf.kakao.com/_BZeSX/chat','_blank'),350)});
 </script></body></html>
