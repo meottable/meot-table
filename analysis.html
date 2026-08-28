@@ -37,4 +37,20 @@ form.addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromE
 const text='[무료 상권분석 신청]\n성함: '+d.name+'\n연락처: '+d.phone+'\n후보지: '+d.address+'\n업종: '+d.industry+'\n진행 단계: '+d.stage+'\n예상 평수: '+(d.size||'미정')+'\n오픈 시기: '+(d.opening||'미정')+'\n궁금한 점: '+(d.memo||'없음');
 try{await navigator.clipboard.writeText(text)}catch(_){prompt('아래 신청 내용을 복사해주세요.',text)}
 localStorage.setItem('meot_last_area_application',JSON.stringify({...d,createdAt:new Date().toISOString()}));toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);setTimeout(()=>window.open('https://pf.kakao.com/_BZeSX/chat','_blank'),350)});
-</script></body></html>
+</script>
+<script id="meot-analytics-v1">
+(function(){
+  var API='https://countapi.mileshilliard.com/api/v1/hit/';
+  var PREFIX='meottable_a91f4_';
+  function day(){var p=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()),o={};p.forEach(function(x){o[x.type]=x.value});return o.year+o.month+o.day}
+  var d=day();
+  function hit(metric){var img=new Image();img.referrerPolicy='no-referrer';img.src=API+PREFIX+d+'_'+metric+'?t='+Date.now()+Math.random()}
+  hit('pageviews');
+  var sk='meot_session_'+d;if(!sessionStorage.getItem(sk)){sessionStorage.setItem(sk,'1');hit('visitors')}
+  var source='direct',u=new URL(location.href),s=(u.searchParams.get('utm_source')||'').toLowerCase(),r=(document.referrer||'').toLowerCase();var q=s+' '+r;
+  if(/naver/.test(q))source='naver';else if(/google/.test(q))source='google';else if(/instagram|facebook|threads/.test(q))source='instagram';else if(/kakao/.test(q))source='kakao';else if(r&&new URL(document.referrer).hostname!==location.hostname)source='other';
+  var rk='meot_source_'+d;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,'1');hit('source_'+source)}
+  document.addEventListener('click',function(e){var el=e.target.closest('a,button');if(!el)return;var href=(el.getAttribute('href')||'').toLowerCase(),txt=(el.textContent||'').toLowerCase(),m='other';if(/pf\.kakao|kakao|카카오/.test(href+' '+txt))m='kakao';else if(/^tel:|전화/.test(href+' '+txt))m='phone';else if(/analysis\.html|상권/.test(href+' '+txt))m='analysis';else if(/table-x76u|제품|테이블 디자인|의자 디자인|catalog/.test(href+' '+txt))m='products';hit('click_'+m)},{capture:true});
+})();
+</script>
+</body></html>
