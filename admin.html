@@ -43,7 +43,7 @@
 <script>
 const API='https://countapi.mileshilliard.com/api/v1/get/';
 const PREFIX='meottable_a91f4_';
-const metrics={sources:[['직접 방문','source_direct'],['네이버','source_naver'],['구글','source_google'],['인스타그램','source_instagram'],['카카오','source_kakao'],['기타','source_other']],clicks:[['카카오톡','click_kakao'],['전화 상담','click_phone'],['무료 상권분석','click_analysis'],['제품 보기','click_products'],['기타 버튼','click_other']]};
+const metrics={sources:[['직접 방문','source_direct'],['네이버','source_naver'],['구글','source_google'],['인스타그램','source_instagram'],['카카오','source_kakao'],['기타','source_other']],clicks:[['카카오톡','click_kakao'],['전화 상담','click_phone'],['무료 상권분석','click_analysis'],['제품 보기','click_products'],['예상견적 계산','click_quote'],['견적서 받기','click_quote_document'],['문자 상담','click_sms'],['메뉴·페이지 이동','click_navigation'],['화면 조작','click_ui'],['기타 버튼','click_other']]};
 function kDate(d=new Date()){const p=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const o=Object.fromEntries(p.map(x=>[x.type,x.value]));return o.year+o.month+o.day}
 function displayDate(d=new Date()){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(d)}
 function keyToInput(key){return key.slice(0,4)+'-'+key.slice(4,6)+'-'+key.slice(6,8)}
