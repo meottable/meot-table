@@ -5,7 +5,7 @@
   function card(name, index) {
     var number = String(index + 1).padStart(3, "0");
     return '<a class="signatureDesignCard" href="' + chatUrl + '" target="_blank" rel="noreferrer" aria-label="' + name + ' 시그니처 상판 문의하기">' +
-      '<img src="/meot-table/images/signature/mt' + number + '.webp" alt="' + name + ' 시그니처 상판 디자인" loading="lazy" decoding="async"/>' +
+      '<img src="/meot-table/images/signature/mt' + number + '.webp?v=20260901-3" alt="' + name + ' 시그니처 상판 디자인" loading="lazy" decoding="async"/>' +
       '<div class="signatureDesignMeta"><strong>' + name + '</strong><span>SIGNATURE</span></div>' +
     '</a>';
   }
