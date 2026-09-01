@@ -37,6 +37,22 @@
     mount();
     setTimeout(mount, 250);
     setTimeout(mount, 900);
+
+    var design = document.getElementById("design");
+    if (design) {
+      var observer = new MutationObserver(function () {
+        var head = design.querySelector(".catalogHead");
+        var section = document.getElementById("signature-design");
+        if (head && section && section.previousElementSibling !== head) {
+          head.insertAdjacentElement("afterend", section);
+        }
+      });
+      observer.observe(design, { childList: true });
+      setTimeout(function () {
+        mount();
+        observer.disconnect();
+      }, 7000);
+    }
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
