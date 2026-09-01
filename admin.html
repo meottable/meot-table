@@ -29,10 +29,10 @@
     <nav class="nav">
       <button class="on" data-page="dashboard">대시보드</button><button data-page="customers">고객관리</button><button data-page="quotes">견적관리</button><button data-page="leads">창업 글</button><button data-page="analytics">방문통계</button><button data-page="settings">설정</button>
     </nav>
-    <div class="side-foot">이 기기에 안전하게 임시 저장됩니다.<br><a href="./" target="_blank">홈페이지 보기 ↗</a></div>
+    <div class="side-foot">자동 문의는 비공개 Google Sheet에 저장됩니다.<br><a href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">고객 DB 열기 ↗</a></div>
   </aside>
   <main>
-    <header class="top"><h1 id="topTitle">오늘의 영업 현황</h1><div class="top-actions"><span class="sync">● 데이터 준비됨</span><a class="btn light" href="./" target="_blank">홈페이지</a><button class="btn gold" onclick="openCustomer()">+ 신규 고객</button></div></header>
+    <header class="top"><h1 id="topTitle">오늘의 영업 현황</h1><div class="top-actions"><span class="sync">● 고객 DB 연결됨</span><a class="btn light" href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">고객 DB</a><a class="btn light" href="./" target="_blank">홈페이지</a><button class="btn gold" onclick="openCustomer()">+ 신규 고객</button></div></header>
 
     <section class="page on" id="dashboard">
       <div class="page-head"><div><span class="eyebrow">TODAY'S BUSINESS</span><h2>놓치지 말아야 할 일</h2><p id="todayText"></p></div></div>
@@ -46,7 +46,7 @@
         <article class="panel"><div class="panel-head"><h3>오늘 연락할 고객</h3><button class="link-btn" onclick="go('customers')">전체 보기 →</button></div><div class="list" id="taskList"></div></article>
         <article class="panel"><div class="panel-head"><h3>오픈이 가까운 고객</h3><button class="link-btn" onclick="go('customers')">전체 보기 →</button></div><div class="list" id="openingList"></div></article>
         <article class="panel"><div class="panel-head"><h3>최근 견적</h3><button class="link-btn" onclick="go('quotes')">견적관리 →</button></div><div class="list" id="recentQuotes"></div></article>
-        <article class="panel"><div class="panel-head"><h3>빠른 실행</h3></div><div class="list"><div class="list-row"><div><div class="list-title">창업 후보 글 검토</div><div class="list-meta">원문과 연락 초안을 확인합니다.</div></div><button class="icon-btn" onclick="go('leads')">열기</button></div><div class="list-row"><div><div class="list-title">상권분석 신청 페이지</div><div class="list-meta">고객에게 보이는 신청 화면입니다.</div></div><a class="icon-btn" href="./analysis.html" target="_blank">보기</a></div><div class="list-row"><div><div class="list-title">창업 글 답변 도우미</div><div class="list-meta">글에 맞춘 연락 초안을 만듭니다.</div></div><a class="icon-btn" href="./lead-monitor.html" target="_blank">열기</a></div></div></article>
+        <article class="panel"><div class="panel-head"><h3>빠른 실행</h3></div><div class="list"><div class="list-row"><div><div class="list-title">자동 저장 고객 DB</div><div class="list-meta">홈페이지 카톡·문자·전화 문의 전 입력된 고객을 확인합니다.</div></div><a class="icon-btn" href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">열기</a></div><div class="list-row"><div><div class="list-title">창업 후보 글 검토</div><div class="list-meta">원문과 연락 초안을 확인합니다.</div></div><button class="icon-btn" onclick="go('leads')">열기</button></div><div class="list-row"><div><div class="list-title">상권분석 신청 페이지</div><div class="list-meta">고객에게 보이는 신청 화면입니다.</div></div><a class="icon-btn" href="./analysis.html" target="_blank">보기</a></div><div class="list-row"><div><div class="list-title">창업 글 답변 도우미</div><div class="list-meta">글에 맞춘 연락 초안을 만듭니다.</div></div><a class="icon-btn" href="./lead-monitor.html" target="_blank">열기</a></div></div></article>
       </div>
     </section>
 
@@ -77,7 +77,7 @@
 
     <section class="page" id="settings">
       <div class="page-head"><div><span class="eyebrow">SETTINGS</span><h2>설정·데이터</h2><p>현재 기기에 저장된 영업자료를 관리합니다.</p></div></div>
-      <article class="panel settings"><div class="setting-row"><div><b>데이터 백업</b><p>고객·견적·창업 글 자료를 JSON 파일로 내려받습니다.</p></div><button class="btn light" onclick="backupData()">백업 받기</button></div><div class="setting-row"><div><b>데이터 가져오기</b><p>이전에 내려받은 백업 파일을 복원합니다.</p></div><label class="btn light">파일 선택<input type="file" id="restoreFile" accept="application/json" hidden></label></div><div class="setting-row"><div><b>관리자 보안</b><p>현재는 고객정보가 서버에 전송되지 않고 이 브라우저에만 저장됩니다.</p></div><span class="badge new">서버 연결 전</span></div></article>
+      <article class="panel settings"><div class="setting-row"><div><b>자동 저장 고객 DB</b><p>웹사이트 문의 고객과 문의 이력이 비공개 Google Sheet에 저장됩니다.</p></div><a class="btn light" href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">Google Sheet 열기</a></div><div class="setting-row"><div><b>데이터 백업</b><p>기기 내 고객·견적·창업 글 자료를 JSON 파일로 내려받습니다.</p></div><button class="btn light" onclick="backupData()">백업 받기</button></div><div class="setting-row"><div><b>데이터 가져오기</b><p>이전에 내려받은 기기 백업 파일을 복원합니다.</p></div><label class="btn light">파일 선택<input type="file" id="restoreFile" accept="application/json" hidden></label></div><div class="setting-row"><div><b>관리자 보안</b><p>자동 문의 DB는 Google 로그인 권한이 있는 사용자만 열 수 있습니다.</p></div><span class="badge win">고객 DB 연결됨</span></div></article>
       <article class="panel settings danger-zone"><div class="setting-row"><div><b>기기 내 영업자료 초기화</b><p>고객과 견적 자료가 삭제되며 되돌릴 수 없습니다.</p></div><button class="btn danger" onclick="clearBusinessData()">초기화</button></div></article>
     </section>
   </main>

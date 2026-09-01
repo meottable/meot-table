@@ -28,13 +28,15 @@ button{width:100%;margin-top:20px;padding:17px;border:0;background:var(--gold);c
 <label class="full">후보지 주소<input name="address" required placeholder="예: 경기도 화성시 안연로 33"></label>
 <label>예정 업종<input name="industry" required placeholder="예: 오리고깃집"></label><label>진행 단계<select name="stage"><option>후보지 검토 중</option><option>계약 전</option><option>계약 완료</option><option>오픈 준비 중</option></select></label>
 <label>예상 평수<input name="size" placeholder="예: 35평"></label><label>예상 오픈 시기<input name="opening" placeholder="예: 3개월 이내"></label>
-<label class="full">궁금한 점<textarea name="memo" placeholder="주차, 주변 경쟁점, 예상 좌석 수 등 가장 궁금한 점을 적어주세요."></textarea></label></div>
-<button type="submit">신청 내용 복사하고 카카오톡 열기 ↗</button><p class="notice">입력 내용은 서버에 자동 저장되지 않습니다. 버튼을 누르면 신청서가 복사되고 멋:테이블 카카오톡 상담창이 열립니다.</p></form></section>
-<section class="process"><p class="eyebrow">HOW IT WORKS</p><div class="steps"><div class="step"><span>01</span><h3>기본 정보 확인</h3><p>주소와 업종, 현재 진행 단계를 확인합니다.</p></div><div class="step"><span>02</span><h3>1차 상권 검토</h3><p>공개 데이터를 바탕으로 수요·경쟁·접근성을 정리합니다.</p></div><div class="step"><span>03</span><h3>상담 제안</h3><p>입지와 운영에 맞는 좌석 구성과 가구 방향을 안내합니다.</p></div></div></section></main><div id="toast">신청서가 복사되었습니다.</div>
+<label class="full">궁금한 점<textarea name="memo" placeholder="주차, 주변 경쟁점, 예상 좌석 수 등 가장 궁금한 점을 적어주세요."></textarea></label><label class="full" style="display:flex;gap:9px;align-items:flex-start;font-weight:500;line-height:1.5"><input name="privacy" type="checkbox" required style="width:auto;margin:2px 0 0"><span>상담 응대를 위한 개인정보 수집·이용에 동의합니다. 입력 정보는 상담 목적으로만 사용됩니다.</span></label></div>
+<button type="submit">신청 저장하고 카카오톡 열기 ↗</button><p class="notice">입력 내용은 상담 응대용 고객 DB에 저장되며, 담당자가 확인 후 연락드립니다.</p></form></section>
+<section class="process"><p class="eyebrow">HOW IT WORKS</p><div class="steps"><div class="step"><span>01</span><h3>기본 정보 확인</h3><p>주소와 업종, 현재 진행 단계를 확인합니다.</p></div><div class="step"><span>02</span><h3>1차 상권 검토</h3><p>공개 데이터를 바탕으로 수요·경쟁·접근성을 정리합니다.</p></div><div class="step"><span>03</span><h3>상담 제안</h3><p>입지와 운영에 맞는 좌석 구성과 가구 방향을 안내합니다.</p></div></div></section></main><div id="toast">고객 DB에 신청이 저장되었습니다.</div>
+<script src="/meot-table/lead-db.js?v=20260901-1"></script>
 <script>
 const form=document.getElementById('apply'),toast=document.getElementById('toast');
 form.addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(form));
 const text='[무료 상권분석 신청]\n성함: '+d.name+'\n연락처: '+d.phone+'\n후보지: '+d.address+'\n업종: '+d.industry+'\n진행 단계: '+d.stage+'\n예상 평수: '+(d.size||'미정')+'\n오픈 시기: '+(d.opening||'미정')+'\n궁금한 점: '+(d.memo||'없음');
+try{await window.meotLeadDb.save({name:d.name,phone:d.phone,region:d.address,industry:d.industry,opening:d.opening,channel:'카카오톡',source:'무료 상권분석',memo:text,page:location.href})}catch(_){alert('연락처를 확인한 뒤 다시 신청해 주세요.');return}
 try{await navigator.clipboard.writeText(text)}catch(_){prompt('아래 신청 내용을 복사해주세요.',text)}
 localStorage.setItem('meot_last_area_application',JSON.stringify({...d,createdAt:new Date().toISOString()}));toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);setTimeout(()=>window.open('https://pf.kakao.com/_BZeSX/chat','_blank'),350)});
 </script>

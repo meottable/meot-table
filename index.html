@@ -160,7 +160,9 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
       <p>업종과 공간 조건을 바탕으로 테이블 규격, 좌석 구성, 상판 디자인과 예상 등급을 함께 안내합니다.</p>
     </header>
     <form class="consultDetail__card" id="consultForm">
-      <p class="consultDetail__intro">필수 정보를 입력하면 상담 내용이 자동으로 정리됩니다.</p>
+      <p class="consultDetail__intro">필수 정보를 입력하면 상담 내용이 고객 DB에 저장되고 자동으로 정리됩니다.</p>
+      <div class="consultField"><label for="cName">성함 또는 매장명 <em>*</em></label><input id="cName" required autocomplete="name" placeholder="예: 김멋 / 멋식당"></div>
+      <div class="consultField"><label for="cPhone">연락 가능한 번호 <em>*</em></label><input id="cPhone" required type="tel" inputmode="tel" autocomplete="tel" placeholder="예: 010-1234-5678"></div>
       <div class="consultField"><label for="cType">업종·운영 형태 <em>*</em></label><input id="cType" required placeholder="예: 고깃집 / 신규 오픈"></div>
       <div class="consultField"><label for="cRegion">지역 또는 주소 <em>*</em></label><input id="cRegion" required placeholder="예: 경기 수원시 권선구"></div>
       <div class="consultField"><label for="cSize">공간 규모 <em>*</em></label><input id="cSize" required placeholder="예: 35평"></div>
@@ -170,8 +172,9 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
       <div class="consultField consultField--wide"><label for="cMood">원하는 분위기·상판 색상</label><input id="cMood" placeholder="예: 따뜻한 우드톤, 밝은 오크, 모던한 분위기"></div>
       <div class="consultField consultField--wide"><label for="cPhoto">참고 사진</label><input id="cPhoto" type="file" accept="image/*" multiple><small>상담문에 파일명이 표시됩니다. 카카오톡이 열리면 사진 원본을 직접 첨부해 주세요.</small></div>
       <div class="consultField consultField--wide"><label for="cMemo">추가 요청사항</label><textarea id="cMemo" placeholder="예: 로스터 매립, 서랍, 전선홀, 벤치 좌석 등"></textarea></div>
+      <div class="consultField consultField--wide"><label style="display:flex;gap:9px;align-items:flex-start;font-weight:600"><input id="cPrivacy" type="checkbox" required style="width:auto;margin-top:3px"><span>상담 응대를 위한 개인정보 수집·이용에 동의합니다. 입력 정보는 상담 목적으로만 사용됩니다.</span></label></div>
       <div class="consultActions"><button class="consultSubmit" type="submit">상담 내용 정리하고 카카오톡 열기 ↗</button><a class="consultPhone" href="tel:01062928562">전화 상담 010-6292-8562</a></div>
-      <p class="consultNotice">입력 내용은 서버에 저장되지 않습니다. 버튼을 누르면 상담문이 복사되고 카카오톡 상담창이 열립니다.</p>
+      <p class="consultNotice">입력 내용은 상담 응대용 고객 DB에 안전하게 저장됩니다. 저장 후 카카오톡 상담창이 열립니다.</p>
       <p class="consultStatus" id="consultStatus" role="status" aria-live="polite"></p>
     </form>
   </div>
@@ -186,6 +189,8 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
     var files=Array.from(document.getElementById('cPhoto').files||[]).map(function(f){return f.name}).join(', ')||'없음';
     var lines=[
       '[멋:테이블 상담 신청]',
+      '성함·매장명: '+document.getElementById('cName').value.trim(),
+      '연락처: '+document.getElementById('cPhone').value.trim(),
       '업종·운영 형태: '+document.getElementById('cType').value.trim(),
       '지역·주소: '+document.getElementById('cRegion').value.trim(),
       '공간 규모: '+document.getElementById('cSize').value.trim(),
@@ -198,7 +203,8 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
     ];
     var message=lines.join('\n');
     function openKakao(){
-      status.textContent='상담문을 복사했습니다. 카카오톡에서 붙여넣고 참고 사진을 첨부해 주세요.';
+      if(window.meotLeadDb)window.meotLeadDb.save({name:document.getElementById('cName').value,phone:document.getElementById('cPhone').value,region:document.getElementById('cRegion').value,industry:document.getElementById('cType').value,opening:document.getElementById('cDate').value,channel:'카카오톡',source:'홈페이지 상세상담',memo:message,page:location.href}).catch(function(){});
+      status.textContent='고객 DB에 저장했습니다. 카카오톡에서 상담문을 붙여넣고 참고 사진을 첨부해 주세요.';
       window.open('https://pf.kakao.com/_BZeSX/chat','_blank','noopener');
     }
     if(navigator.clipboard&&window.isSecureContext){
@@ -268,6 +274,7 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
         "요청사항: "+(esc(form.note.value)||"없음")
       ];
       var message=lines.join("\n");
+      if(window.meotLeadDb)window.meotLeadDb.save({name:"홈페이지 고객",phone:esc(form.phone.value),region:esc(form.area.value),industry:esc(form.business.value),opening:esc(form.open.value),channel:isMobile()?"문자":"홈페이지 폼",source:"홈페이지 상담폼",memo:message,page:location.href}).catch(function(){});
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(message).catch(function(){});}
       if(isMobile()){
         status.textContent="문자 앱이 열리면 참고 사진을 첨부하고 ‘보내기’를 눌러 주세요.";
@@ -476,3 +483,13 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
   setTimeout(function(){observer.disconnect();layoutQuote()},7000);
 })();
 </script>
+<script src="/meot-table/lead-db.js?v=20260901-1"></script>
+<style id="factory-poster-image-v1">
+  .introPhoto img{
+    width:100%;
+    height:auto!important;
+    aspect-ratio:auto!important;
+    object-fit:contain!important;
+  }
+  .introPhoto figcaption{display:none!important}
+</style>
