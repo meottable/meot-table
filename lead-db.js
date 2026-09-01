@@ -11,19 +11,28 @@
     if(/pf\.kakao|kakao/i.test(href))return '카카오톡';
     return '기타';
   }
-  function source(){
-    var p=new URLSearchParams(location.search),utm=clean(p.get('utm_source'));
-    return utm?'홈페이지 · '+utm:'홈페이지';
+  function source(base){
+    base=clean(base)||'홈페이지';
+    var label=window.meotAnalytics&&window.meotAnalytics.label?clean(window.meotAnalytics.label()):'';
+    return label&&label!=='direct'?base+' · '+label:base;
+  }
+  function memo(v){
+    v=clean(v);
+    if(window.meotAnalytics&&window.meotAnalytics.decorateMemo&&!/\[광고 유입\]/.test(v))return window.meotAnalytics.decorateMemo(v);
+    return v;
   }
   function save(data){
     var body=new URLSearchParams({
       name:clean(data.name),phone:digits(data.phone),region:clean(data.region),
-      industry:clean(data.industry),opening:clean(data.opening),source:clean(data.source)||source(),
-      channel:clean(data.channel)||'기타',memo:clean(data.memo),page:clean(data.page)||location.href,
+      industry:clean(data.industry),opening:clean(data.opening),source:source(data.source),
+      channel:clean(data.channel)||'기타',memo:memo(data.memo),page:clean(data.page)||location.href,
       website:clean(data.website)
     });
     if(body.get('phone').length<10)return Promise.reject(new Error('invalid_phone'));
-    return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),keepalive:true});
+    return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),keepalive:true}).then(function(result){
+      if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track('lead_saved',{channel:body.get('channel')});
+      return result;
+    });
   }
   function continueTo(href){
     if(/^tel:|^sms:/i.test(href))location.href=href;
@@ -43,13 +52,14 @@
     form.addEventListener('submit',function(e){
       e.preventDefault();if(!form.reportValidity()||!pending)return;
       var d=Object.fromEntries(new FormData(form)),href=pending.href;
-      Object.assign(d,{channel:pending.channel,source:source(),memo:pending.memo||'',page:location.href});
+      Object.assign(d,{channel:pending.channel,source:'홈페이지',memo:pending.memo||'',page:location.href});
       status.textContent='고객 DB에 저장하고 있습니다…';
       save(d).then(function(){status.textContent='저장되었습니다. 상담 화면을 엽니다.';gate.classList.remove('on');form.reset();pending=null;continueTo(href)}).catch(function(){status.textContent='저장 중 문제가 생겼습니다. 번호를 확인하고 다시 시도해 주세요.'});
     });
   }
   function openGate(opts){
     ensureGate();pending={href:opts.href,channel:opts.channel||channelFor(opts.href),memo:opts.memo||''};
+    if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track('lead_gate_open',{channel:pending.channel});
     var gate=document.getElementById('meotLeadGate'),form=gate.querySelector('form');
     ['name','phone','region','industry','opening'].forEach(function(k){if(opts[k])form.elements[k].value=opts[k]});
     gate.querySelector('.meotLeadGateStatus').textContent='';gate.classList.add('on');setTimeout(function(){form.elements.name.focus()},30);
