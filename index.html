@@ -281,7 +281,7 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
     });
   }
   if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",mount);}else{mount();}
-  window.addEventListener("load",function(){setTimeout(mount,50);setTimeout(mount,1400);setTimeout(mount,3200);setTimeout(mount,6000);});
+  window.addEventListener("load",function(){setTimeout(mount,50);setTimeout(mount,1400);setTimeout(mount,3200);setTimeout(mount,6000);});var meotFormChecks=0;var meotFormTimer=setInterval(function(){mount();meotFormChecks++;if(document.querySelector("#contact .meotConsultForm")&&meotFormChecks>12){clearInterval(meotFormTimer)}if(meotFormChecks>30){clearInterval(meotFormTimer)}},1000);var meotFormObserver=new MutationObserver(function(){mount()});meotFormObserver.observe(document.body,{childList:true,subtree:true});setTimeout(function(){meotFormObserver.disconnect();mount()},35000);
 })();
 </script>
 <script id="meot-market-popup-bootstrap">
