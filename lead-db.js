@@ -65,7 +65,7 @@
     gate.querySelector('.meotLeadGateStatus').textContent='';gate.classList.add('on');setTimeout(function(){form.elements.name.focus()},30);
   }
   document.addEventListener('click',function(e){
-    var a=e.target.closest('a[href]');if(!a||a.dataset.meotDbSkip==='true')return;
+    var a=e.target.closest('a[data-meot-db-gate="true"][href]');if(!a)return;
     var href=a.getAttribute('href')||'';if(!(/^tel:|^sms:/i.test(href)||/pf\.kakao|kakao/i.test(href)))return;
     e.preventDefault();e.stopImmediatePropagation();openGate({href:href,channel:channelFor(href)});
   },true);
