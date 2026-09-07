@@ -524,3 +524,32 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();setTimeout(mount,600);new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
+<style id="mobile-polish-v1-style">
+.allDesigns:not([open])>.designGrid{display:none!important}.customerReviewPager{display:none}
+@media(max-width:700px){
+ .areaAnalysisPromo,.meot-market-popup{display:none!important}
+ #design.catalog.section{padding-bottom:54px!important}
+ #chairs .section{padding-top:58px!important;padding-bottom:58px!important}
+ #factory.section{padding-top:56px!important;padding-bottom:56px!important}
+ .productionProcess.section{padding-top:50px!important;padding-bottom:42px!important}
+ .customerReviews{padding-top:48px!important;padding-bottom:48px!important}
+ #portfolio.section{padding-top:50px!important}
+ .customerReviewPager{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;color:#6f675e;font-size:12px}
+ .customerReviewPager b{min-width:30px;font-size:12px;font-weight:800}
+ .customerReviewDots{display:flex;gap:6px}.customerReviewDots i{display:block;width:6px;height:6px;border-radius:50%;background:#d4cec4;transition:width .2s,background .2s}.customerReviewDots i.isActive{width:18px;border-radius:999px;background:#b77b1d}
+ .customerReviewHint{margin-top:9px!important;text-align:center!important}
+}
+</style>
+<script id="mobile-polish-v1-loader">
+(function(){
+ function closeCatalogs(){document.querySelectorAll("#design details.allDesigns,#chairs details.allDesigns").forEach(function(details){if(details.dataset.mobileFoldReady)return;details.removeAttribute("open");details.dataset.mobileFoldReady="true"})}
+ function reviewPager(){
+  var grid=document.querySelector("#customer-reviews .customerReviewGrid");if(!grid||grid.dataset.pagerReady)return;
+  var cards=Array.from(grid.querySelectorAll(".customerReviewCard"));if(cards.length<2)return;grid.dataset.pagerReady="true";
+  var pager=document.createElement("div");pager.className="customerReviewPager";pager.setAttribute("aria-label","고객 후기 위치");pager.innerHTML='<b>1 / '+cards.length+'</b><span class="customerReviewDots">'+cards.map(function(_,i){return '<i class="'+(i===0?'isActive':'')+'" aria-hidden="true"></i>'}).join("")+'</span>';grid.insertAdjacentElement("afterend",pager);
+  var frame=0;function update(){cancelAnimationFrame(frame);frame=requestAnimationFrame(function(){var step=(cards[0].offsetWidth||1)+14;var active=Math.max(0,Math.min(cards.length-1,Math.round(grid.scrollLeft/step)));pager.querySelector("b").textContent=(active+1)+" / "+cards.length;pager.querySelectorAll("i").forEach(function(dot,i){dot.classList.toggle("isActive",i===active)})})}grid.addEventListener("scroll",update,{passive:true});window.addEventListener("resize",update,{passive:true});update()
+ }
+ function polish(){closeCatalogs();reviewPager()}
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",polish);else polish();[300,900,1800].forEach(function(ms){setTimeout(polish,ms)});new MutationObserver(polish).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
