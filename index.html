@@ -512,10 +512,10 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
  ];
  function mount(){
   if(document.getElementById("customer-reviews"))return;
-  var hero=document.querySelector(".hero");if(!hero)return;
+  var portfolioSection=document.querySelector("#portfolio");if(!portfolioSection)return;
   var cards=reviews.map(function(r,i){return '<figure class="customerReviewCard"><button type="button" data-review-index="'+i+'" aria-label="'+r.title+' 크게 보기"><img src="'+r.src+'" alt="'+r.alt+'" loading="lazy" decoding="async"></button><figcaption><b>'+r.title+'</b><span>'+r.desc+'</span></figcaption></figure>'}).join("");
   var section=document.createElement("section");section.className="customerReviews";section.id="customer-reviews";section.setAttribute("aria-labelledby","customer-reviews-title");section.innerHTML='<div class="customerReviewsHead"><div><p class="reviewEyebrow">REAL CUSTOMER REVIEWS</p><h2 id="customer-reviews-title">고객님이 직접 남겨주신 후기</h2></div><p>상담부터 맞춤 제작, 설치 후 만족도까지 실제 대화로 확인해 보세요. 고객 정보 보호를 위해 이름 일부를 가렸습니다.</p></div><div class="customerReviewGrid">'+cards+'</div><p class="customerReviewHint">후기 사진을 누르면 크게 볼 수 있습니다.</p>';
-  hero.insertAdjacentElement("afterend",section);
+  portfolioSection.insertAdjacentElement("beforebegin",section);
   var modal=document.createElement("div");modal.className="customerReviewModal";modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");modal.setAttribute("aria-label","고객 후기 크게 보기");modal.innerHTML='<button type="button" aria-label="닫기">×</button><img alt="">';document.body.appendChild(modal);
   section.querySelectorAll("[data-review-index]").forEach(function(button){button.addEventListener("click",function(){var r=reviews[Number(button.dataset.reviewIndex)];modal.querySelector("img").src=r.src;modal.querySelector("img").alt=r.alt;modal.classList.add("isOpen");document.body.style.overflow="hidden"})});
   function close(){modal.classList.remove("isOpen");document.body.style.overflow=""}modal.querySelector("button").addEventListener("click",close);modal.addEventListener("click",function(e){if(e.target===modal)close()});document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
