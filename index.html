@@ -574,3 +574,20 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",polish);else polish();[300,900,1800].forEach(function(ms){setTimeout(polish,ms)});new MutationObserver(polish).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
+
+<style id="meot-payment-nav-style">
+header nav a.meotPaymentNavLink,.mobileMenu a.meotPaymentNavLink{color:#e3bc72!important;font-weight:800;opacity:1}
+</style>
+<script id="meot-payment-nav-loader">
+(function(){
+ function mount(){
+  document.querySelectorAll("header nav,.mobileMenu div").forEach(function(nav){
+   if(nav.querySelector(".meotPaymentNavLink"))return;
+   var link=document.createElement("a");link.href="/meot-table/payment/";link.className="meotPaymentNavLink";link.textContent="견적조회·입금";
+   var contact=nav.querySelector('a[href="#contact"]');nav.insertBefore(link,contact||null);
+  });
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();
+ setTimeout(mount,500);new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
