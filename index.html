@@ -131,6 +131,7 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
 </script>
 <style id="meot-grade-choice-style">
 #table-grade-guide,.tableGradeGuide,.tableGrades{display:none!important}
+.chatCase{display:none!important}
 .meotGradeChoice{max-width:1280px;margin:0 auto;padding:96px 42px 88px;background:#f4f0e7;color:#17212a}
 .meotGradeChoice *{box-sizing:border-box}.meotGradeChoiceHead{max-width:720px;margin-bottom:34px}.meotGradeChoiceEyebrow{margin:0 0 12px;color:#b77b1d;font-size:13px;font-weight:800;letter-spacing:.18em}
 .meotGradeChoice h2{margin:0;font-family:Georgia,"Noto Serif KR",serif;font-size:clamp(34px,4vw,54px);font-weight:500;line-height:1.2;letter-spacing:-.045em}.meotGradeChoiceLead{margin:17px 0 0;color:#66717a;font-size:16px;line-height:1.75}
@@ -145,6 +146,9 @@ repeating-linear-gradient(2deg,transparent 0 26px,rgba(255,255,255,.025) 27px 28
  function mount(){document.querySelectorAll('#table-grade-guide,.tableGradeGuide,.tableGrades').forEach(function(node){node.remove()});if(document.getElementById('table-grade-choice'))return;var design=document.getElementById('design');if(design)design.insertAdjacentHTML('afterend',markup)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();setTimeout(mount,500);setTimeout(mount,1400);new MutationObserver(function(){if(document.querySelector('#table-grade-guide,.tableGradeGuide,.tableGrades')||!document.getElementById('table-grade-choice'))mount()}).observe(document.documentElement,{childList:true,subtree:true});
 })();
+</script>
+<script id="meot-remove-consultation-example">
+(function(){function remove(){document.querySelectorAll('.chatCase').forEach(function(section){section.remove()})}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',remove);else remove();setTimeout(remove,500);setTimeout(remove,1400);new MutationObserver(remove).observe(document.documentElement,{childList:true,subtree:true})})();
 </script>
 <style id="meot-consult-conversion-v2">
 .consultActions{grid-template-columns:1.15fr .85fr}
