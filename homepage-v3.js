@@ -18,16 +18,21 @@
  }
  function renderBookings(){
   const status=reservationStatus(),month=Number(status.key.split('-')[1])+'월';
-  qa('[data-reservation-month]').forEach(el=>el.textContent=month+' 맞춤 제작 예약');
-  qa('[data-reservation-confirmed]').forEach(el=>el.textContent=status.known?String(status.confirmed):'—');
+  qa('[data-confirmed-summary]').forEach(el=>el.textContent=status.known?'월 10팀 · 확정 '+status.confirmed+'팀':'월 10팀 · 예약 현황 문의');
   qa('[data-reservation-left]').forEach(el=>el.textContent=status.known?String(status.remaining):'문의');
-  qa('[data-reservation-state]').forEach(el=>el.textContent=status.closed?'예약 마감':status.known?'남은 예약':'예약 현황');
+  qa('[data-reservation-state]').forEach(el=>el.textContent=status.closed?'예약 마감':status.known?'남은 자리':'예약 현황');
   qa('[data-reservation-unit]').forEach(el=>el.hidden=!status.known);
   qa('[data-booking-panel]').forEach(el=>{
    el.classList.toggle('is-unknown',!status.known);
    el.classList.toggle('is-closed',status.closed);
-   el.setAttribute('aria-label',month+' 맞춤 제작 예약: '+(status.known?'확정 '+status.confirmed+'팀, 남은 예약 '+status.remaining+'팀':'월 10팀 한정, 현재 예약 현황은 상담으로 안내합니다.'));
+   el.setAttribute('aria-label',month+' 프리미엄 고급형 제작 예약: 월 10팀 한정, '+(status.known?'확정 '+status.confirmed+'팀, 남은 자리 '+status.remaining+'팀':'현재 예약 현황은 상담으로 안내합니다.'));
   });
+  qa('[data-reservation-progress]').forEach(el=>{
+   el.hidden=!status.known;
+   el.setAttribute('aria-valuenow',status.known?String(status.confirmed):'0');
+   el.setAttribute('aria-valuetext',status.known?'10팀 중 '+status.confirmed+'팀 확정, '+status.remaining+'팀 남음':'예약 현황 확인 중');
+  });
+  qa('[data-reservation-fill]').forEach(el=>el.style.width=status.known?String(status.confirmed/BOOKING_CAPACITY*100)+'%':'0%');
  }
  function loadBookings(){
   if(bookingRequest)return bookingRequest;

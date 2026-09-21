@@ -245,3 +245,42 @@ dialog{width:min(580px,calc(100vw - 32px));border:1px solid #d0d7db;border-radiu
 .meot-market-popup{bottom:100px!important}
 @media(max-width:700px){.meot-market-popup{display:none!important}}
 @media(max-width:480px){.contact-request-grid{grid-template-columns:1fr}}
+
+
+/* Approved premium reservation and grade-choice callout. */
+
+
+.grade-choice-proof{width:fit-content;max-width:100%;margin:22px auto 28px;display:flex;align-items:center;gap:10px;border:1px solid #dda91d;border-radius:100px;background:linear-gradient(100deg,#faf5e8,#fffdfa);color:#143145;padding:11px 20px;scroll-margin-top:110px}
+.grade-choice-dot{width:10px;height:10px;margin:0 4px;flex:none;border-radius:50%;background:#d8a520;box-shadow:0 0 0 6px #f5e9c3}
+.grade-choice-proof p{margin:0;font-size:15px;font-weight:750;line-height:1.55;letter-spacing:-.025em;word-break:keep-all}
+.grade-choice-proof strong{font-size:20px;color:#ab7e10;font-weight:850;vertical-align:-1px;line-height:1}
+.premium-grade-card{scroll-margin-top:100px;container-type:inline-size}
+.premium-reservation{margin-top:16px;background:#143145;color:#fff;border-radius:10px;padding:17px 14px 14px;line-height:1.55}
+.premium-reservation p{margin:0}
+.premium-only{font-size:13px;font-weight:800;color:#f3cc66;letter-spacing:.11em;text-align:center}
+.premium-exclusive{margin-top:7px!important;font-size:12px;font-weight:750;text-align:center;letter-spacing:-.035em;line-height:1.65}
+.premium-reservation-rule{height:1px;background:#78909e66;margin:15px 0}
+.premium-reservation-status{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.premium-reservation-label{color:#b2c1cb;font-size:13px;letter-spacing:-.035em}
+.premium-reservation-label small{display:block;margin-top:2px;color:#a6bac7;font-size:10px;letter-spacing:0}
+.premium-remaining{font-size:17px;font-weight:700;white-space:nowrap;letter-spacing:-.04em}
+.premium-remaining strong{font-size:26px;line-height:1;color:#f2c64e;margin-left:3px;font-weight:850;vertical-align:-1px}
+.premium-progress{width:100%;height:7px;background:#3d5869;border-radius:20px;overflow:hidden}
+.premium-progress>span{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#dcae2c,#f3c952)}
+@supports(font-size:1cqi){
+ .premium-reservation{padding:5cqi 4cqi 4cqi;border-radius:3cqi}
+ .premium-only{font-size:3.8cqi}.premium-exclusive{font-size:3.45cqi;margin-top:2cqi!important}
+ .premium-reservation-rule{margin:4.2cqi 0}.premium-reservation-label{font-size:3.8cqi}
+ .premium-reservation-label small{font-size:3cqi}.premium-remaining{font-size:4.8cqi}.premium-remaining strong{font-size:7.5cqi}
+ .premium-progress{height:1.9cqi;min-height:6px}.premium-reservation-status{margin-bottom:3.5cqi}
+}
+@media(max-width:700px){
+ 
+ .grade-choice-proof{padding:12px 14px;gap:8px;margin:19px auto 23px}
+ .grade-choice-proof p{font-size:12px;line-height:1.7;letter-spacing:-.04em}
+ .grade-choice-proof strong{font-size:17px}.grade-choice-dot{width:8px;height:8px;box-shadow:0 0 0 5px #f5e9c3}
+ .premium-reservation{margin-top:14px}
+}
+@media(max-width:359px){.grade-choice-proof{padding:11px 12px}.grade-choice-proof p{font-size:12px}}
+
+.premium-progress[hidden]{display:none}.premium-reservation.is-unknown .premium-remaining strong{font-size:inherit}
