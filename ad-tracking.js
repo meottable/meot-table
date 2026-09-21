@@ -88,13 +88,13 @@
     else if(href.charAt(0)==='#')m='navigation';
     else if(el.tagName==='BUTTON')m='ui';
     hit('click_'+m);
-    if(el.closest('#quick-quote')&&!sessionStorage.getItem('meot_quote_used_'+day())){
+    if(el.closest('#quick-quote,#estimate')&&!sessionStorage.getItem('meot_quote_used_'+day())){
       sessionStorage.setItem('meot_quote_used_'+day(),'1');track('quote_interact')
     }
   },{capture:true});
 
   document.addEventListener('change',function(e){
-    if(e.target&&e.target.closest&&e.target.closest('#quick-quote')&&!sessionStorage.getItem('meot_quote_used_'+day())){
+    if(e.target&&e.target.closest&&e.target.closest('#quick-quote,#estimate')&&!sessionStorage.getItem('meot_quote_used_'+day())){
       sessionStorage.setItem('meot_quote_used_'+day(),'1');track('quote_interact')
     }
   },true);
@@ -111,3 +111,4 @@
     decorateMemo:function(memo){return clean(memo)+'\n\n[광고 유입]\n'+label()}
   };
 })();
+
