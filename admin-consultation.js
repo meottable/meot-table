@@ -46,7 +46,8 @@ loadAnalytics=async function(){
   const clicks=core[2]===null||core[3]===null?null:core[2]+core[3];
   $('views').textContent=core[0]===null?'확인 불가':core[0].toLocaleString();
   $('visitors').textContent=core[1]===null?'확인 불가':core[1].toLocaleString();
-  $('clicks').textContent=clicks===null?'확인 불가':clicks.toLocaleString();
+  const knownClicks=core.slice(2).filter(v=>v!==null).reduce((a,b)=>a+b,0);
+  $('clicks').textContent=clicks===null?(knownClicks>0?knownClicks.toLocaleString()+'회 이상':'확인 불가'):clicks.toLocaleString();
   $('rate').textContent=core[1]===null||clicks===null?'확인 불가':core[1]===0?'—':(clicks/core[1]*100).toFixed(1)+'%';
   const base=dateObj(date),days=[];
   for(let i=6;i>=0;i--){const key=kDate(new Date(base.getTime()-i*86400000));days.push({key,label:Number(key.slice(4,6))+'/'+Number(key.slice(6))})}
