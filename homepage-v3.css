@@ -284,3 +284,49 @@ dialog{width:min(580px,calc(100vw - 32px));border:1px solid #d0d7db;border-radiu
 @media(max-width:359px){.grade-choice-proof{padding:11px 12px}.grade-choice-proof p{font-size:12px}}
 
 .premium-progress[hidden]{display:none}.premium-reservation.is-unknown .premium-remaining strong{font-size:inherit}
+
+
+    #meot-reservation-motion{padding:20px 10px;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#173247}
+    #meot-reservation-motion *{box-sizing:border-box}
+    #meot-reservation-motion .mr-shell{max-width:430px;margin:auto;background:#faf8f2;border:1px solid #e5dfd1;border-radius:20px;overflow:hidden}
+    #meot-reservation-motion .mr-demo{background:#eee5d1;color:#695429;text-align:center;font-size:12px;font-weight:700;padding:11px 16px;letter-spacing:.015em}
+    #meot-reservation-motion .mr-content{padding:25px 20px 20px}
+    #meot-reservation-motion .mr-brand{margin:0 0 9px;font-size:12px;font-weight:800;letter-spacing:.16em;color:#a7791d}
+    #meot-reservation-motion h2{margin:0;font-size:25px;font-weight:800;line-height:1.4;letter-spacing:-.045em;color:#173247}
+    #meot-reservation-motion .mr-intro{margin:10px 0 22px;color:#67747c;font-size:13px;line-height:1.7;word-break:keep-all}
+    #meot-reservation-motion .mr-premium{padding:23px 19px 19px;border-radius:13px;background:#143145;color:#fff}
+    #meot-reservation-motion .mr-exclusive{margin:0;text-align:center;font-size:11px;font-weight:800;color:#f2cc67;letter-spacing:.16em}
+    #meot-reservation-motion .mr-copy{margin:11px 0 21px;text-align:center;font-size:12px;font-weight:650;line-height:1.8;letter-spacing:-.03em;word-break:keep-all}
+    #meot-reservation-motion .mr-summary{border-top:1px solid #ffffff29;padding-top:18px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    #meot-reservation-motion .mr-limit{font-size:13px;color:#d0dce4;line-height:1.6}
+    #meot-reservation-motion .mr-limit small{display:block;font-size:11px;color:#a8bdca}
+    #meot-reservation-motion .mr-left{margin:0;white-space:nowrap;font-size:17px;font-weight:700;letter-spacing:-.045em}
+    #meot-reservation-motion .mr-left strong{font-size:37px;color:#f2c853;vertical-align:-3px;margin-left:3px;line-height:1.2}
+    #meot-reservation-motion .mr-beacon{display:inline-block;width:8px;height:8px;margin-left:8px;vertical-align:3px;border-radius:50%;background:#f2c853;box-shadow:0 0 0 4px #f2c85320;animation:meot-reservation-beacon 1.6s ease-in-out infinite}
+    @keyframes meot-reservation-beacon{0%,100%{opacity:1;box-shadow:0 0 0 4px #f2c85320,0 0 10px #f2c85366}50%{opacity:.25;box-shadow:0 0 0 2px #f2c85308,0 0 0 #f2c85300}}
+    #meot-reservation-motion.mr-paused .mr-beacon{animation-play-state:paused}
+    @media(prefers-reduced-motion:reduce){#meot-reservation-motion .mr-beacon{animation:none}}
+    #meot-reservation-motion .mr-track{height:7px;background:#3e596b;border-radius:20px;margin-top:15px;overflow:hidden}
+    #meot-reservation-motion .mr-fill{height:100%;width:70%;border-radius:20px;background:linear-gradient(90deg,#d5a931,#f6cf62)}
+    #meot-reservation-motion .mr-feed-heading{display:flex;align-items:center;justify-content:space-between;margin:21px 0 10px;gap:8px}
+    #meot-reservation-motion .mr-feed-heading h3{margin:0;font-size:13px;font-weight:750;color:#173247}
+    #meot-reservation-motion .mr-feed-heading span{font-size:11px;color:#8b7957}
+    #meot-reservation-motion .mr-viewport{height:88px;position:relative;overflow:hidden;background:#fff;border:1px solid #dfd7c5;border-radius:12px}
+    #meot-reservation-motion .mr-entry{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 16px;background:#fff}
+    #meot-reservation-motion .mr-person{min-width:0}
+    #meot-reservation-motion .mr-name{display:flex;align-items:center;flex-wrap:wrap;gap:5px 7px;font-size:17px;font-weight:800;letter-spacing:-.025em}
+    #meot-reservation-motion .mr-industry{display:inline-block;padding:3px 6px;border-radius:5px;background:#edf2f4;color:#456171;font-size:11px;font-weight:650;line-height:1.4;white-space:nowrap}
+    #meot-reservation-motion .mr-number{margin-top:6px;font-size:12px;color:#6f7880;letter-spacing:.015em}
+    #meot-reservation-motion .mr-status{font-size:11px;font-weight:700;background:#f7efda;color:#8f6817;border-radius:20px;padding:7px 10px;white-space:nowrap}
+    #meot-reservation-motion .mr-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+    #meot-reservation-motion .mr-count{font-size:11px;letter-spacing:.07em;color:#7b8185;font-variant-numeric:tabular-nums}
+    #meot-reservation-motion .mr-buttons{display:flex;gap:2px}
+    #meot-reservation-motion button{border:0;background:transparent;color:#173247;min-height:44px;padding:8px 11px;font-family:inherit;font-size:12px;font-weight:650;border-radius:6px}
+    #meot-reservation-motion button:hover{background:#eee8da}
+    #meot-reservation-motion .mr-notice{margin:6px 0 0;color:#7d7564;font-size:11px;line-height:1.6;text-align:center}
+    @media(max-width:360px){#meot-reservation-motion{padding:12px 0}#meot-reservation-motion .mr-content{padding:21px 15px 16px}#meot-reservation-motion .mr-premium{padding:21px 14px 16px}#meot-reservation-motion h2{font-size:23px}#meot-reservation-motion .mr-left{font-size:15px}#meot-reservation-motion .mr-left strong{font-size:32px}}
+  
+#meot-reservation-motion{padding:16px 0 0;scroll-margin-top:110px}
+#meot-reservation-motion .mr-track[hidden]{display:none}
+#meot-reservation-motion .mr-premium.is-closed .mr-beacon,#meot-reservation-motion .mr-premium.is-unknown .mr-beacon{display:none}
+#meot-reservation-motion .mr-premium.is-unknown .mr-left strong{font-size:17px}

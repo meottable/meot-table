@@ -141,3 +141,42 @@
  renderEstimate();renderBookings();loadBookings();
  window.MeotSite={monthKey,reservationStatus};
 })();
+
+
+    (()=>{
+      const root=document.getElementById('meot-reservation-motion');
+      const viewport=root.querySelector('.mr-viewport');
+      const pause=root.querySelector('.mr-pause');
+      const next=root.querySelector('.mr-next');
+      const count=root.querySelector('.mr-count');
+      const samples=[['이**','8819'],['김**','2046'],['박**','7362'],['최**','5913'],['정**','4087'],['한**','1625']];
+      const industries=['고깃집','카페','한식당','이자카야','분식집','양식당'];
+      for(let i=industries.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[industries[i],industries[j]]=[industries[j],industries[i]];}
+      viewport.querySelector('.mr-industry').textContent=industries[0];
+      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+      let current=0,paused=reduced.matches,busy=false;
+      function updateButton(){pause.textContent=paused?'자동재생':'일시정지';pause.setAttribute('aria-pressed',String(paused));root.classList.toggle('mr-paused',paused);}
+      function advance(){
+        if(busy)return;
+        current=(current+1)%samples.length;
+        const old=viewport.querySelector('.mr-entry');
+        const incoming=old.cloneNode(true);
+        incoming.querySelector('.mr-customer').textContent=samples[current][0]+' 고객님';
+        incoming.querySelector('.mr-industry').textContent=industries[current];
+        incoming.querySelector('.mr-number').textContent='번호 끝자리 · '+samples[current][1];
+        count.textContent=String(current+1).padStart(2,'0')+' / 06';
+        viewport.appendChild(incoming);
+        if(reduced.matches||typeof incoming.animate!=='function'){old.remove();return;}
+        busy=true;old.setAttribute('aria-hidden','true');
+        const timing={duration:480,easing:'cubic-bezier(.22,.8,.25,1)',fill:'forwards'};
+        old.animate([{transform:'translateY(0)'},{transform:'translateY(-100%)'}],timing);
+        const motion=incoming.animate([{transform:'translateY(100%)'},{transform:'translateY(0)'}],timing);
+        motion.finished.then(()=>{old.remove();motion.cancel();busy=false;}).catch(()=>{old.remove();busy=false;});
+      }
+      pause.addEventListener('click',()=>{paused=!paused;updateButton();});
+      next.addEventListener('click',advance);
+      reduced.addEventListener('change',()=>{if(reduced.matches){paused=true;updateButton();}});
+      updateButton();
+      const timer=setInterval(()=>{if(!root.isConnected){clearInterval(timer);return;}if(!paused&&!document.hidden)advance();},3000);
+    })();
+  
