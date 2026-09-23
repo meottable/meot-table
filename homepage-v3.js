@@ -4,50 +4,6 @@
  const prices={basic:{name:'기본형',price:59000},middle:{name:'중급형',price:89000},premium:{name:'고급형',price:129000}};
  const state={grade:'basic',quantity:10};
  const won=n=>n.toLocaleString('ko-KR')+'원';
- const BOOKING_CAPACITY=10;
- let bookingData={"capacity":10,"months":{"2026-09":{"confirmed":7}},"updatedAt":"2026-09-21T23:56:10+09:00"};
- let lastBookingFetch=0,bookingRequest=null;
- function monthKey(date=new Date()){
-  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit'}).formatToParts(date);
-  return parts.find(p=>p.type==='year').value+'-'+parts.find(p=>p.type==='month').value;
- }
- function reservationStatus(key=monthKey()){
-  const confirmed=bookingData.months?.[key]?.confirmed;
-  const known=Number.isInteger(confirmed)&&confirmed>=0&&confirmed<=BOOKING_CAPACITY;
-  return {key,known,confirmed:known?confirmed:null,remaining:known?BOOKING_CAPACITY-confirmed:null,closed:known&&confirmed===BOOKING_CAPACITY};
- }
- function renderBookings(){
-  const status=reservationStatus(),month=Number(status.key.split('-')[1])+'월';
-  qa('[data-confirmed-summary]').forEach(el=>el.textContent=status.known?'월 10팀 · 확정 '+status.confirmed+'팀':'월 10팀 · 예약 현황 문의');
-  qa('[data-reservation-left]').forEach(el=>el.textContent=status.known?String(status.remaining):'문의');
-  qa('[data-reservation-state]').forEach(el=>el.textContent=status.closed?'예약 마감':status.known?'남은 자리':'예약 현황');
-  qa('[data-reservation-unit]').forEach(el=>el.hidden=!status.known);
-  qa('[data-booking-panel]').forEach(el=>{
-   el.classList.toggle('is-unknown',!status.known);
-   el.classList.toggle('is-closed',status.closed);
-   el.setAttribute('aria-label',month+' 프리미엄 고급형 제작 예약: 월 10팀 한정, '+(status.known?'확정 '+status.confirmed+'팀, 남은 자리 '+status.remaining+'팀':'현재 예약 현황은 상담으로 안내합니다.'));
-  });
-  qa('[data-reservation-progress]').forEach(el=>{
-   el.hidden=!status.known;
-   el.setAttribute('aria-valuenow',status.known?String(status.confirmed):'0');
-   el.setAttribute('aria-valuetext',status.known?'10팀 중 '+status.confirmed+'팀 확정, '+status.remaining+'팀 남음':'예약 현황 확인 중');
-  });
-  qa('[data-reservation-fill]').forEach(el=>el.style.width=status.known?String(status.confirmed/BOOKING_CAPACITY*100)+'%':'0%');
- }
- function loadBookings(){
-  if(bookingRequest)return bookingRequest;
-  bookingRequest=fetch('/meot-table/production-bookings.json',{cache:'no-store'})
-   .then(response=>{if(!response.ok)throw new Error('booking_unavailable');return response.json();})
-   .then(data=>{if(data&&data.capacity===BOOKING_CAPACITY&&data.months&&typeof data.months==='object'&&!Array.isArray(data.months)){bookingData=data;renderBookings();}})
-   .catch(()=>{})
-   .finally(()=>{lastBookingFetch=Date.now();bookingRequest=null;});
-  return bookingRequest;
- }
- let lastMonth=monthKey();
- function tickMonth(){const now=monthKey();if(now!==lastMonth){lastMonth=now;renderBookings();loadBookings();}}
- setInterval(tickMonth,60000);
- document.addEventListener('visibilitychange',()=>{if(!document.hidden){tickMonth();if(Date.now()-lastBookingFetch>60000)loadBookings();}});
-
  function renderEstimate(){
   qa('[data-grade]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.grade===state.grade)));
   q('#total').textContent=won(prices[state.grade].price*state.quantity);
@@ -138,45 +94,5 @@
   }catch(error){formStatus.textContent='전송하지 못했습니다. 다시 시도하거나 카카오톡으로 문의해 주세요.';button.disabled=false;}
  });
  form.addEventListener('input',()=>{const button=form.querySelector('[type="submit"]');if(button.textContent==='전송 완료'){button.disabled=false;button.textContent='견적 요청 보내기';formStatus.textContent='';}});
- renderEstimate();renderBookings();loadBookings();
- window.MeotSite={monthKey,reservationStatus};
+ renderEstimate();
 })();
-
-
-    (()=>{
-      const root=document.getElementById('meot-reservation-motion');
-      const viewport=root.querySelector('.mr-viewport');
-      const pause=root.querySelector('.mr-pause');
-      const next=root.querySelector('.mr-next');
-      const count=root.querySelector('.mr-count');
-      const samples=[['이**','8819'],['김**','2046'],['박**','7362'],['최**','5913'],['정**','4087'],['한**','1625']];
-      const industries=['고깃집','카페','한식당','이자카야','분식집','양식당'];
-      for(let i=industries.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[industries[i],industries[j]]=[industries[j],industries[i]];}
-      viewport.querySelector('.mr-industry').textContent=industries[0];
-      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
-      let current=0,paused=reduced.matches,busy=false;
-      function updateButton(){pause.textContent=paused?'자동재생':'일시정지';pause.setAttribute('aria-pressed',String(paused));root.classList.toggle('mr-paused',paused);}
-      function advance(){
-        if(busy)return;
-        current=(current+1)%samples.length;
-        const old=viewport.querySelector('.mr-entry');
-        const incoming=old.cloneNode(true);
-        incoming.querySelector('.mr-customer').textContent=samples[current][0]+' 고객님';
-        incoming.querySelector('.mr-industry').textContent=industries[current];
-        incoming.querySelector('.mr-number').textContent='번호 끝자리 · '+samples[current][1];
-        count.textContent=String(current+1).padStart(2,'0')+' / 06';
-        viewport.appendChild(incoming);
-        if(reduced.matches||typeof incoming.animate!=='function'){old.remove();return;}
-        busy=true;old.setAttribute('aria-hidden','true');
-        const timing={duration:480,easing:'cubic-bezier(.22,.8,.25,1)',fill:'forwards'};
-        old.animate([{transform:'translateY(0)'},{transform:'translateY(-100%)'}],timing);
-        const motion=incoming.animate([{transform:'translateY(100%)'},{transform:'translateY(0)'}],timing);
-        motion.finished.then(()=>{old.remove();motion.cancel();busy=false;}).catch(()=>{old.remove();busy=false;});
-      }
-      pause.addEventListener('click',()=>{paused=!paused;updateButton();});
-      next.addEventListener('click',advance);
-      reduced.addEventListener('change',()=>{if(reduced.matches){paused=true;updateButton();}});
-      updateButton();
-      const timer=setInterval(()=>{if(!root.isConnected){clearInterval(timer);return;}if(!paused&&!document.hidden)advance();},3000);
-    })();
-  
