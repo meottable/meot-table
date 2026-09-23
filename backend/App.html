@@ -21,7 +21,7 @@
  let photos=[],busy=false,reading=false,requestId=crypto.randomUUID(),csrf='';const form=$('review-form');
  function rpc(name,...args){return new Promise((resolve,reject)=>google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[name](...args));}
  function status(id,message,error=false){$(id).textContent=message;$(id).classList.toggle('error',error);}
- function resize(){if(mode==='public'&&bridge)window.top.postMessage({type:'meot-review-height',bridge,height:document.documentElement.scrollHeight},'https://meottable.github.io');}
+ function resize(){if(mode==='public'&&bridge)window.top.postMessage({type:'meot-review-height',bridge,height:Math.ceil(document.body.getBoundingClientRect().height)},'https://meottable.github.io');}
  new ResizeObserver(resize).observe(document.body);
  function screen(id){['landing','writing','success'].forEach(s=>$(s).hidden=s!==id);resize();}
  function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}

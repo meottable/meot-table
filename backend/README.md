@@ -1,11 +1,19 @@
 # 멋:테이블 고객 후기
 
 ## 현재 상태
-구현 완료 / 실제 Google 계정 연결·배포·실기 검증 전. reviews-config.js의 주소가 비어 있는 동안 홈페이지 입력창을 노출하지 않는다. 시안을 실제 저장 기능으로 가장하지 않는다.
+2026-09-23: Google 계정 승인 및 비공개 저장소 초기화 완료. 고객용(소유자로 실행/모든 사용자) v2, 관리자용(접속 사용자로 실행/나만) v3 배포 완료. 임시 초기화·진단 함수는 최신 편집기 코드에서 제거했다.
+
+실제 글 접수에서 `Limit Exceeded: Drive.` 오류 발생. 저장 공간 조회는 usedBytes=100176, limitBytes=16106127360으로, Drive 파일 사용량만으로 원인을 단정할 수 없다. 계정 저장공간/서비스 제한의 추가 진단 전까지 홈페이지 연결과 main 병합을 보류한다. reviews-config.js는 빈 주소를 유지한다.
+
+고객 폼 렌더링, 실패 시 입력 보존, 소유자의 관리 페이지 접속은 확인했다. 공개·삭제의 실서비스 성공 검증은 아직 끝나지 않았다. 사진 파일 선택은 테스트 브라우저에서 filechooser가 열리지 않아 실기 검증을 완료하지 못했다. 테스트 글은 저장 실패 후 새 폴더를 휴지통으로 이동했다.
+
+배포 주소(아직 홈페이지에서 사용하지 않음):
+- 고객용: https://script.google.com/macros/s/AKfycbz-TSYXiJLUvyMttVjntKMiPh092YIujqQLRgM6jX-ZoZ_qrnyiAfKgez8NSwHkCvzjGw/exec
+- 관리자용: https://script.google.com/macros/s/AKfycbzK_oFfTpKLZVCsrheLn8leiVrO9PsGGVZaF6TtaOlArlveX3P3nZ1gopQ2PybM-FxL-g/exec?page=admin
 
 ## 배포
 1. 기존 고객 DB의 소유자 계정으로 새 Apps Script 프로젝트를 생성한다. 기존 lead-db 프로젝트는 수정하지 않는다.
-2. Code.gs, App.html, appsscript.json을 업로드한다. 편집기에서 setup_를 한 번 실행한다. 새로운 비공개 Drive 폴더가 생성된다.
+2. Code.gs, App.html, appsscript.json을 업로드한다. 편집기에서 임시 initializeReviews(){setup_();} 함수를 만들어 한 번 실행한 후 반드시 제거한다. 새로운 비공개 Drive 폴더가 생성된다.
 3. 고객용 웹 앱: 실행 주체는 소유자, 접근은 모든 사용자. 해당 /exec 주소를 publicUrl에 넣는다.
 4. 관리자용 별도 배포: 실행 주체는 접속 사용자, 접근은 본인만. 해당 /exec 주소를 adminUrl에 넣는다. 서버는 REVIEW_OWNER와 실제 로그인 사용자를 매 요청마다 비교한다.
 5. 익명 고객의 글·사진 접수, 익명 관리 API 거부, 소유자의 확인 대기 목록, 공개 후 익명 조회, 삭제 후 글·사진 조회 차단을 모두 검증한다. 본인만 배포 옵션과 접속 사용자 옵션이 함께 허용되지 않으면 관리자 배포를 Google 로그인 사용자로 제한하되 서버 소유자 검사 통과를 확인한다.

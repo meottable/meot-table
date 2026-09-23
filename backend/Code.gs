@@ -58,7 +58,7 @@ function submitReview(d){
       folder.createFile('review.json',JSON.stringify({id:folder.getId(),created:new Date().toISOString(),name:value.name,business:value.business,rating:value.rating,body:value.body,status:'pending',photoCount:value.blobs.length,consentAt:new Date().toISOString()}),MimeType.PLAIN_TEXT);
       cache.put(key,String(count+1),21600);
       return {ok:true,id:folder.getId()};
-    }catch(error){folder.setTrashed(true);throw new Error('저장하지 못했습니다. 작성 내용을 유지한 채 다시 시도해 주세요.');}
+    }catch(error){console.error('review-save-error: '+error.message);folder.setTrashed(true);throw new Error('저장하지 못했습니다. 작성 내용을 유지한 채 다시 시도해 주세요.');}
   });
 }
 function record_(folder){const files=folder.getFilesByName('review.json');if(!files.hasNext())throw new Error('후기를 찾지 못했습니다.');return JSON.parse(files.next().getBlob().getDataAsString());}
