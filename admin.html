@@ -26,13 +26,13 @@
       dialog{width:100%;max-width:none;margin:auto 0 0;border-radius:18px 18px 0 0;max-height:94dvh}.modal{max-height:94dvh;display:flex;flex-direction:column}.modal-head{padding:17px 18px}.modal-head h3{font-size:20px}.close{width:40px;height:40px}.modal-body{padding:16px 17px;max-height:none;flex:1}.form-grid{grid-template-columns:1fr;gap:14px}.form-grid label.full{grid-column:auto}.form-grid input,.form-grid select,.form-grid textarea{font-size:16px;min-height:48px}.modal-foot{position:sticky;bottom:0;padding:11px 16px calc(11px + env(safe-area-inset-bottom));background:#fff}.modal-foot .btn{flex:1;min-height:48px}.top h1{font-size:17px}
     }
   </style>
-<style>.actual-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.actual-fields label{display:grid;gap:8px;font-weight:700}.actual-fields input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}#analyticsStatus{margin-bottom:8px}@media(max-width:600px){.actual-fields{grid-template-columns:1fr}}</style></head>
+<style>.actual-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.actual-fields label{display:grid;gap:8px;font-weight:700}.actual-fields input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}#analyticsStatus{margin-bottom:8px}@media(max-width:600px){.actual-fields{grid-template-columns:1fr}}</style><style>.nav button[data-page="reviews"]:before{content:'✎'}#review-admin-open[hidden]{display:none}#reviews .panel p{line-height:1.7;color:#726b62}#review-admin-open{margin-top:16px}@media(max-width:700px){.nav{grid-template-columns:repeat(4,minmax(0,1fr))}}</style></head>
 <body>
 <div class="app">
   <aside class="side">
     <div class="brand"><span>MEOT :</span> TABLE</div><small>BUSINESS DESK</small>
     <nav class="nav">
-      <button class="on" data-page="dashboard">대시보드</button><button data-page="customers">고객관리</button><button data-page="quotes">견적관리</button><button data-page="leads">창업 글</button><button data-page="analytics">광고·문의 추적</button><button data-page="settings">설정</button>
+      <button class="on" data-page="dashboard">대시보드</button><button data-page="customers">고객관리</button><button data-page="quotes">견적관리</button><button data-page="leads">창업 글</button><button data-page="analytics">광고·문의 추적</button><button data-page="reviews">후기 관리</button><button data-page="settings">설정</button>
     </nav>
     <div class="side-foot">자동 문의는 비공개 Google Sheet에 저장됩니다.<br><a href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">고객 DB 열기 ↗</a></div>
   </aside>
@@ -100,7 +100,8 @@
       <div class="notice" style="margin-top:14px">광고 통계에는 개인정보·전화번호·검색어 원문을 저장하지 않습니다. 상담 고객의 광고 출처는 비공개 고객 DB의 출처와 메모에서 확인할 수 있습니다. <button class="btn light" onclick="loadAnalytics()" style="margin-left:10px">새로고침</button></div>
     </section>
 
-    <section class="page" id="settings">
+    <section class="page" id="reviews"><div class="page-head"><div><span class="eyebrow">CUSTOMER REVIEWS</span><h2>고객 후기 관리</h2><p>고객이 남긴 글과 사진을 확인하고 공개·삭제합니다.</p></div></div><article class="panel"><h3>관리자 전용 후기 관리</h3><p>관리자 Google 계정으로 로그인한 뒤 접수된 후기를 확인할 수 있습니다. 삭제하면 후기 글과 사진이 함께 내려갑니다.</p><a id="review-admin-open" class="btn gold" hidden target="_blank" rel="noopener noreferrer">후기 관리 열기 ↗</a><p id="review-admin-setup">후기 저장 서비스 연결을 준비하고 있습니다.</p></article></section>
+<section class="page" id="settings">
       <div class="page-head"><div><span class="eyebrow">SETTINGS</span><h2>설정·데이터</h2><p>현재 기기에 저장된 영업자료를 관리합니다.</p></div></div>
       <article class="panel settings"><div class="setting-row"><div><b>자동 저장 고객 DB</b><p>웹사이트 문의 고객과 문의 이력이 비공개 Google Sheet에 저장됩니다.</p></div><a class="btn light" href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">Google Sheet 열기</a></div><div class="setting-row"><div><b>데이터 백업</b><p>기기 내 고객·견적·창업 글·실제 상담 자료를 JSON 파일로 내려받습니다.</p></div><button class="btn light" onclick="backupData()">백업 받기</button></div><div class="setting-row"><div><b>데이터 가져오기</b><p>이전에 내려받은 기기 백업 파일을 복원합니다.</p></div><label class="btn light">파일 선택<input type="file" id="restoreFile" accept="application/json" hidden></label></div><div class="setting-row"><div><b>관리자 보안</b><p>자동 문의 DB는 Google 로그인 권한이 있는 사용자만 열 수 있습니다.</p></div><span class="badge">Google 로그인 필요</span></div></article>
       <article class="panel settings danger-zone"><div class="setting-row"><div><b>기기 내 영업자료 초기화</b><p>고객과 견적 자료가 삭제되며 되돌릴 수 없습니다.</p></div><button class="btn danger" onclick="clearBusinessData()">초기화</button></div></article>
@@ -118,7 +119,7 @@ const won=n=>(Number(n)||0).toLocaleString('ko-KR')+'원', today=()=>new Date().
 let customers=parse(CKEY), quotes=parse(QKEY), leadStates=parse('meot_lead_states_v2',{});
 const stageClass=s=>s==='신규'?'new':s==='연락완료'?'contact':s==='견적발송'||s==='협의중'?'quote':s==='계약'?'win':s==='보류'?'lost':'';
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
-function go(id){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.page===id));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id));const titles={dashboard:'오늘의 영업 현황',customers:'고객·영업관리',quotes:'견적관리',leads:'창업 글 후보',analytics:'광고·문의 추적',settings:'설정·데이터'};$('topTitle').textContent=titles[id];if(id==='analytics')loadAnalytics();if(id==='leads')renderLeads();scrollTo(0,0)}
+function go(id){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.page===id));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id));const titles={dashboard:'오늘의 영업 현황',customers:'고객·영업관리',quotes:'견적관리',leads:'창업 글 후보',analytics:'광고·문의 추적',reviews:'고객 후기 관리',settings:'설정·데이터'};$('topTitle').textContent=titles[id];if(id==='analytics')loadAnalytics();if(id==='leads')renderLeads();scrollTo(0,0)}
 function uid(prefix){return prefix+'-'+Date.now().toString(36)}
 function sourcePrefix(source){return {'카카오톡':'K','네이버 톡톡':'N','네이버':'N','블로그':'B','인스타그램':'I','홈페이지':'W','소개':'R','전화':'T','창업 글':'L'}[source]||'C'}
 function makeCustomerCode(source,date=today()){const day=(date||today()).slice(5,10).replace('-',''),stem=sourcePrefix(source)+day,nums=customers.map(c=>c.customerCode||'').filter(x=>x.startsWith(stem)).map(x=>Number(x.slice(stem.length))||0);return stem+String(Math.max(0,...nums)+1).padStart(2,'0')}
@@ -187,8 +188,10 @@ function shiftDate(n){const d=new Date(dateObj(selectedDate).getTime()+n*8640000
 function backupData(){const data={version:2,exportedAt:new Date().toISOString(),customers,quotes,leads:parse(LKEY),leadStates},blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='meot-admin-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
 $('restoreFile').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(!confirm('백업 파일의 자료로 현재 자료를 바꿀까요?'))return;customers=d.customers||[];quotes=d.quotes||[];leadStates=d.leadStates||{};save(CKEY,customers);save(QKEY,quotes);save(LKEY,d.leads||[]);save('meot_lead_states_v2',leadStates);renderAll();alert('복원이 완료됐습니다.')}catch(_){alert('올바른 백업 파일이 아닙니다.')}};
 function clearBusinessData(){if(!confirm('고객과 견적 자료를 모두 삭제할까요?'))return;if(!confirm('한 번 더 확인합니다. 삭제 후 복구할 수 없습니다.'))return;customers=[];quotes=[];save(CKEY,customers);save(QKEY,quotes);renderAll()}
+if(location.hash==='#reviews')go('reviews');
 seed();ensureCustomerCodes();$('todayText').textContent=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(new Date());renderAll();
 </script>
 <script src="./admin-consultation.js?v=20260922-1"></script>
-</body>
+<script src="reviews-config.js?v=20260924-reviews"></script><script src="reviews.js?v=20260924-reviews"></script></body>
 </html>
+
