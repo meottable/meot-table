@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Responsive layout check</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#e9e7e2;font:14px system-ui}header{padding:12px;display:flex;gap:16px;align-items:center;justify-content:center}select{padding:7px}iframe{display:block;margin:auto;border:1px solid #aaa;background:white;width:393px;height:790px;max-width:100%}</style>
+<header><label>화면 너비 <select id="width"><option>320</option><option>375</option><option selected>393</option><option>430</option><option>768</option><option>1280</option></select></label><label>구역 <select id="section"><option value="meot-business-guide">업종별 안내</option><option value="delivery">납품 사례</option><option value="cta">상담 버튼</option><option value="customer-reviews">고객 후기</option></select></label></header>
+<iframe id="preview" title="모바일 홈페이지" src="../?v=20260924-mobile-layout#meot-business-guide"></iframe>
+<script>
+const frame=document.querySelector('#preview');
+document.querySelector('#width').addEventListener('change',e=>frame.style.width=e.target.value+'px');
+document.querySelector('#section').addEventListener('change',e=>{
+ const doc=frame.contentDocument;
+ const target=e.target.value==='delivery'?doc.querySelector('.meotDeliveryCase'):e.target.value==='cta'?doc.querySelector('.meotBusinessGuideCta'):doc.getElementById(e.target.value);
+ target?.scrollIntoView({block:'start'});
+});
+</script></html>
