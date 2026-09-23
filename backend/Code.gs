@@ -33,8 +33,8 @@ function validate_(d){
   if(!d||typeof d!=='object')throw new Error('입력 내용을 확인해 주세요.');
   if(d.website)throw new Error('접수할 수 없습니다.');
   if(!/^[a-f0-9-]{36}$/i.test(d.requestId||''))throw new Error('접수 번호를 확인해 주세요.');
-  const name=clean_(d.name,16),body=clean_(d.body,1000),rating=Number(d.rating);
-  if(!name||body.length<10||!Number.isInteger(rating)||rating<1||rating>5||d.consent!==true)throw new Error('이름·별점·후기·공개 동의를 확인해 주세요.');
+  const storeName=clean_(d.storeName,60),body=clean_(d.body,1000),rating=Number(d.rating);
+  if(!storeName||body.length<10||!Number.isInteger(rating)||rating<1||rating>5||d.consent!==true)throw new Error('상호명·별점·후기·공개 동의를 확인해 주세요.');
   const photos=d.photos||[];
   if(!Array.isArray(photos)||photos.length>3)throw new Error('사진은 최대 3장입니다.');
   const blobs=photos.map((p,i)=>{
@@ -43,7 +43,7 @@ function validate_(d){
     if(bytes.length>1000000||bytes.length<4||(bytes[0]&255)!==255||(bytes[1]&255)!==216||(bytes[2]&255)!==255||(bytes[bytes.length-2]&255)!==255||(bytes[bytes.length-1]&255)!==217)throw new Error('사진 파일을 확인해 주세요.');
     return Utilities.newBlob(bytes,'image/jpeg','photo-'+(i+1)+'.jpg');
   });
-  return {name,body,rating,business:clean_(d.business,30),blobs};
+  return {storeName,body,rating,business:clean_(d.business,40),blobs};
 }
 function submitReview(d){
   const value=validate_(d);
@@ -55,7 +55,7 @@ function submitReview(d){
     const folder=root.createFolder(d.requestId);
     try{
       value.blobs.forEach(blob=>folder.createFile(blob));
-      folder.createFile('review.json',JSON.stringify({id:folder.getId(),created:new Date().toISOString(),name:value.name,business:value.business,rating:value.rating,body:value.body,status:'pending',photoCount:value.blobs.length,consentAt:new Date().toISOString()}),MimeType.PLAIN_TEXT);
+      folder.createFile('review.json',JSON.stringify({id:folder.getId(),created:new Date().toISOString(),storeName:value.storeName,business:value.business,rating:value.rating,body:value.body,status:'pending',photoCount:value.blobs.length,consentAt:new Date().toISOString()}),MimeType.PLAIN_TEXT);
       cache.put(key,String(count+1),21600);
       return {ok:true,id:folder.getId()};
     }catch(error){console.error('review-save-error: '+error.message);folder.setTrashed(true);throw new Error('저장하지 못했습니다. 작성 내용을 유지한 채 다시 시도해 주세요.');}
@@ -77,7 +77,7 @@ function list_(admin){
   }
   return items.sort((a,b)=>b.created.localeCompare(a.created));
 }
-function getPublicReviews(){return list_(false).slice(0,30).map(r=>({id:r.id,name:r.name,business:r.business,rating:r.rating,body:r.body,created:r.created,photoCount:r.photoCount}));}
+function getPublicReviews(){return list_(false).slice(0,30).map(r=>({id:r.id,storeName:r.storeName||r.name||'',business:r.business,rating:r.rating,body:r.body,created:r.created,photoCount:r.photoCount}));}
 function getReviewPhotos(id,admin){
   if(admin===true)owner_();
   const folder=folder_(id),record=record_(folder);
