@@ -45,7 +45,7 @@
  .rotatingHero.hero{display:block}
  .rotatingHero .hero-media{min-height:0;height:clamp(400px,112vw,550px)}
  .rotatingHero .hero-headline{left:22px;right:20px;bottom:25px}
- .rotatingHero .hero-headline h1{font-size:34px;max-width:none}
+ .rotatingHero .hero-headline h1{font-size:clamp(28px,8.3vw,34px);max-width:none}
  .rotatingHero.hero>.wrap{padding:25px 22px 30px}
  .rotatingHero .hero-desc{font-size:15px;margin-top:0}
  .rotatingHero .hero-media-top{top:12px;left:12px;right:12px}
