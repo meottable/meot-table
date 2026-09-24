@@ -143,3 +143,26 @@
 })();
 
 
+
+
+/* Compact catalogs: native touch scrolling, keyboard arrows and full-grid toggle. */
+(function(){
+ 'use strict';
+ document.querySelectorAll('.compactCatalog').forEach(section=>{
+  const rail=section.querySelector('.compactCatalogRail'),toggle=section.querySelector('[data-catalog-all]');
+  const arrows=section.querySelector('.compactCatalogArrows'),buttons=[...arrows.querySelectorAll('button')];
+  const original=toggle.textContent;
+  function sync(){buttons[0].disabled=rail.scrollLeft<=2;buttons[1].disabled=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-2;}
+  function move(direction){const card=rail.firstElementChild;const gap=parseFloat(getComputedStyle(rail).gap)||0;rail.scrollBy({left:direction*(card.getBoundingClientRect().width+gap),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
+  buttons.forEach(button=>button.addEventListener('click',()=>move(Number(button.dataset.catalogStep))));
+  rail.addEventListener('scroll',sync,{passive:true});window.addEventListener('resize',sync);
+  rail.addEventListener('keydown',event=>{if(event.target===rail&&!section.classList.contains('is-expanded')&&['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();move(event.key==='ArrowRight'?1:-1);}});
+  toggle.addEventListener('click',()=>{
+   const expanded=section.classList.toggle('is-expanded');toggle.setAttribute('aria-expanded',String(expanded));
+   toggle.textContent=expanded?'접고 옆으로 보기 ↑':original;arrows.hidden=expanded;
+   rail.setAttribute('aria-label',expanded?'전체 디자인 목록':'디자인, 옆으로 넘겨 보기');
+   if(!expanded){rail.scrollLeft=0;section.scrollIntoView({block:'start',behavior:'instant'});}
+   sync();
+  });sync();
+ });
+})();
