@@ -12,7 +12,7 @@
    const full=document.createElement('a');const fullUrl=new URL(config.publicUrl);fullUrl.searchParams.set('view','list');full.href=fullUrl.href;full.target='_blank';full.rel='noopener noreferrer';full.textContent='후기 새 창에서 보기 ↗';fallback.append(full);
    const timer=setTimeout(()=>{fallback.hidden=false;status.hidden=true;},15000);
    window.addEventListener('message',event=>{
-     if(!/^https:\/\/([a-z0-9-]+\.)?script\.googleusercontent\.com$/.test(event.origin)&&event.origin!=='https://script.google.com')return;
+     if(!/^https:\/\/([a-z0-9-]+[.-])?script\.googleusercontent\.com$/.test(event.origin)&&event.origin!=='https://script.google.com')return;
      const d=event.data;if(!d||d.bridge!==bridge)return;
      if(d.type==='meot-review-height'&&Number.isFinite(d.height)&&d.height>0){frame.style.height=Math.min(30000,Math.max(220,Math.ceil(d.height)+12))+'px';status.hidden=true;fallback.hidden=true;clearTimeout(timer);}
      if(d.type==='meot-review-focus'){section.scrollIntoView({block:'start',behavior:'auto'});}
