@@ -2,15 +2,15 @@
  'use strict';
  const media=document.querySelector('.hero-media');
  if(media){
-  const slides=[...media.querySelectorAll('.hero-slide')],count=document.getElementById('hero-image-count'),label=document.getElementById('hero-image-label'),pause=document.getElementById('hero-pause');
+  const slides=[...media.querySelectorAll('.hero-slide')],count=document.getElementById('hero-image-count'),pause=document.getElementById('hero-pause');
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let current=0,timer=null,paused=reduced.matches,inView=true,hover=false,focused=false,moving=false,startX=0,startY=0;
   function load(img){if(img.dataset.src){img.src=img.dataset.src;delete img.dataset.src;}return img.decode().catch(()=>{});}
-  function sync(){clearTimeout(timer);if(!paused&&!document.hidden&&inView&&!hover&&!focused)timer=setTimeout(()=>show(current+1),3500);}
+  function sync(){clearTimeout(timer);if(!paused&&!document.hidden&&inView&&!hover&&!focused)timer=setTimeout(()=>show(current+1),2000);}
   async function show(index){
    if(moving)return;moving=true;clearTimeout(timer);const next=(index+slides.length)%slides.length;
    await load(slides[next]);
-   if(slides[next].naturalWidth){slides[current].classList.remove('is-active');slides[current].setAttribute('aria-hidden','true');current=next;slides[current].classList.add('is-active');slides[current].setAttribute('aria-hidden','false');count.textContent=(current+1)+' / '+slides.length;label.textContent=slides[current].dataset.label;}
+   if(slides[next].naturalWidth){slides[current].classList.remove('is-active');slides[current].setAttribute('aria-hidden','true');current=next;slides[current].classList.add('is-active');slides[current].setAttribute('aria-hidden','false');count.textContent=(current+1)+' / '+slides.length;}
    moving=false;load(slides[(current+1)%slides.length]);sync();
   }
   function pauseLabel(){pause.textContent=paused?'▶':'Ⅱ';pause.setAttribute('aria-pressed',String(paused));pause.setAttribute('aria-label',paused?'메인 사진 자동 전환 재생':'메인 사진 자동 전환 일시정지');}
