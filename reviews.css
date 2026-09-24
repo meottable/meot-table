@@ -1,0 +1,10 @@
+.legacy-home #customer-reviews{background:#fff;scroll-margin-top:105px;padding:64px 32px 45px}
+.legacy-home #customer-reviews .customerReviewsHead{display:block;margin:0 auto 24px;max-width:1100px}
+.legacy-home #customer-reviews .reviewEyebrow{font:700 13px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;letter-spacing:.04em;color:#9a7426;margin:0 0 11px}
+.legacy-home #customer-reviews #customer-reviews-title{font:750 clamp(27px,3.4vw,40px)/1.4 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;letter-spacing:-.04em;color:#193b4e;margin:0 0 12px}
+.legacy-home #customer-reviews .customerReviewsHead>p{font:400 15px/1.7 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;color:#697880;margin:0;max-width:none}
+.legacy-home #customer-reviews .review-reader-frame{display:block;width:100%;height:800px;border:0;max-width:1100px;margin:0 auto;background:#fff}
+.legacy-home #customer-reviews .review-reader-status,.legacy-home #customer-reviews .review-reader-fallback{max-width:1100px;margin:12px auto;font-size:14px;line-height:1.7;color:#60747e}
+.legacy-home #customer-reviews .review-reader-fallback a{color:#193b4e;text-decoration:underline}
+@media(max-width:767px){.legacy-home #customer-reviews{padding:38px 17px 25px}.legacy-home #customer-reviews .customerReviewsHead{margin-bottom:21px}.legacy-home #customer-reviews #customer-reviews-title{font-size:28px}.legacy-home #customer-reviews .customerReviewsHead>p{font-size:14px}.legacy-home #customer-reviews .reviewEyebrow{font-size:12px}}
+@media(max-width:380px){.legacy-home #customer-reviews #customer-reviews-title{font-size:25px}.legacy-home #customer-reviews{padding-left:13px;padding-right:13px}}
