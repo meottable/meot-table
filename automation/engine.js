@@ -1,0 +1,24 @@
+/* Pure business rules. No network calls and no customer messages are sent. */
+(function(root){
+'use strict';
+const day=d=>/^\d{4}-\d{2}-\d{2}$/.test(d||'')&&!Number.isNaN(Date.parse(d+'T12:00:00Z'))&&new Date(d+'T12:00:00Z').toISOString().slice(0,10)===d;
+const addDays=(d,n)=>day(d)?new Date(Date.parse(d+'T12:00:00Z')+n*86400000).toISOString().slice(0,10):'';
+const money=n=>Number.isSafeInteger(Number(n))&&Number(n)>=0;
+const empty=()=>({version:1,revision:0,orders:[],payments:[],done:{},quoteSent:{},sampleSent:{},log:[]});
+function validate(s){if(!s||s.version!==1||!Array.isArray(s.orders)||!Array.isArray(s.payments)||!s.done||!s.quoteSent||!s.sampleSent||!Array.isArray(s.log))throw Error('자동화 자료 형식을 확인해주세요.');const ids=new Set();for(const o of s.orders){if(!o||typeof o.id!=='string'||ids.has(o.id)||!money(o.total)||!o.quote||!o.checks)throw Error('주문 자료 형식을 확인해주세요.');ids.add(o.id)}
+const pids=new Set();for(const p of s.payments){if(!p||typeof p.id!=='string'||pids.has(p.id)||!ids.has(p.orderId)||!money(p.amount)||Number(p.amount)<=0||typeof p.amount!=='number'||!day(p.date))throw Error('입금 자료 형식을 확인해주세요.');pids.add(p.id)}
+for(const o of s.orders)if(balance(s,o)<0)throw Error('입금 합계가 계약액을 초과합니다.');return s}
+function balance(s,o){return o.total-s.payments.filter(p=>p.orderId===o.id&&!p.voided).reduce((n,p)=>n+p.amount,0)}
+function fingerprint(q){return JSON.stringify(['customer','size','grade','tableQty','tableUnit','chairQty','chairUnit','cutlery','cutleryQty','cutleryUnit','grand','shipDate','memo'].map(k=>q[k]??''))}
+function contract(s,q,id,at){if(s.orders.some(o=>o.quoteId===q.id&&!o.cancelled))throw Error('이미 주문으로 등록된 견적입니다.');if(!q.id||!q.customer||!money(q.grand)||Number(q.grand)<=0)throw Error('고객과 견적 금액을 먼저 확인해주세요.');const o={id,quoteId:q.id,quoteNumber:q.number,customer:q.customer,total:Number(q.grand),quote:JSON.parse(JSON.stringify(q)),fingerprint:fingerprint(q),created:at.slice(0,10),stage:'계약 확인',checks:{}};s.orders.push(o);return o}
+function payment(s,id,amount,date,ref,pid){const o=s.orders.find(x=>x.id===id&&!x.cancelled);if(!o)throw Error('유효한 주문을 선택해주세요.');amount=Number(amount);if(!money(amount)||amount<=0||!day(date))throw Error('입금액은 양의 정수, 입금일은 실제 날짜로 입력해주세요.');ref=String(ref||'').trim();if(!ref)throw Error('은행 거래번호 또는 확인 메모를 입력해주세요.');if(s.payments.some(p=>p.id===pid||(!p.voided&&p.orderId===id&&p.date===date&&p.amount===amount&&p.ref===ref)))throw Error('이미 기록된 입금입니다.');if(amount>balance(s,o))throw Error('입금액이 잔금을 초과합니다. 금액을 확인해주세요.');s.payments.push({id:pid,orderId:id,amount,date,ref});return o}
+function tasks(s,cs,qs,now){const out=[],push=(key,type,title,due,extra={})=>{if(due&&due<=now&&!s.done[key])out.push({key,type,title,due,...extra})};
+cs.filter(c=>!['계약','보류'].includes(c.stage)).forEach(c=>{push('contact:'+c.id+':'+c.nextContact,'contact',(c.name||'고객')+' 재연락',c.nextContact,{customerId:c.id});if(c.stage==='신규')push('new:'+c.id,'contact',(c.name||'신규 고객')+' 첫 상담',(c.created||now).slice(0,10),{customerId:c.id})});
+qs.forEach(q=>{if(s.orders.some(o=>o.quoteId===q.id&&!o.cancelled)||q.status==='보류')return;const sent=s.quoteSent[q.id];if(sent)push('quote:'+q.id+':'+sent,'quote',(q.customer||'고객')+' 견적 확인',addDays(sent,2),{quoteId:q.id})});
+Object.entries(s.sampleSent).forEach(([id,date])=>{const c=cs.find(c=>c.id===id);if(c&&!['계약','보류'].includes(c.stage))push('sample:'+id+':'+date,'sample',c.name+' 샘플 확인',addDays(date,3),{customerId:id})});
+s.orders.filter(o=>!o.cancelled).forEach(o=>{if(o.delivered)push('review:'+o.id+':'+o.delivered,'review',o.customer+' 후기 요청',addDays(o.delivered,7),{orderId:o.id});else if(o.quote.shipDate)push('ship:'+o.id+':'+o.quote.shipDate,'ship',o.customer+' 출고 확인',o.quote.shipDate,{orderId:o.id})});return out.sort((a,b)=>a.due.localeCompare(b.due))}
+function factoryReady(o){return o.quote.size&&o.quote.grade&&Number(o.quote.tableQty)>0&&['있음','없음'].includes(o.quote.cutlery)&&day(o.quote.shipDate)&&(o.quote.cutlery==='없음'||Number(o.quote.cutleryQty)>0)}
+function transition(s,id,stage,date){const o=s.orders.find(o=>o.id===id&&!o.cancelled);if(!o)throw Error('주문을 찾을 수 없습니다.');const next={'계약 확인':'제작중','제작중':'출고 준비','출고 준비':'배송 완료'};if(next[o.stage]!==stage)throw Error('현재 주문 단계에서 실행할 수 없습니다.');if(!factoryReady(o))throw Error('규격·등급·수저통·출고일을 확인해주세요.');if(stage==='제작중'&&(!o.checks.spec||!o.checks.schedule))throw Error('규격과 공장 일정을 확인한 뒤 제작을 진행해주세요.');if(stage==='출고 준비'&&(!o.checks.spec||!o.checks.schedule||!o.checks.quality||!o.checks.address||balance(s,o)>0))throw Error('잔금과 출고 체크리스트를 모두 확인해주세요.');if(stage==='배송 완료'){if(!day(date))throw Error('실제 배송 완료일을 입력해주세요.');o.delivered=date}o.stage=stage;return o}
+root.MeotAutomation={empty,validate,day,addDays,money,balance,fingerprint,contract,payment,tasks,factoryReady,transition};
+if(typeof module!=='undefined')module.exports=root.MeotAutomation;
+})(typeof globalThis!=='undefined'?globalThis:this);
