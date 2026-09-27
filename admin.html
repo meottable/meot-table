@@ -34,7 +34,7 @@
     <nav class="nav" aria-label="영업 콘솔 메뉴">
 <button class="on" data-page="dashboard"><span>⌂</span>오늘</button><button data-page="customers"><span>☏</span>문의</button><button data-page="quotes"><span>▤</span>견적</button><button data-page="reviews"><span>☆</span>후기</button><button data-page="settings"><span>☰</span>더보기</button>
 </nav>
-    <div class="side-foot">자동 문의는 비공개 Google Sheet에 저장됩니다.<br><a href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">고객 DB 열기 ↗</a></div>
+    <div class="side-foot">홈페이지 비즈카톡 문의는 연락처 동의 후 고객 DB에 자동 저장됩니다.<br><a href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">고객 DB 열기 ↗</a></div>
   </aside>
   <main>
     <header class="top"><div class="console-brand">멋<span>:</span>테이블 <small>영업 콘솔</small><h1 id="topTitle">오늘의 영업 현황</h1></div><div class="top-actions"><span class="sync">● 고객 DB 바로가기</span><a class="btn light" href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noreferrer">고객 DB</a><a class="btn light" href="./" target="_blank">홈페이지</a><button class="btn gold" onclick="openCustomer()">+ 신규 고객</button></div></header>
@@ -48,7 +48,7 @@
         <article class="card"><div class="label">이번 달 계약</div><div class="value" id="dWins">0</div><div class="sub" id="dWinAmount">0원</div></article>
       </div>
       <div class="console-shortcuts"><button onclick="go('customers')"><b>문의·상담</b><span>고객 기록 확인 →</span></button><button onclick="go('reviews')"><b>후기 관리</b><span>글·사진 공개 및 삭제 →</span></button><button onclick="go('quotes')"><b>견적 작성</b><span>규격·수량으로 계산 →</span></button><button onclick="go('analytics')"><b>방문·상담 통계</b><span>날짜별 확인 →</span></button></div>
-<p class="console-note">고객·견적 기록은 이 기기에 저장됩니다. 홈페이지에서 접수된 문의는 <a href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noopener">고객 DB</a>에서 확인하세요.</p>
+<p class="console-note">고객·견적 기록은 이 기기에 저장됩니다. 홈페이지 비즈카톡에서 접수된 이름·전화번호는 <a href="https://docs.google.com/spreadsheets/d/1caJ7plf4SWSWksu2lq_XvJkNBKyZVgof0RpoSOWDVUc/edit" target="_blank" rel="noopener">고객 DB</a>에서 확인하세요.</p>
       <div class="acquisition-grid">
         <article class="panel action-panel"><div class="panel-head"><h3>오늘의 고객 유치 제안</h3><span class="badge" id="actionCount">0개 실행</span></div><p class="action-lead" id="acqHeadline">고객 정보를 등록하면 오늘의 우선 행동을 정리합니다.</p><p class="action-summary" id="acqSummary">유입경로, 오픈일, 관심 등급과 고민을 함께 기록할수록 제안이 정확해집니다.</p><div class="action-items" id="acqActions"></div></article>
         <article class="panel"><div class="panel-head"><h3>문의에서 계약까지</h3><button class="link-btn" onclick="go('customers')">고객 확인 →</button></div><div class="funnel" id="customerFunnel"></div><div class="insight-box" id="funnelInsight">고객을 등록하면 단계별 전환율과 막힌 구간을 확인할 수 있습니다.</div><div class="target-chips" id="targetChips"></div></article>
