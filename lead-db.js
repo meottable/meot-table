@@ -35,7 +35,11 @@
     });
   }
   function continueTo(href){
-    if(/^tel:|^sms:/i.test(href))location.href=href;
+    // Kakao chatbot links must keep ?bot=true intact on mobile.
+    // Opening a new window after the async lead-save can hand Kakao only the base chat URL,
+    // which re-enters 1:1 counselor mode. Navigate the current tab directly instead.
+    if(/^tel:|^sms:/i.test(href)) location.href=href;
+    else if(/pf\.kakao\.com/i.test(href) && /[?&]bot=true(?:&|$)/i.test(href)) location.assign(href);
     else window.open(href,'_blank','noopener,noreferrer');
   }
   function ensureGate(){
