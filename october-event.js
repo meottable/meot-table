@@ -24,7 +24,25 @@ close();
 if(window.meotLeadDb&&window.meotLeadDb.openGate){window.meotLeadDb.openGate({href:'https://pf.kakao.com/_BZeSX/chat',channel:'카카오톡',source:'10월 첫 주 이벤트 팝업',memo:'10월 첫 주 이벤트 혜택 문의'})}
 else location.href='https://pf.kakao.com/_BZeSX/chat';
 };
-function show(){if(document.querySelector('dialog[open],.meotLeadGate.on'))return;if(preview||active())d.showModal()}
-setTimeout(show,900);
+// Never interrupt a visitor who has started navigating or using the estimate.
+var autoShowTimer=null;
+var activityEvents=['pointerdown','keydown','input','scroll','hashchange'];
+function stopScheduledShow(){
+  if(autoShowTimer!==null){clearTimeout(autoShowTimer);autoShowTimer=null}
+  activityEvents.forEach(function(type){window.removeEventListener(type,stopScheduledShow,true)});
+}
+function show(){
+  stopScheduledShow();
+  if(document.querySelector('dialog[open],.meotLeadGate.on'))return;
+  if(!preview){
+    var hash=location.hash;
+    var focused=document.activeElement;
+    if((hash&&hash!=='#top')||window.scrollY>80||
+      (focused&&focused.matches('input,textarea,select,[contenteditable="true"]')))return;
+  }
+  if(preview||active())d.showModal();
+}
+if(!preview)activityEvents.forEach(function(type){window.addEventListener(type,stopScheduledShow,{capture:true,passive:true})});
+autoShowTimer=setTimeout(show,900);
 if(!preview){var timer=setInterval(function(){if(!active()){if(d.open)d.close();clearInterval(timer)}},30000)}
 })();
