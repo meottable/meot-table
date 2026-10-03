@@ -124,7 +124,7 @@
  function openDialog(selector){qa('dialog[open]').forEach(d=>d.close());q(selector).showModal();}
  qa('[data-close]').forEach(el=>el.addEventListener('click',()=>el.closest('dialog').close()));
  qa('dialog').forEach(d=>d.addEventListener('click',event=>{if(event.target===d){const r=d.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)d.close();}}));
- q('#estimate-confirm').addEventListener('click',()=>{if(!validateQuantity()){q('#quantity').focus();return;}if(window.meotLeadDb){window.meotLeadDb.openGate({href:'/meot-table/kakao-chatbot.html',channel:'카카오톡',source:'홈페이지 예상견적',memo:quoteText()});}else{q('#estimate-summary').innerHTML=quoteSummary();openDialog('#estimate-dialog');}});
+ q('#estimate-confirm').addEventListener('click',()=>{if(!validateQuantity()){q('#quantity').focus();return;}if(window.meotLeadDb){window.meotLeadDb.openGate({href:'https://pf.kakao.com/_BZeSX/chat?bot=true',channel:'카카오톡',source:'홈페이지 예상견적',memo:quoteText()});}else{q('#estimate-summary').innerHTML=quoteSummary();openDialog('#estimate-dialog');}});
  let toastTimer;
  function toast(text){q('#toast').textContent=text;q('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>q('#toast').hidden=true,2800);}
  q('#copy-quote').addEventListener('click',()=>{if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(quoteText()).then(()=>toast('예상견적을 복사했습니다. 카카오톡에 붙여넣어 주세요.')).catch(()=>toast('표시된 등급과 수량을 카카오톡에 알려주세요.'));else toast('표시된 등급과 수량을 카카오톡에 알려주세요.');});
