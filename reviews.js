@@ -11,11 +11,20 @@
    const fallback=document.createElement('p');fallback.className='review-reader-fallback';fallback.hidden=true;fallback.append('후기가 열리지 않나요? ');
    const full=document.createElement('a');const fullUrl=new URL(config.publicUrl);fullUrl.searchParams.set('view','list');full.href=fullUrl.href;full.target='_blank';full.rel='noopener noreferrer';full.textContent='후기 새 창에서 보기 ↗';fallback.append(full);
    const timer=setTimeout(()=>{fallback.hidden=false;status.hidden=true;},15000);
-   window.addEventListener('message',event=>{
+   // Apps Script sends to window.top, including in our same-origin mobile preview.
+   let messageHost=window;
+   try{if(window.top.location.origin===window.location.origin)messageHost=window.top;}catch(_){}
+   function focusReader(){
+     const header=document.querySelector('.site-header');
+     const headerBottom=header?Math.max(0,header.getBoundingClientRect().bottom):0;
+     const top=frame.getBoundingClientRect().top+window.scrollY-headerBottom-12;
+     window.scrollTo({top:Math.max(0,top),behavior:'instant'});
+   }
+   messageHost.addEventListener('message',event=>{
      if(!/^https:\/\/([a-z0-9-]+[.-])?script\.googleusercontent\.com$/.test(event.origin)&&event.origin!=='https://script.google.com')return;
      const d=event.data;if(!d||d.bridge!==bridge)return;
      if(d.type==='meot-review-height'&&Number.isFinite(d.height)&&d.height>0){frame.style.height=Math.min(30000,Math.max(220,Math.ceil(d.height)+12))+'px';status.hidden=true;fallback.hidden=true;clearTimeout(timer);}
-     if(d.type==='meot-review-focus'){section.scrollIntoView({block:'start',behavior:'auto'});}
+     if(d.type==='meot-review-focus'){requestAnimationFrame(focusReader);}
    });
    frame.src=url.href;section.querySelector('.customerReviewsHead').after(status,frame,fallback);
  }
