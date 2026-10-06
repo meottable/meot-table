@@ -118,13 +118,13 @@
  qa('[data-select-grade]').forEach(el=>el.addEventListener('click',()=>{chooseGrade(el.dataset.selectGrade);scrollToSection(q('#estimate'));}));
  function quoteSummary(){
   const grade=prices[state.grade];
-  return '<div class="summary-row"><span>테이블 등급</span><strong>'+grade.name+'</strong></div><div class="summary-row"><span>기준 규격</span><strong>1200×800 이하</strong></div><div class="summary-row"><span>단가 · 수량</span><strong>'+won(grade.price)+' × '+state.quantity+'개</strong></div><div class="summary-row emphasis"><span>예상 금액</span><strong>'+won(Math.round(grade.price*state.quantity*1.1))+'</strong></div>';
+  return '<div class="summary-row"><span>테이블 등급</span><strong>'+grade.name+'</strong></div><div class="summary-row"><span>기준 규격</span><strong>1200×800 이하</strong></div><div class="summary-row"><span>단가 · 수량</span><strong>'+won(grade.price)+' × '+state.quantity+'개</strong></div><div class="summary-row"><span>수저통</span><strong>'+q('#estimate-cutlery').selectedOptions[0].textContent+'</strong></div><div class="summary-row emphasis"><span>예상 금액</span><strong>'+won(Math.round(grade.price*state.quantity*1.1))+'</strong></div>';
  }
- function quoteText(){return ['[멋:테이블 예상견적]','등급: '+prices[state.grade].name,'규격: 1200×800 이하','수량: '+state.quantity+'개','예상 금액 (부가세 포함): '+won(Math.round(prices[state.grade].price*state.quantity*1.1)),'배송비·추가 옵션 별도',q('#estimate-chair').checked?'의자도 함께 상담 (별도 견적)':'의자 미포함'].join('\n');}
+ function quoteText(){return ['[멋:테이블 예상견적]','등급: '+prices[state.grade].name,'규격: 1200×800 이하','수량: '+state.quantity+'개','수저통: '+q('#estimate-cutlery').selectedOptions[0].textContent,'예상 금액 (부가세 포함): '+won(Math.round(prices[state.grade].price*state.quantity*1.1)),'배송비·추가 옵션 별도',q('#estimate-chair').checked?'의자도 함께 상담 (별도 견적)':'의자 미포함'].join('\n');}
  function openDialog(selector){qa('dialog[open]').forEach(d=>d.close());q(selector).showModal();}
  qa('[data-close]').forEach(el=>el.addEventListener('click',()=>el.closest('dialog').close()));
  qa('dialog').forEach(d=>d.addEventListener('click',event=>{if(event.target===d){const r=d.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)d.close();}}));
- q('#estimate-confirm').addEventListener('click',()=>{if(!validateQuantity()){q('#quantity').focus();return;}if(window.meotLeadDb){window.meotLeadDb.openGate({href:'https://pf.kakao.com/_BZeSX/chat?bot=true',channel:'카카오톡',source:'홈페이지 예상견적',memo:quoteText()});}else{q('#estimate-summary').innerHTML=quoteSummary();openDialog('#estimate-dialog');}});
+ q('#estimate-confirm').addEventListener('click',()=>{if(!validateQuantity()){q('#quantity').focus();return;}q('#estimate-summary').innerHTML=quoteSummary();openDialog('#estimate-dialog');});
  let toastTimer;
  function toast(text){q('#toast').textContent=text;q('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>q('#toast').hidden=true,2800);}
  q('#copy-quote').addEventListener('click',()=>{if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(quoteText()).then(()=>toast('예상견적을 복사했습니다. 카카오톡에 붙여넣어 주세요.')).catch(()=>toast('표시된 등급과 수량을 카카오톡에 알려주세요.'));else toast('표시된 등급과 수량을 카카오톡에 알려주세요.');});
@@ -176,7 +176,7 @@
   if(!/^\d{10,11}$/.test(phone)){formStatus.textContent='연락처를 다시 확인해 주세요.';q('#cPhone').focus();return;}
   if(!window.meotLeadDb?.save){formStatus.textContent='현재 문의 접수를 연결할 수 없습니다. 카카오톡으로 바로 문의해 주세요.';return;}
   const region=q('#cRegion').value.trim(),industry=q('#cType').value.trim(),quantity=q('#cSeats').value.trim();
-  const message=['[멋:테이블 견적 요청]','지역: '+region,'업종: '+industry,'테이블 수량: '+quantity,'관심 등급: '+prices[state.grade].name,'연락처: '+phone].join('\n');
+  const message=['[멋:테이블 견적 요청]','지역: '+region,'업종: '+industry,'테이블 수량: '+quantity,'수저통: '+q('#cCutlery').value,'관심 등급: '+prices[state.grade].name,'연락처: '+phone].join('\n');
   const button=form.querySelector('[type="submit"]');button.disabled=true;formStatus.textContent='상담 내용을 전송하고 있습니다…';
   try{
    await window.meotLeadDb.save({name:'홈페이지 고객',phone,region,industry,opening:'',channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
@@ -214,4 +214,5 @@
   });sync();
  });
 })();
+
 

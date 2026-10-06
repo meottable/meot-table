@@ -62,6 +62,11 @@
     });
   }
   function openGate(opts){
+    // Kakao consultations open directly without collecting contact information.
+    if(opts && /^https?:\/\/pf\.kakao\.com\//i.test(opts.href||'')){
+      var chatUrl=new URL(opts.href);chatUrl.searchParams.set('bot','true');
+      continueTo(chatUrl.href);return;
+    }
     document.querySelectorAll('dialog[open]').forEach(function(d){d.close()});
     ensureGate();pending={href:opts.href,channel:opts.channel||channelFor(opts.href),source:opts.source||'홈페이지',memo:opts.memo||''};
     if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track('lead_gate_open',{channel:pending.channel});
@@ -77,4 +82,5 @@
   },true);
   window.meotLeadDb={save:save,openGate:openGate,api:API};
 })();
+
 
