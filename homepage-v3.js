@@ -127,7 +127,7 @@
  q('#estimate-confirm').addEventListener('click',()=>{if(!validateQuantity()){q('#quantity').focus();return;}q('#estimate-summary').innerHTML=quoteSummary();openDialog('#estimate-dialog');});
  let toastTimer;
  function toast(text){q('#toast').textContent=text;q('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>q('#toast').hidden=true,2800);}
- q('#copy-quote').addEventListener('click',()=>{if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(quoteText()).then(()=>toast('예상견적을 복사했습니다. 카카오톡에 붙여넣어 주세요.')).catch(()=>toast('표시된 등급과 수량을 카카오톡에 알려주세요.'));else toast('표시된 등급과 수량을 카카오톡에 알려주세요.');});
+ q('#copy-quote').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:quoteText(),href:'https://pf.kakao.com/_BZeSX/chat?bot=true',button:q('#copy-quote'),status:q('#quote-chat-status'),fallback:q('#quote-copy-fallback'),textarea:q('#quote-copy-text')}));
  q('#menu-toggle').addEventListener('click',()=>{const expanded=q('#menu-toggle').getAttribute('aria-expanded')==='true';q('#menu-toggle').setAttribute('aria-expanded',String(!expanded));q('#menu-toggle').setAttribute('aria-label',expanded?'메뉴 열기':'메뉴 닫기');q('#mobile-nav').hidden=expanded;});
  qa('#mobile-nav a').forEach(a=>a.addEventListener('click',()=>{q('#mobile-nav').hidden=true;q('#menu-toggle').setAttribute('aria-expanded','false');q('#menu-toggle').setAttribute('aria-label','메뉴 열기');}));
 
@@ -168,24 +168,26 @@
  });
 
  qa('[data-contact-form]').forEach(el=>el.addEventListener('click',()=>{q('#cSeats').value=state.quantity;openDialog('#consult-dialog');}));
- const form=q('#consultForm'),formStatus=q('#consultStatus');let formStarted=false;
+ const form=q('#consultForm'),formStatus=q('#consultStatus');let formStarted=false,consultMessage='',consultPending=false;
  form.addEventListener('focusin',()=>{if(!formStarted){formStarted=true;window.meotAnalytics?.track('form_start',{form:'consult_detail_v3'});}});
  form.addEventListener('submit',async event=>{
-  event.preventDefault();if(!form.reportValidity())return;
+  event.preventDefault();if(consultPending||form.querySelector('[type="submit"]').disabled||!form.reportValidity())return;
   const phone=q('#cPhone').value.replace(/\D/g,'');
   if(!/^\d{10,11}$/.test(phone)){formStatus.textContent='연락처를 다시 확인해 주세요.';q('#cPhone').focus();return;}
   if(!window.meotLeadDb?.save){formStatus.textContent='현재 문의 접수를 연결할 수 없습니다. 카카오톡으로 바로 문의해 주세요.';return;}
   const region=q('#cRegion').value.trim(),industry=q('#cType').value.trim(),quantity=q('#cSeats').value.trim();
   const message=['[멋:테이블 견적 요청]','지역: '+region,'업종: '+industry,'테이블 수량: '+quantity,'수저통: '+q('#cCutlery').value,'관심 등급: '+prices[state.grade].name,'연락처: '+phone].join('\n');
-  const button=form.querySelector('[type="submit"]');button.disabled=true;formStatus.textContent='상담 내용을 전송하고 있습니다…';
+  consultMessage=message;q('#consult-copy-text').value=message;
+  const button=form.querySelector('[type="submit"]');button.disabled=true;consultPending=true;formStatus.textContent='상담 내용을 전송하고 있습니다…';
   try{
    await window.meotLeadDb.save({name:'홈페이지 고객',phone,region,industry,opening:'',channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
-   window.meotAnalytics?.track('form_submit',{form:'consult_detail_v3',channel:'kakao'});
-   formStatus.textContent='상담 내용을 전송했습니다. 매장 사진이나 도면은 카카오톡으로 보내주세요.';
-   button.textContent='전송 완료';
-  }catch(error){formStatus.textContent='전송하지 못했습니다. 다시 시도하거나 카카오톡으로 문의해 주세요.';button.disabled=false;}
+   // Current opaque Apps Script response cannot prove a DB commit or owner receipt.
+   formStatus.textContent='전송 요청을 보냈지만 저장 완료는 확인하지 못했습니다. 기다리지만 마시고 아래 버튼으로 카카오 상담을 이어가 주세요.';
+  }catch(error){formStatus.textContent='접수 여부를 확인하지 못했습니다. 작성 내용은 유지됩니다. 중복 신청 대신 아래 버튼으로 카카오 상담을 이어가 주세요.';}
+  finally{consultPending=false;button.textContent='접수 확인 필요';q('#consultFallback').hidden=false;}
  });
- form.addEventListener('input',()=>{const button=form.querySelector('[type="submit"]');if(button.textContent==='전송 완료'){button.disabled=false;button.textContent='견적 요청 보내기';formStatus.textContent='';}});
+ q('#consult-copy-chat').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:consultMessage,href:'https://pf.kakao.com/_BZeSX/chat?bot=true',button:q('#consult-copy-chat'),status:formStatus,fallback:q('#consult-copy-manual'),textarea:q('#consult-copy-text')}));
+ form.addEventListener('input',()=>{if(consultPending)return;const button=form.querySelector('[type="submit"]');if(button.textContent==='접수 확인 필요'){button.disabled=false;button.textContent='견적 요청 보내기';formStatus.textContent='';q('#consultFallback').hidden=true;}});
  renderEstimate();renderBookings();loadBookings();
  window.MeotSite={monthKey,reservationStatus};
 })();

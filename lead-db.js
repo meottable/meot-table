@@ -29,10 +29,13 @@
       website:clean(data.website)
     });
     if(body.get('phone').length<10)return Promise.reject(new Error('invalid_phone'));
-    return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),keepalive:true}).then(function(result){
-      if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track('lead_saved',{channel:body.get('channel')});
-      return result;
-    });
+    // no-cors returns an opaque response, not a storage acknowledgement.
+    // Preserve the existing delivery endpoint; never count this as lead_saved.
+    var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},15000);
+    return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),keepalive:true,signal:controller.signal}).then(function(){
+      if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track('lead_request_sent',{channel:body.get('channel')});
+      return {status:'unconfirmed'};
+    }).finally(function(){clearTimeout(timer);});
   }
   function continueTo(href){
     // Kakao chatbot links must keep ?bot=true intact on mobile.
@@ -58,8 +61,15 @@
       var d=Object.fromEntries(new FormData(form)),href=pending.href;
       Object.assign(d,{channel:pending.channel,source:pending.source||'홈페이지',memo:pending.memo||'',page:location.href});
       status.textContent='상담 정보를 접수하고 있습니다…';
-      save(d).then(function(){status.textContent='상담 화면을 엽니다.';gate.classList.remove('on');form.reset();pending=null;continueTo(href)}).catch(function(){status.textContent='저장 중 문제가 생겼습니다. 번호를 확인하고 다시 시도해 주세요.'});
+      var button=form.querySelector('.meotLeadGateSubmit');if(button.disabled)return;button.disabled=true;
+      function unconfirmed(){
+        status.textContent='저장 완료를 확인하지 못했습니다. 입력 내용은 유지됩니다. ';
+        var link=document.createElement('a');link.href=href;link.textContent='상담 바로 이어가기 →';link.addEventListener('click',function(e){e.preventDefault();continueTo(href)});status.appendChild(link);
+        button.textContent='접수 확인 필요';
+      }
+      save(d).then(unconfirmed).catch(unconfirmed);
     });
+    form.addEventListener('input',function(){var button=form.querySelector('.meotLeadGateSubmit');if(button.textContent==='접수 확인 필요'){button.disabled=false;button.textContent='카카오톡으로 상담 이어가기';status.textContent='';}});
   }
   function openGate(opts){
     // Kakao consultations open directly without collecting contact information.
