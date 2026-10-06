@@ -16,7 +16,7 @@ function migrate(base,current=today().slice(0,7)){
  if(base.schema!==1||!Array.isArray(base.orders)||!Array.isArray(base.cash))throw Error('기존 장부 형식을 확인해주세요.');
  const s={schema:2,sourceUpdated:String(base.updated||''),updated:new Date().toISOString(),defaultTarget:10000000,orders:base.orders.map((o,i)=>({...o,id:'import-order-'+i,basePaid:Number(o.paid||0),baseBalance:Number(o.balance||0),adjustment:Number(o.amount||0)-Number(o.paid||0)-Number(o.balance||0),imported:true})),cash:base.cash.map((c,i)=>({...c,id:'import-cash-'+i,orderId:'',imported:true})),months:{}};
  for(const r of [...s.orders,...s.cash]){const m=ensureMonth(s,r.date.slice(0,7));if(Number.isSafeInteger(base.target)&&base.target>=0)m.target=base.target;}
- ensureMonth(s,current);validate(s);return s;
+ if(base.source){s.sourceVersion=base.source.version;s.sourceMeta=clone(base.source);s.sourceBaseline=clone({schema:1,updated:base.updated,target:base.target,orders:base.orders,cash:base.cash,source:base.source});}ensureMonth(s,current);validate(s);return s;
 }
 function validate(s){
  if(!s||s.schema!==2||!Array.isArray(s.orders)||!Array.isArray(s.cash)||!s.months||typeof s.months!=='object'||Array.isArray(s.months))throw Error('지원하지 않는 장부 파일입니다.');
