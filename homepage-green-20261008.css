@@ -1,0 +1,56 @@
+/* Approved beige x dark green palette, 2026-10-08. Color-only layer. */
+:root{--navy:#28523e;--deep:#173326;--gold:#b99a61;--gold-light:#e4cca0;--ivory:#f5efe5;--text:#243b2e;--muted:#627165;--line:#d9cbbb}
+body,.legacy-home{--ink:#28523e;--paper:#f5efe5;--gold:#b99a61;--muted:#627165;--line:#d9cbbb;background:#f5efe5;color:#243b2e}
+.site-header,.mobile-nav,.sticky-actions{background:#f5efe5f7;border-color:#d9cbbb}
+.wordmark,.desktop-nav,.nav-contact,.menu-button{color:#28523e}
+.nav-contact{border-color:#28523e}
+body .btn-gold{background:#28523e;color:#fffdfa;border-color:#28523e}
+body .btn-gold:hover{background:#173326;color:#fffdfa}
+body .btn-outline{color:#28523e;border-color:#28523e}
+body .btn-outline:hover{background:#e6ece4}
+body .hero-actions .btn-outline{color:#fffdfa!important;border-color:#adc0ad!important}
+body .hero-actions .btn-outline:hover{background:#28523e!important}
+.eyebrow,.section-head h2,.estimate-title h2,.analysis-copy h2{color:#28523e}
+.trust-bar,.analysis-section{background:#ebe4d7;border-color:#d9cbbb}
+.estimate-card,dialog,.summary-box{background:#fffdfa;border-color:#d9cbbb}
+.total,.estimate-title>.icon,.analysis-symbol>.icon{color:#28523e}
+.grade-option[aria-pressed="true"]{background:#28523e;border-color:#28523e;box-shadow:inset 0 0 0 1px #b99a61}
+.rotatingHero.hero{background:#173326}
+.hero .eyebrow,.hero .price strong,.production-promise strong,.closing .closing-limit-note{color:#e4cca0}
+.production-booking{background:#234834;border-color:#b99a6170}
+.production-confirmed,.production-booking-title{color:#e0e9df}
+.production-confirmed strong{color:#fffdfa}
+.production-promise p,.hero-desc{color:#e0e9df}
+.closing{background:#173326}
+.closing:after{background:linear-gradient(90deg,#173326 30%,#173326de 49%,#17332638 78%)}
+.site-footer{background:#173326;color:#d6e1d5}
+.footer-brand{color:#fffdfa}
+#grades{background:#f5efe5}
+#grades .mg-grade-content{background:#fffdfa;color:#28523e}
+#grades .mg-grade-content :is(h2,h3,.choice-row td b,.grade-common b,.mg-description-subtitle,.zoom-photo-button,#mg-zoom-close){color:#28523e}
+#grades .mg-grade-content .comparison thead th:last-child{background:#28523e;color:#fffdfa}
+#grades .mg-grade-content .emphasis{background:#eee5d4}
+#grades .mg-grade-content .grade-zoom{background:#f5efe5;border-top-color:#b99a61}
+#grades .mg-grade-content .quality-split-actions .quality-card-button{background:#fffdfa;color:#28523e;border-color:#28523e}
+#grades .mg-grade-content .quality-split-actions .quality-card-button:last-child{background:#28523e;color:#fffdfa}
+#grades .quality-card{--ink:#28523e;--muted:#627165;--line:#d9cbbb;background:#fffdfa}
+#grades .quality-card--premium{--ink:#fffdfa;--muted:#d6e1d5;background:#173326}
+#grades .quality-card--middle .quality-card-button{background:#28523e;border-color:#28523e;color:#fffdfa}
+#grades .quality-card--premium .quality-card-button{background:#eee5d4;border-color:#eee5d4;color:#173326}
+.premium-reservation,#meot-reservation-motion .mr-premium{background:#173326}
+.meotCollaboration,#factory,.legacy-home .factoryStory{background:#173326;color:#fffdfa}
+.meotCollaboration h2,#factory h2,.legacy-home .factoryStory h2{color:#fffdfa}
+.mc-partners a,#factory .fp-photos figure,#factory .fp-photos article,.legacy-home .factoryStoryBuilding,.legacy-home .factoryStory .productionCard{background:#234834;border-color:#64806b}
+.meotCollaboration .mc-nationwide{background:#28523e;border-color:#b99a61}
+.meotCollaboration .mc-nationwide strong{color:#f1d8a8}
+.meotCollaboration .mc-nationwide span{color:#fffdfa}
+.mc-heading>p:last-child,.mc-partners p,.mc-benefits span,.mc-note,#factory .fp-desc,#factory .fp-caption,#factory .fp-photos p,#factory .fp-photos span,.legacy-home .factoryStoryHead>div,.legacy-home .factoryStory .productionCard p{color:#d6e1d5}
+.mc-benefits{border-color:#64806b}
+.mc-partners small,.mc-partners span,.mc-benefits strong,.meotCollaboration .eyebrow,#factory .fp-eyebrow{color:#e4cca0}
+.legacy-home .compactCatalog,.legacy-home .signatureCollection,.legacy-home .moreDesigns{background:#f5efe5;color:#28523e}
+.legacy-home .moreDesignsCta,.legacy-home .meotBusinessGuideButton{background:#28523e;color:#fffdfa!important}
+.legacy-home .signatureCollection h3,.legacy-home .signatureDesignMeta strong,.legacy-home .moreDesigns h2{color:#28523e}
+#order-faq,#order-faq h2,#order-faq .faq-answer strong{color:#28523e}
+#estimate .quote-scope,#estimate .estimate-cutlery-label select,#cCutlery{color:#28523e}
+input[type="checkbox"]{accent-color:#28523e}
+@media(max-width:700px){.closing:after{background:linear-gradient(90deg,#173326ef,#173326c5)}}
