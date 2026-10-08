@@ -241,7 +241,7 @@
   consultMessage=message;q('#consult-copy-text').value=message;
   const button=form.querySelector('[type="submit"]');button.disabled=true;consultPending=true;formStatus.textContent='상담 내용을 전송하고 있습니다…';
   try{
-   await window.meotLeadDb.save({name:q('#cStore').value.trim()||'홈페이지 고객',phone,region,industry,opening:q('#cDelivery').value,channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
+   await window.meotLeadDb.save({name:q('#cStore').value.trim()||'홈페이지 고객',phone,region,industry,opening:'',channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
    // Current opaque Apps Script response cannot prove a DB commit or owner receipt.
    formStatus.textContent='전송 요청을 보냈지만 저장 완료는 확인하지 못했습니다. 기다리지만 마시고 아래 버튼으로 카카오 상담을 이어가 주세요.';
   }catch(error){formStatus.textContent='접수 여부를 확인하지 못했습니다. 작성 내용은 유지됩니다. 중복 신청 대신 아래 버튼으로 카카오 상담을 이어가 주세요.';}
