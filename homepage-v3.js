@@ -49,7 +49,7 @@
  window.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Escape',' '].includes(event.key))cancelSectionScroll();});
  window.addEventListener('popstate',cancelSectionScroll);
  const prices={basic:{name:'기본형',price:59000},middle:{name:'중급형',price:89000},premium:{name:'고급형',price:129000}};
- const state={grade:'basic',quantity:10};
+ const state={grade:'basic',quantity:10,top:'',chair:''};
  const won=n=>n.toLocaleString('ko-KR')+'원';
  const BOOKING_CAPACITY=10;
  let bookingData={"capacity":10,"months":{"2026-09":{"confirmed":7}},"updatedAt":"2026-09-21T23:56:10+09:00"};
@@ -95,20 +95,56 @@
  setInterval(tickMonth,60000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){tickMonth();if(Date.now()-lastBookingFetch>60000)loadBookings();}});
 
+ const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const catalog={top:[],chair:[]};
+ qa('[data-product]').forEach(el=>{
+  const kind=el.closest('#chairs')?'chair':'top',im=el.querySelector('img');
+  const name=el.querySelector('h3,strong')?.textContent.trim()||im.alt;
+  catalog[kind].push({name,el});
+  const option=document.createElement('option');option.value=name;option.textContent=name;
+  q(kind==='chair'?'#quote-chair':'#quote-top').append(option);
+  el.setAttribute('aria-label',name+' 선택하고 견적 보기');
+ });
+ function config(){
+  const size=q('#quote-size').value,qty=Number(q('#quantity').value);
+  const fixed=['1200×800','1100×700','800×800'].includes(size);
+  const valid=Number.isInteger(qty)&&qty>=1&&qty<=999;
+  const supply=fixed&&valid?prices[state.grade].price*qty:null;
+  return {top:state.top||'상담 후 결정',chair:q('#estimate-chair').checked?(state.chair||'상담 후 결정'):'미포함',chairQty:q('#quote-chair-quantity').value,
+   size:size==='custom'?(q('#quote-width').value||'미정')+'×'+(q('#quote-depth').value||'미정'):size==='undecided'?'상담 후 결정':size,
+   qty,cutlery:q('#estimate-cutlery').selectedOptions[0].textContent,delivery:q('#quote-delivery').value||'상담 후 결정',supply,total:supply===null?null:Math.round(supply*1.1)};
+ }
+ function saveConfiguration(){
+  // Store only product choices, never contact details; preserve choices after returning from Kakao.
+  try{sessionStorage.setItem('meot_product_quote_v1',JSON.stringify({grade:state.grade,top:state.top,chair:state.chair,fields:Object.fromEntries(['quantity','quote-size','quote-width','quote-depth','quote-chair-quantity','estimate-cutlery','quote-delivery'].map(id=>[id,q('#'+id).value])),includeChair:q('#estimate-chair').checked}));}catch(_){}
+ }
  function renderEstimate(){
+  const c=config();
   qa('[data-grade]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.grade===state.grade)));
-  q('#total').textContent=won(prices[state.grade].price*state.quantity*1.1);
-  q('#estimate-breakdown').textContent='공급가 '+won(prices[state.grade].price*state.quantity)+' + 부가세 '+won(Math.round(prices[state.grade].price*state.quantity*.1));
+  q('#total').textContent=c.total===null?'맞춤 견적 안내':won(c.total);
+  q('#estimate-breakdown').textContent=c.total===null?'규격과 제작 사양을 확인해 금액을 안내합니다.':'공급가 '+won(c.supply)+' + 부가세 '+won(c.total-c.supply);
   q('#qty-minus').disabled=state.quantity<=1;q('#qty-plus').disabled=state.quantity>=999;
+  q('#quote-custom').hidden=q('#quote-size').value!=='custom';
+  q('#quote-chair-quantity-label').hidden=!q('#estimate-chair').checked;
+  q('#chair-scope').hidden=!q('#estimate-chair').checked;
+  q('#quote-picked').textContent='선택한 구성 · 상판 '+c.top+' / 의자 '+c.chair;
+  saveConfiguration();
  }
  function validateQuantity(){
-  const raw=q('#quantity').value,n=Number(raw);
-  const valid=raw.trim()!==''&&Number.isInteger(n)&&n>=1&&n<=999;
-  q('#quantity').setAttribute('aria-invalid',String(!valid));
-  q('#qty-error').textContent=valid?'':'수량은 1~999개의 정수로 입력해 주세요.';
-  if(valid){state.quantity=n;renderEstimate();}
-  else{q('#total').textContent='수량 확인';q('#qty-minus').disabled=true;q('#qty-plus').disabled=true;}
+  const raw=q('#quantity').value,n=Number(raw),valid=raw.trim()!==''&&Number.isInteger(n)&&n>=1&&n<=999;
+  q('#quantity').setAttribute('aria-invalid',String(!valid));q('#qty-error').textContent=valid?'':'수량은 1~999개의 정수로 입력해 주세요.';
+  if(valid){state.quantity=n;renderEstimate();}else{q('#total').textContent='수량 확인';q('#qty-minus').disabled=true;q('#qty-plus').disabled=true;}
   return valid;
+ }
+ function validateConfig(){
+  if(!validateQuantity()){q('#quantity').focus();return false;}
+  let field=null,message='';
+  if(q('#quote-size').value==='custom'){
+   field=['#quote-width','#quote-depth'].map(q).find(el=>!el.value||!el.checkValidity());
+   if(field)message='가로·세로 규격을 100~10000 mm의 정수로 입력해 주세요.';
+  }
+  if(!field&&q('#estimate-chair').checked&&(!q('#quote-chair-quantity').value||!q('#quote-chair-quantity').checkValidity())){field=q('#quote-chair-quantity');message='의자 수량은 1~9999개의 정수로 입력해 주세요.';}
+  q('#quote-config-error').textContent=message;if(field){field.focus();return false;}return true;
  }
  function chooseGrade(grade){if(!prices[grade])return;state.grade=grade;renderEstimate();validateQuantity();}
  qa('[data-grade]').forEach(el=>el.addEventListener('click',()=>chooseGrade(el.dataset.grade)));
@@ -116,15 +152,34 @@
  q('#qty-minus').addEventListener('click',()=>{q('#quantity').value=Math.max(1,state.quantity-1);validateQuantity();});
  q('#qty-plus').addEventListener('click',()=>{q('#quantity').value=Math.min(999,state.quantity+1);validateQuantity();});
  qa('[data-select-grade]').forEach(el=>el.addEventListener('click',()=>{chooseGrade(el.dataset.selectGrade);scrollToSection(q('#estimate'));}));
- function quoteSummary(){
-  const grade=prices[state.grade];
-  return '<div class="summary-row"><span>테이블 등급</span><strong>'+grade.name+'</strong></div><div class="summary-row"><span>기준 규격</span><strong>1200×800 이하</strong></div><div class="summary-row"><span>단가 · 수량</span><strong>'+won(grade.price)+' × '+state.quantity+'개</strong></div><div class="summary-row"><span>수저통</span><strong>'+q('#estimate-cutlery').selectedOptions[0].textContent+'</strong></div><div class="summary-row emphasis"><span>예상 금액</span><strong>'+won(Math.round(grade.price*state.quantity*1.1))+'</strong></div>';
+ ['quote-size','quote-width','quote-depth','quote-chair-quantity','estimate-cutlery','quote-delivery'].forEach(id=>q('#'+id).addEventListener('input',renderEstimate));
+ q('#quote-top').addEventListener('change',()=>{state.top=q('#quote-top').value;renderEstimate();});
+ q('#quote-chair').addEventListener('change',()=>{state.chair=q('#quote-chair').value;q('#estimate-chair').checked=!!state.chair;renderEstimate();});
+ q('#estimate-chair').addEventListener('change',()=>{if(!q('#estimate-chair').checked){state.chair='';q('#quote-chair').value='';}renderEstimate();});
+ function selectProduct(el){
+  const kind=el.closest('#chairs')?'chair':'top',item=catalog[kind].find(x=>x.el===el);
+  if(!item)return;state[kind]=item.name;q(kind==='chair'?'#quote-chair':'#quote-top').value=item.name;
+  if(kind==='chair')q('#estimate-chair').checked=true;
+  qa('dialog[open]').forEach(d=>d.close());renderEstimate();scrollToSection(q('#estimate'));
  }
- function quoteText(){return ['[멋:테이블 예상견적]','등급: '+prices[state.grade].name,'규격: 1200×800 이하','수량: '+state.quantity+'개','수저통: '+q('#estimate-cutlery').selectedOptions[0].textContent,'예상 금액 (부가세 포함): '+won(Math.round(prices[state.grade].price*state.quantity*1.1)),'배송비·추가 옵션 별도',q('#estimate-chair').checked?'의자도 함께 상담 (별도 견적)':'의자 미포함'].join('\n');}
+ function quoteSummary(){
+  const c=config(),rows=[['상판 디자인',c.top],['제작 등급',prices[state.grade].name],['테이블 규격·수량',c.size+' / '+c.qty+'개'],['수저통',c.cutlery],['의자',c.chair+(c.chair==='미포함'?'':' / '+c.chairQty+'개')],['희망 납품일',c.delivery],['테이블 기준 예상금액',c.total===null?'상담 후 안내':won(c.total)+' (부가세 포함)']];
+  return rows.map(([label,value])=>'<div class="summary-row"><span>'+label+'</span><strong>'+escapeHtml(value)+'</strong></div>').join('');
+ }
+ function quoteText(){const c=config();return ['[멋:테이블 견적 상담]','상판: '+c.top,'제작 등급: '+prices[state.grade].name,'테이블: '+c.size+' / '+c.qty+'개','수저통: '+c.cutlery,'의자: '+c.chair+(c.chair==='미포함'?'':' / '+c.chairQty+'개'),'희망 납품일: '+c.delivery,'테이블 기준 예상금액: '+(c.total===null?'상담 후 안내':won(c.total)+' (부가세 포함)'),'선택 디자인·다리 구성·수저통·의자·배송비 상담 후 확정'].join('\n');}
+ try{
+  const saved=JSON.parse(sessionStorage.getItem('meot_product_quote_v1')||'null');
+  if(saved){if(prices[saved.grade])state.grade=saved.grade;
+   ['top','chair'].forEach(kind=>{if(catalog[kind].some(x=>x.name===saved[kind])){state[kind]=saved[kind];q('#quote-'+kind).value=saved[kind];}});
+   for(const id of ['quantity','quote-size','quote-width','quote-depth','quote-chair-quantity','estimate-cutlery','quote-delivery'])if(typeof saved.fields?.[id]==='string')q('#'+id).value=saved.fields[id];
+   if(!q('#quote-size').value)q('#quote-size').value='1200×800';if(!q('#estimate-cutlery').value)q('#estimate-cutlery').value='undecided';
+   q('#estimate-chair').checked=!!saved.includeChair;state.quantity=Number(q('#quantity').value)||10;
+  }
+ }catch(_){}
  function openDialog(selector){qa('dialog[open]').forEach(d=>d.close());q(selector).showModal();}
  qa('[data-close]').forEach(el=>el.addEventListener('click',()=>el.closest('dialog').close()));
  qa('dialog').forEach(d=>d.addEventListener('click',event=>{if(event.target===d){const r=d.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)d.close();}}));
- q('#estimate-confirm').addEventListener('click',()=>{if(!validateQuantity()){q('#quantity').focus();return;}q('#estimate-summary').innerHTML=quoteSummary();openDialog('#estimate-dialog');});
+ q('#estimate-confirm').addEventListener('click',()=>{if(!validateConfig())return;q('#estimate-summary').innerHTML=quoteSummary();q('#quote-copy-text').value=quoteText();openDialog('#estimate-dialog');});
  let toastTimer;
  function toast(text){q('#toast').textContent=text;q('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>q('#toast').hidden=true,2800);}
  q('#copy-quote').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:quoteText(),href:'https://pf.kakao.com/_BZeSX/chat',button:q('#copy-quote'),status:q('#quote-chat-status'),fallback:q('#quote-copy-fallback'),textarea:q('#quote-copy-text')}));
@@ -147,8 +202,8 @@
   openDialog('#catalog-dialog');
  }
  qa('[data-product]').forEach(el=>{
-  el.addEventListener('click',event=>{event.preventDefault();showCatalog(el);});
-  if(el.getAttribute('role')==='button')el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();showCatalog(el);}});
+  el.addEventListener('click',event=>{event.preventDefault();selectProduct(el);});
+  if(el.getAttribute('role')==='button')el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectProduct(el);}});
  });
  qa('[data-review]').forEach(el=>el.addEventListener('click',()=>showCatalog(el,true)));
  q('#portfolio-more').addEventListener('click',()=>{
@@ -167,7 +222,13 @@
   }));
  });
 
- qa('[data-contact-form]').forEach(el=>el.addEventListener('click',()=>{q('#cSeats').value=state.quantity;openDialog('#consult-dialog');}));
+ function openRequest(){if(!validateConfig())return;q('#cSeats').value=state.quantity;q('#cCutlery').value=q('#estimate-cutlery').selectedOptions[0].textContent;q('#cDelivery').value=q('#quote-delivery').value;q('#consult-config-summary').innerHTML=quoteSummary();openDialog('#consult-dialog');}
+ qa('[data-contact-form]').forEach(el=>el.addEventListener('click',openRequest));q('#quote-request-open').addEventListener('click',openRequest);
+ ['cSeats','cCutlery','cDelivery'].forEach(id=>q('#'+id).addEventListener('input',()=>{
+  q('#quantity').value=q('#cSeats').value;state.quantity=Number(q('#cSeats').value);
+  const option=Array.from(q('#estimate-cutlery').options).find(o=>o.textContent===q('#cCutlery').value);if(option)q('#estimate-cutlery').value=option.value;
+  q('#quote-delivery').value=q('#cDelivery').value;renderEstimate();q('#consult-config-summary').innerHTML=quoteSummary();
+ }));
  const form=q('#consultForm'),formStatus=q('#consultStatus');let formStarted=false,consultMessage='',consultPending=false;
  form.addEventListener('focusin',()=>{if(!formStarted){formStarted=true;window.meotAnalytics?.track('form_start',{form:'consult_detail_v3'});}});
  form.addEventListener('submit',async event=>{
@@ -176,11 +237,11 @@
   if(!/^\d{10,11}$/.test(phone)){formStatus.textContent='연락처를 다시 확인해 주세요.';q('#cPhone').focus();return;}
   if(!window.meotLeadDb?.save){formStatus.textContent='현재 문의 접수를 연결할 수 없습니다. 카카오톡으로 바로 문의해 주세요.';return;}
   const region=q('#cRegion').value.trim(),industry=q('#cType').value.trim(),quantity=q('#cSeats').value.trim();
-  const message=['[멋:테이블 견적 요청]','지역: '+region,'업종: '+industry,'테이블 수량: '+quantity,'수저통: '+q('#cCutlery').value,'관심 등급: '+prices[state.grade].name,'연락처: '+phone].join('\n');
+  const message=quoteText()+'\n상호: '+(q('#cStore').value.trim()||'미입력')+'\n지역: '+region+'\n업종: '+industry+'\n연락처: '+phone;
   consultMessage=message;q('#consult-copy-text').value=message;
   const button=form.querySelector('[type="submit"]');button.disabled=true;consultPending=true;formStatus.textContent='상담 내용을 전송하고 있습니다…';
   try{
-   await window.meotLeadDb.save({name:'홈페이지 고객',phone,region,industry,opening:'',channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
+   await window.meotLeadDb.save({name:q('#cStore').value.trim()||'홈페이지 고객',phone,region,industry,opening:q('#cDelivery').value,channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
    // Current opaque Apps Script response cannot prove a DB commit or owner receipt.
    formStatus.textContent='전송 요청을 보냈지만 저장 완료는 확인하지 못했습니다. 기다리지만 마시고 아래 버튼으로 카카오 상담을 이어가 주세요.';
   }catch(error){formStatus.textContent='접수 여부를 확인하지 못했습니다. 작성 내용은 유지됩니다. 중복 신청 대신 아래 버튼으로 카카오 상담을 이어가 주세요.';}
@@ -216,5 +277,6 @@
   });sync();
  });
 })();
+
 
 

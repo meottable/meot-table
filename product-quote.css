@@ -1,0 +1,12 @@
+/* Product choices stay attached to the estimate and Kakao copy. */
+.product-quote-fields{margin:24px 0;padding:20px;background:#f5efe5;border:1px solid #d9cbbb;border-radius:16px}
+.quote-product-picks,.quote-config-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;min-width:0}
+.quote-product-picks label{grid-row:1}.quote-product-picks a{font-size:14px;color:#28523e;text-decoration:underline;text-underline-offset:4px}
+.quote-config-grid{margin-top:20px}.product-quote-fields label,.quote-chair-quantity{display:grid;gap:8px;font-size:14px;font-weight:700;min-width:0}
+.product-quote-fields :is(input,select),.quote-chair-quantity input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;padding:12px;border:1px solid #b6bfae;border-radius:9px;background:#fffdfa;color:#243b2e;font:inherit;font-size:16px}
+.quote-custom{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}.quote-custom[hidden],.quote-chair-quantity[hidden]{display:none}
+#quote-picked{margin:18px 0 0;color:#28523e;line-height:1.6;font-size:14px;overflow-wrap:anywhere}
+.quote-chair-quantity{max-width:240px;margin:16px 0}.quote-secondary{display:block;width:100%;padding:14px;margin-top:12px;border:1px solid #28523e;border-radius:10px;background:#fffdfa;color:#28523e;font:inherit;font-size:14px;cursor:pointer}
+.summary-row{gap:16px}.summary-row strong{overflow-wrap:anywhere;text-align:right}.summary-row span{flex-shrink:0}
+#consult-config-summary{font-size:14px;margin-bottom:20px}#total{overflow-wrap:anywhere}
+@media(max-width:600px){.product-quote-fields{padding:16px}.quote-product-picks,.quote-config-grid{grid-template-columns:1fr}.quote-product-picks label{grid-row:auto}.quote-product-picks a{margin-bottom:8px}.summary-row{gap:12px;font-size:14px}#estimate .quote-scope strong{line-height:1.6}#estimate .total{font-size:32px}}
