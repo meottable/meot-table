@@ -22,7 +22,7 @@
     if(opts.button.disabled)return false;
     var url=new URL(opts.href);
     if(url.origin!=='https://pf.kakao.com'||url.pathname!=='/_BZeSX/chat')throw new Error('invalid_chat_url');
-    url.searchParams.set('bot','true');
+    url.searchParams.delete('bot');
     opts.button.disabled=true;opts.button.setAttribute('aria-busy','true');
     opts.status.textContent='내용을 복사하고 있습니다…';
     try{

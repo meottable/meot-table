@@ -127,7 +127,7 @@
  q('#estimate-confirm').addEventListener('click',()=>{if(!validateQuantity()){q('#quantity').focus();return;}q('#estimate-summary').innerHTML=quoteSummary();openDialog('#estimate-dialog');});
  let toastTimer;
  function toast(text){q('#toast').textContent=text;q('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>q('#toast').hidden=true,2800);}
- q('#copy-quote').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:quoteText(),href:'https://pf.kakao.com/_BZeSX/chat?bot=true',button:q('#copy-quote'),status:q('#quote-chat-status'),fallback:q('#quote-copy-fallback'),textarea:q('#quote-copy-text')}));
+ q('#copy-quote').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:quoteText(),href:'https://pf.kakao.com/_BZeSX/chat',button:q('#copy-quote'),status:q('#quote-chat-status'),fallback:q('#quote-copy-fallback'),textarea:q('#quote-copy-text')}));
  q('#menu-toggle').addEventListener('click',()=>{const expanded=q('#menu-toggle').getAttribute('aria-expanded')==='true';q('#menu-toggle').setAttribute('aria-expanded',String(!expanded));q('#menu-toggle').setAttribute('aria-label',expanded?'메뉴 열기':'메뉴 닫기');q('#mobile-nav').hidden=expanded;});
  qa('#mobile-nav a').forEach(a=>a.addEventListener('click',()=>{q('#mobile-nav').hidden=true;q('#menu-toggle').setAttribute('aria-expanded','false');q('#menu-toggle').setAttribute('aria-label','메뉴 열기');}));
 
@@ -186,7 +186,7 @@
   }catch(error){formStatus.textContent='접수 여부를 확인하지 못했습니다. 작성 내용은 유지됩니다. 중복 신청 대신 아래 버튼으로 카카오 상담을 이어가 주세요.';}
   finally{consultPending=false;button.textContent='접수 확인 필요';q('#consultFallback').hidden=false;}
  });
- q('#consult-copy-chat').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:consultMessage,href:'https://pf.kakao.com/_BZeSX/chat?bot=true',button:q('#consult-copy-chat'),status:formStatus,fallback:q('#consult-copy-manual'),textarea:q('#consult-copy-text')}));
+ q('#consult-copy-chat').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:consultMessage,href:'https://pf.kakao.com/_BZeSX/chat',button:q('#consult-copy-chat'),status:formStatus,fallback:q('#consult-copy-manual'),textarea:q('#consult-copy-text')}));
  form.addEventListener('input',()=>{if(consultPending)return;const button=form.querySelector('[type="submit"]');if(button.textContent==='접수 확인 필요'){button.disabled=false;button.textContent='견적 요청 보내기';formStatus.textContent='';q('#consultFallback').hidden=true;}});
  renderEstimate();renderBookings();loadBookings();
  window.MeotSite={monthKey,reservationStatus};
