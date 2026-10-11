@@ -7,6 +7,8 @@
 .legacy-home .compactCatalogRail{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 66px)/4.15);gap:22px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:0;padding:0 0 12px;scrollbar-width:thin;scrollbar-color:#d7cbb6 transparent;-webkit-overflow-scrolling:touch}
 .legacy-home .compactCatalogCard{display:block;min-width:0;overflow:hidden;background:#fffdf8;border:1px solid #ded6c7;border-radius:14px;color:#261f18;text-decoration:none;scroll-snap-align:start;align-self:start}
 .legacy-home .compactCatalogCard img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;margin:0;transition:none}
+.legacy-home #chairs .compactCatalogCard img{object-fit:contain;background:#fff}
+.legacy-home #chairs .compactCatalogMeta{min-height:72px;display:flex;align-items:center}
 .legacy-home .compactCatalogMeta{padding:14px 12px}
 .legacy-home .compactCatalogMeta h3{margin:0;font-family:inherit;font-size:17px;font-weight:750;line-height:1.45;letter-spacing:-.025em;overflow-wrap:anywhere}
 .legacy-home .compactCatalogMeta span{display:block;margin-top:6px;font-size:13px;color:#958d7e}
