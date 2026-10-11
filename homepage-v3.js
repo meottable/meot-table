@@ -166,7 +166,7 @@
   const c=config(),rows=[['상판 디자인',c.top],['제작 등급',prices[state.grade].name],['테이블 규격·수량',c.size+' / '+c.qty+'개'],['수저통',c.cutlery],['의자',c.chair+(c.chair==='미포함'?'':' / '+c.chairQty+'개')],['희망 납품일',c.delivery],['테이블 기준 예상금액',c.total===null?'상담 후 안내':won(c.total)+' (부가세 포함)']];
   return rows.map(([label,value])=>'<div class="summary-row"><span>'+label+'</span><strong>'+escapeHtml(value)+'</strong></div>').join('');
  }
- function quoteText(){const c=config();return ['[멋:테이블 견적 상담]','상판: '+c.top,'제작 등급: '+prices[state.grade].name,'테이블: '+c.size+' / '+c.qty+'개','수저통: '+c.cutlery,'의자: '+c.chair+(c.chair==='미포함'?'':' / '+c.chairQty+'개'),'희망 납품일: '+c.delivery,'테이블 기준 예상금액: '+(c.total===null?'상담 후 안내':won(c.total)+' (부가세 포함)'),'선택 디자인·다리 구성·수저통·의자·배송비 상담 후 확정'].join('\n');}
+ function quoteText(){const c=config();return ['[멋:테이블 견적 상담]','상판: '+c.top,'제작 등급: '+prices[state.grade].name,'테이블: '+c.size+' / '+c.qty+'개','수저통: '+c.cutlery,'의자: '+c.chair+(c.chair==='미포함'?'':' / '+c.chairQty+'개'),'희망 납품일: '+c.delivery,'테이블 기준 예상금액: '+(c.total===null?'상담 후 안내':won(c.total)+' (부가세 포함)')].join('\n');}
  try{
   const saved=JSON.parse(sessionStorage.getItem('meot_product_quote_v1')||'null');
   if(saved){if(prices[saved.grade])state.grade=saved.grade;
@@ -243,8 +243,8 @@
   try{
    await window.meotLeadDb.save({name:q('#cStore').value.trim()||'홈페이지 고객',phone,region,industry,opening:'',channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
    // Current opaque Apps Script response cannot prove a DB commit or owner receipt.
-   formStatus.textContent='전송 요청을 보냈지만 저장 완료는 확인하지 못했습니다. 기다리지만 마시고 아래 버튼으로 카카오 상담을 이어가 주세요.';
-  }catch(error){formStatus.textContent='접수 여부를 확인하지 못했습니다. 작성 내용은 유지됩니다. 중복 신청 대신 아래 버튼으로 카카오 상담을 이어가 주세요.';}
+   formStatus.textContent='문의가 접수됐는지 확인되지 않습니다. 아래 버튼을 눌러 카톡으로 내용을 보내주세요.';
+  }catch(error){formStatus.textContent='문의가 접수됐는지 확인되지 않습니다. 적어주신 내용은 그대로 있으니 아래 버튼으로 카톡에 보내주세요.';}
   finally{consultPending=false;button.textContent='접수 확인 필요';q('#consultFallback').hidden=false;}
  });
  q('#consult-copy-chat').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:consultMessage,href:'https://pf.kakao.com/_BZeSX/chat',button:q('#consult-copy-chat'),status:formStatus,fallback:q('#consult-copy-manual'),textarea:q('#consult-copy-text')}));
