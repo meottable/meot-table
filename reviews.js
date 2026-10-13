@@ -6,11 +6,13 @@
  if(section&&valid(config.publicUrl)){
    const bridge=crypto.randomUUID(),url=new URL(config.publicUrl);
    url.searchParams.set('bridge',bridge);url.searchParams.set('view','list');url.searchParams.set('ui','photos-first-20260924');
-   const frame=document.createElement('iframe');frame.title='고객 후기와 매장 사진';frame.className='review-reader-frame';frame.referrerPolicy='strict-origin-when-cross-origin';
-   const status=document.createElement('p');status.className='review-reader-status';status.textContent='고객 후기와 사진을 불러오고 있어요.';status.setAttribute('role','status');
+   const frame=document.createElement('iframe');frame.title='고객 후기와 매장 사진';frame.className='review-reader-frame';frame.referrerPolicy='strict-origin-when-cross-origin';frame.classList.add('is-loading');frame.setAttribute('aria-hidden','true');
+   const photos=document.createElement('div');photos.className='review-loading-photos';
+   [['delivery-dining.jpeg','넓은 홀의 테이블 배치'],['delivery-restaurant.jpeg','우드 인테리어에 맞춘 구성']].forEach(([file,label])=>{const a=document.createElement('a');a.href='#full-portfolio';const img=document.createElement('img');img.src='/meot-table/images/homepage-20260921/'+file;img.alt='실제 납품 현장 · '+label;img.loading='lazy';const caption=document.createElement('span');caption.textContent=label;a.append(img,caption);photos.append(a);});
+   const status=document.createElement('p');status.className='review-reader-status';status.textContent='후기를 불러오는 동안 실제 납품 사진을 먼저 살펴보세요.';status.setAttribute('role','status');
    const fallback=document.createElement('p');fallback.className='review-reader-fallback';fallback.hidden=true;fallback.append('후기가 열리지 않나요? ');
    const full=document.createElement('a');const fullUrl=new URL(config.publicUrl);fullUrl.searchParams.set('view','list');full.href=fullUrl.href;full.target='_blank';full.rel='noopener noreferrer';full.textContent='후기 새 창에서 보기 ↗';fallback.append(full);
-   const timer=setTimeout(()=>{fallback.hidden=false;status.hidden=true;},15000);
+   const timer=setTimeout(()=>{fallback.hidden=false;status.hidden=true;},4500);
    // Apps Script sends to window.top, including in our same-origin mobile preview.
    let messageHost=window;
    try{if(window.top.location.origin===window.location.origin)messageHost=window.top;}catch(_){}
@@ -23,11 +25,12 @@
    messageHost.addEventListener('message',event=>{
      if(!/^https:\/\/([a-z0-9-]+[.-])?script\.googleusercontent\.com$/.test(event.origin)&&event.origin!=='https://script.google.com')return;
      const d=event.data;if(!d||d.bridge!==bridge)return;
-     if(d.type==='meot-review-height'&&Number.isFinite(d.height)&&d.height>0){frame.style.height=Math.min(30000,Math.max(220,Math.ceil(d.height)+12))+'px';status.hidden=true;fallback.hidden=true;clearTimeout(timer);}
+     if(d.type==='meot-review-height'&&Number.isFinite(d.height)&&d.height>0){frame.classList.remove('is-loading');frame.removeAttribute('aria-hidden');photos.hidden=true;frame.style.height=Math.min(30000,Math.max(220,Math.ceil(d.height)+12))+'px';status.hidden=true;fallback.hidden=true;clearTimeout(timer);}
      if(d.type==='meot-review-focus'){requestAnimationFrame(focusReader);}
    });
-   frame.src=url.href;section.querySelector('.customerReviewsHead').after(status,frame,fallback);
+   frame.src=url.href;section.querySelector('.customerReviewsHead').after(photos,status,frame,fallback);
  }
  const link=document.getElementById('review-admin-open'),note=document.getElementById('review-admin-setup');
  if(link&&valid(config.adminUrl)){const url=new URL(config.adminUrl);url.searchParams.set('page','admin');link.href=url.href;link.hidden=false;if(note)note.hidden=true;}
 })();
+
