@@ -1,15 +1,15 @@
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./model.js'));else root.MeotLedgerSync=factory(root.MeotLedger);})(typeof globalThis!=='undefined'?globalThis:this,function(M){
 'use strict';
 const clone=M.clone,numeric=new Set(['amount','tables','chairs','cutlery','basePaid','baseBalance','adjustment']);
-const fields=['date','number','name','size','grade','tables','chairs','cutlery','amount','basePaid','baseBalance','adjustment','production','deliveryDate','delivery','note'];
-const value=(o,k)=>numeric.has(k)?Number(o?.[k]||0):String(o?.[k]||'');
+const fields=['date','number','name','size','grade','tables','chairs','cutlery','amount','paymentStatus','basePaid','baseBalance','adjustment','production','deliveryDate','delivery','note'];
+const value=(o,k)=>k==='paymentStatus'?(o?.[k]||'known'):numeric.has(k)?(o?.[k]===null?null:Number(o?.[k]||0)):String(o?.[k]||'');
 const comparable=o=>JSON.stringify(fields.map(k=>value(o,k)));
-function sourceOrder(o,id){const n={...o,id,imported:true,basePaid:Number(o.paid||0),baseBalance:Number(o.balance||0),adjustment:o.amount-Number(o.paid||0)-Number(o.balance||0)};delete n.paid;delete n.balance;return n;}
+const sourceOrder=M.importOrder;
 const cashComparable=c=>JSON.stringify(['date','type','category','name','amount','note'].map(k=>k==='amount'?Number(c?.[k]||0):String(c?.[k]||'')));
-function baseline(feed){return clone({schema:1,updated:feed.updated,target:feed.target,orders:feed.orders,cash:feed.cash,source:feed.source});}
+function baseline(feed){return clone({schema:feed.schema,updated:feed.updated,target:feed.target,orders:feed.orders,cash:feed.cash,source:feed.source});}
 function error(message){throw Error(message+' 기기 기록은 보존했습니다. 백업을 받은 뒤 겹친 기록을 확인해주세요.');}
 function merge(state,feed){
- if(feed?.schema!==1||!feed.source||!Number.isSafeInteger(feed.source.version)||feed.source.version<1)throw Error('원본 연동 자료의 형식이 올바르지 않습니다.');
+ if(![1,3].includes(feed?.schema)||!feed.source||!Number.isSafeInteger(feed.source.version)||feed.source.version<1)throw Error('원본 연동 자료의 형식이 올바르지 않습니다.');
  M.validate(M.migrate(feed));
  if(feed.source.version<Number(state.sourceVersion||0))throw Error('이전 버전의 원본입니다. 현재 저장본을 유지합니다.');
  if(feed.source.version===Number(state.sourceVersion||0))return {changed:false,state};
@@ -32,7 +32,7 @@ function merge(state,feed){
   const a=sourceOrder(after,o.id);
   if(links.length&&(a.basePaid!==b.basePaid||a.baseBalance!==b.baseBalance||a.amount!==b.amount))error(o.number+'의 원본 정산과 기기 입금이 함께 바뀌었습니다.');
   const combined={...o};
-  for(const k of fields){const bv=value(b,k),av=value(a,k),lv=value(o,k);if(av!==bv&&lv!==bv&&lv!==av)error(o.number+'의 '+({amount:'매출액',note:'메모',basePaid:'입금액',baseBalance:'미수금'}[k]||k)+'이 원본과 기기에서 다르게 바뀌었습니다.');if(av!==bv)combined[k]=a[k]??(numeric.has(k)?0:'');}
+  for(const k of fields){const bv=value(b,k),av=value(a,k),lv=value(o,k);if(av!==bv&&lv!==bv&&lv!==av)error(o.number+'의 '+({amount:'매출액',note:'메모',basePaid:'입금액',baseBalance:'미수금'}[k]||k)+'이 원본과 기기에서 다르게 바뀌었습니다.');if(av!==bv)combined[k]=a[k]===undefined?(numeric.has(k)?0:''):a[k];}
   combined.imported=true;orderResult.push(combined);incoming.delete(o.number);
  }
  for(const [number,o] of incoming)orderResult.push(sourceOrder(o,'source-order-'+encodeURIComponent(number)));
@@ -44,3 +44,4 @@ function merge(state,feed){
 }
 return {merge,baseline};
 });
+
