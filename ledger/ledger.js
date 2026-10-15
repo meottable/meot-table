@@ -36,7 +36,7 @@ async function syncSource(){
   const result=MeotLedgerSync.merge(data,feed);
   if(result.changed)await commit(s=>{for(const k of Object.keys(s))delete s[k];Object.assign(s,result.state);},'원본 장부 변경 반영 완료');
   lastSyncCheck=Date.now();$('syncStatus').textContent='원본 v'+data.sourceVersion+' · 원본 수정 '+stamp(data.sourceMeta.modifiedAt)+' · 확인 '+new Date().toLocaleTimeString('ko-KR',{timeZone:'Asia/Seoul'});$('syncStatus').classList.remove('error');
- }catch(e){$('syncStatus').textContent='동기화 보류: '+e.message+' 저장된 기록은 그대로 볼 수 있습니다.';$('syncStatus').classList.add('error');}
+ }catch(e){window.MeotLedgerAppUpdate?.check();$('syncStatus').textContent='동기화 보류: '+e.message+' 저장된 기록은 그대로 볼 수 있습니다.';$('syncStatus').classList.add('error');}
  finally{syncBusy=false;$('syncSource').disabled=false;render();}
 }
 $('syncSource').addEventListener('click',()=>syncSource());
@@ -72,6 +72,8 @@ $('connectLedger').addEventListener('click',()=>{const k=connectionKey($('access
 $('installHelp').addEventListener('click',()=>$('help').showModal());$('closeHelp').addEventListener('click',()=>$('help').close());window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvent=e;$('nativeInstall').hidden=false;});$('nativeInstall').addEventListener('click',async()=>{if(installEvent){await installEvent.prompt();installEvent=null;$('nativeInstall').hidden=true;}});
 window.addEventListener('beforeunload',e=>{if(busy||dirty){e.preventDefault();e.returnValue='저장하지 않은 내용이 있습니다.';}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});
+window.MeotLedgerCanReload=()=>!busy&&!syncBusy&&!dirty&&!document.querySelector('dialog[open]')&&!$('accessCode').value.trim();
 unlock();
 })();
+
 
