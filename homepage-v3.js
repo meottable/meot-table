@@ -105,7 +105,7 @@
   q(kind==='chair'?'#quote-chair':'#quote-top').append(option);
   el.setAttribute('aria-label',name+' 선택하고 견적 보기');
  });
- const sizePrices={basic:[59000,110000,115000],middle:[89000,110000,135000],premium:[129000,150000,175000]};
+ const sizePrices={basic:[59000,110000,145000],middle:[89000,130000,165000],premium:[129000,150000,185000]};
  function tableUnitPrice(grade,width,depth){
   if(!sizePrices[grade]||!Number.isInteger(width)||!Number.isInteger(depth)||width<100||width>10000||depth<100||depth>800)return null;
   return sizePrices[grade][width<=1200?0:width<=1600?1:2];
