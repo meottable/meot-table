@@ -105,13 +105,25 @@
   q(kind==='chair'?'#quote-chair':'#quote-top').append(option);
   el.setAttribute('aria-label',name+' 선택하고 견적 보기');
  });
+ const sizePrices={basic:[59000,90000,115000],middle:[89000,110000,135000],premium:[129000,150000,175000]};
+ function tableUnitPrice(grade,width,depth){
+  if(!sizePrices[grade]||!Number.isInteger(width)||!Number.isInteger(depth)||width<100||width>10000||depth<100||depth>800)return null;
+  return sizePrices[grade][width<=1200?0:width<=1600?1:2];
+ }
+ function renderSizePrices(){
+  qa('#quote-size option[data-size-label]').forEach(option=>{
+   const [width,depth]=option.value.split('×').map(Number);
+   option.textContent=option.dataset.sizeLabel+' · '+won(tableUnitPrice(state.grade,width,depth));
+  });
+ }
  function config(){
   const size=q('#quote-size').value,qty=Number(q('#quantity').value);
-  const fixed=['1200×800','1100×700','800×800'].includes(size);
+  const [width,depth]=size==='custom'?[Number(q('#quote-width').value),Number(q('#quote-depth').value)]:size.split('×').map(Number);
+  const unit=tableUnitPrice(state.grade,width,depth);
   const valid=Number.isInteger(qty)&&qty>=1&&qty<=999;
-  const supply=fixed&&valid?prices[state.grade].price*qty:null;
+  const supply=unit!==null&&valid?unit*qty:null;
   return {top:state.top||'상담 후 결정',chair:q('#estimate-chair').checked?(state.chair||'상담 후 결정'):'미포함',chairQty:q('#quote-chair-quantity').value,
-   size:size==='custom'?(q('#quote-width').value||'미정')+'×'+(q('#quote-depth').value||'미정'):size==='undecided'?'상담 후 결정':size,
+   size:size==='custom'?(q('#quote-width').value||'미정')+'×'+(q('#quote-depth').value||'미정'):size==='undecided'?'상담 후 결정':(q('#quote-size').selectedOptions[0].dataset.sizeLabel+' / 세로 800 mm 이하'),
    qty,cutlery:q('#estimate-cutlery').selectedOptions[0].textContent,delivery:q('#quote-delivery').value||'상담 후 결정',supply,total:supply===null?null:Math.round(supply*1.1)};
  }
  function saveConfiguration(){
@@ -119,6 +131,7 @@
   try{sessionStorage.setItem('meot_product_quote_v1',JSON.stringify({grade:state.grade,top:state.top,chair:state.chair,fields:Object.fromEntries(['quantity','quote-size','quote-width','quote-depth','quote-chair-quantity','estimate-cutlery','quote-delivery'].map(id=>[id,q('#'+id).value])),includeChair:q('#estimate-chair').checked}));}catch(_){}
  }
  function renderEstimate(){
+  renderSizePrices();
   const c=config();
   qa('[data-grade]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.grade===state.grade)));
   q('#total').textContent=c.total===null?'맞춤 견적 안내':won(c.total);
