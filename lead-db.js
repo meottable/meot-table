@@ -22,19 +22,24 @@
     return v;
   }
   function save(data){
+    if(data.consent!==true)return Promise.reject(new Error('consent_required'));
+    if(!/^[a-f0-9-]{36}$/i.test(data.requestId||''))return Promise.reject(new Error('invalid_request'));
     var body=new URLSearchParams({
+      action:'submitLeadV2',requestId:data.requestId,consent:'true',consentVersion:clean(data.consentVersion),
       name:clean(data.name),phone:digits(data.phone),region:clean(data.region),
       industry:clean(data.industry),opening:clean(data.opening),source:source(data.source),
       channel:clean(data.channel)||'기타',memo:memo(data.memo),page:clean(data.page)||location.href,
       website:clean(data.website)
     });
-    if(body.get('phone').length<10)return Promise.reject(new Error('invalid_phone'));
-    // no-cors returns an opaque response, not a storage acknowledgement.
-    // Preserve the existing delivery endpoint; never count this as lead_saved.
-    var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},15000);
-    return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),keepalive:true,signal:controller.signal}).then(function(){
-      if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track('lead_request_sent',{channel:body.get('channel')});
-      return {status:'unconfirmed'};
+    if(!/^0\d{9,10}$/.test(body.get('phone')))return Promise.reject(new Error('invalid_phone'));
+    var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},20000);
+    return fetch(API,{method:'POST',mode:'cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),signal:controller.signal})
+    .then(function(response){if(!response.ok||response.type==='opaque')throw new Error('unconfirmed');return response.json();})
+    .then(function(receipt){
+      if(!receipt||receipt.ok!==true||receipt.status!=='saved'||receipt.requestId!==data.requestId)throw new Error('unconfirmed');
+      if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track('lead_saved',{channel:body.get('channel')});
+      document.dispatchEvent(new CustomEvent('meot:lead-saved'));
+      return {status:'saved',requestId:receipt.requestId};
     }).finally(function(){clearTimeout(timer);});
   }
   function continueTo(href){
@@ -57,7 +62,7 @@
     form.addEventListener('submit',function(e){
       e.preventDefault();if(!form.reportValidity()||!pending)return;
       var d=Object.fromEntries(new FormData(form)),href=pending.href;
-      Object.assign(d,{channel:pending.channel,source:pending.source||'홈페이지',memo:pending.memo||'',page:location.href});
+      Object.assign(d,{requestId:crypto.randomUUID(),consent:d.privacy==='on',consentVersion:'20261020-v1',channel:pending.channel,source:pending.source||'홈페이지',memo:pending.memo||'',page:location.href});
       status.textContent='상담 정보를 접수하고 있습니다…';
       var button=form.querySelector('.meotLeadGateSubmit');if(button.disabled)return;button.disabled=true;
       function unconfirmed(){
@@ -65,7 +70,7 @@
         var link=document.createElement('a');link.href=href;link.textContent='상담 바로 이어가기 →';link.addEventListener('click',function(e){e.preventDefault();continueTo(href)});status.appendChild(link);
         button.textContent='접수 확인 필요';
       }
-      save(d).then(unconfirmed).catch(unconfirmed);
+      save(d).then(function(){status.textContent='접수되었습니다.';continueTo(href);}).catch(unconfirmed);
     });
     form.addEventListener('input',function(){var button=form.querySelector('.meotLeadGateSubmit');if(button.textContent==='접수 확인 필요'){button.disabled=false;button.textContent='카카오톡으로 상담 이어가기';status.textContent='';}});
   }
@@ -90,5 +95,6 @@
   },true);
   window.meotLeadDb={save:save,openGate:openGate,api:API};
 })();
+
 
 

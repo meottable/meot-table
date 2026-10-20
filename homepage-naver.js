@@ -19,9 +19,8 @@
     if(href.indexOf("pf.kakao.com")!==-1)sendConversion("custom001");
     else if(href.indexOf("tel:")===0)sendConversion("custom002");
   },true);
-  document.addEventListener("submit",function(event){
-    var form=event.target;
-    if(form&&form.id==="consultForm")sendConversion("custom001");
-  },true);
+  // Count an acknowledged callback request separately from a chat click.
+  document.addEventListener('meot:lead-saved',function(){sendConversion('custom003');});
   window.meotNaverConversion=sendConversion;
 })();
+

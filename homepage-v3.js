@@ -192,7 +192,7 @@
  function openDialog(selector){qa('dialog[open]').forEach(d=>d.close());q(selector).showModal();}
  qa('[data-close]').forEach(el=>el.addEventListener('click',()=>el.closest('dialog').close()));
  qa('dialog').forEach(d=>d.addEventListener('click',event=>{if(event.target===d){const r=d.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)d.close();}}));
- q('#estimate-confirm').addEventListener('click',()=>{if(!validateConfig())return;q('#estimate-summary').innerHTML=quoteSummary();q('#quote-copy-text').value=quoteText();openDialog('#estimate-dialog');});
+ q('#estimate-confirm').addEventListener('click',openRequest);
  let toastTimer;
  function toast(text){q('#toast').textContent=text;q('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>q('#toast').hidden=true,2800);}
  q('#copy-quote').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:quoteText(),href:'https://pf.kakao.com/_BZeSX/chat',button:q('#copy-quote'),status:q('#quote-chat-status'),fallback:q('#quote-copy-fallback'),textarea:q('#quote-copy-text')}));
@@ -235,33 +235,46 @@
   }));
  });
 
- function openRequest(){if(!validateConfig())return;q('#cSeats').value=state.quantity;q('#cCutlery').value=q('#estimate-cutlery').selectedOptions[0].textContent;q('#cDelivery').value=q('#quote-delivery').value;q('#consult-config-summary').innerHTML=quoteSummary();openDialog('#consult-dialog');}
- qa('[data-contact-form]').forEach(el=>el.addEventListener('click',openRequest));q('#quote-request-open').addEventListener('click',openRequest);
- ['cSeats','cCutlery','cDelivery'].forEach(id=>q('#'+id).addEventListener('input',()=>{
-  q('#quantity').value=q('#cSeats').value;state.quantity=Number(q('#cSeats').value);
-  const option=Array.from(q('#estimate-cutlery').options).find(o=>o.textContent===q('#cCutlery').value);if(option)q('#estimate-cutlery').value=option.value;
-  q('#quote-delivery').value=q('#cDelivery').value;renderEstimate();q('#consult-config-summary').innerHTML=quoteSummary();
- }));
- const form=q('#consultForm'),formStatus=q('#consultStatus');let formStarted=false,consultMessage='',consultPending=false;
- form.addEventListener('focusin',()=>{if(!formStarted){formStarted=true;window.meotAnalytics?.track('form_start',{form:'consult_detail_v3'});}});
+ function openRequest(){
+  if(!validateConfig())return;
+  q('#consult-config-summary').innerHTML=quoteSummary();
+  if(completed&&requestPayload!==quoteText()+'\n연락처: '+q('#cPhone').value.replace(/\D/g,'')){completed=false;form.querySelector('[type="submit"]').disabled=false;form.querySelector('[type="submit"]').textContent='견적 요청하기';formStatus.textContent='';}
+  openDialog('#consult-dialog');
+  window.meotAnalytics?.track('quote_request_open');
+ }
+ qa('[data-contact-form]').forEach(el=>el.addEventListener('click',openRequest));
+ q('#quote-request-open').addEventListener('click',openRequest);
+ const form=q('#consultForm'),formStatus=q('#consultStatus');
+ let formStarted=false,consultMessage='',consultPending=false,requestId='',requestPayload='',completed=false;
+ form.addEventListener('focusin',()=>{if(!formStarted){formStarted=true;window.meotAnalytics?.track('form_start',{form:'consult_quick_v1'});}});
  form.addEventListener('submit',async event=>{
-  event.preventDefault();if(consultPending||form.querySelector('[type="submit"]').disabled||!form.reportValidity())return;
+  event.preventDefault();
+  if(consultPending||completed||!form.reportValidity()||!validateConfig())return;
   const phone=q('#cPhone').value.replace(/\D/g,'');
-  if(!/^\d{10,11}$/.test(phone)){formStatus.textContent='연락처를 다시 확인해 주세요.';q('#cPhone').focus();return;}
-  if(!window.meotLeadDb?.save){formStatus.textContent='현재 문의 접수를 연결할 수 없습니다. 카카오톡으로 바로 문의해 주세요.';return;}
-  const region=q('#cRegion').value.trim(),industry=q('#cType').value.trim(),quantity=q('#cSeats').value.trim();
-  const message=quoteText()+'\n상호: '+(q('#cStore').value.trim()||'미입력')+'\n지역: '+region+'\n업종: '+industry+'\n연락처: '+phone;
-  consultMessage=message;q('#consult-copy-text').value=message;
-  const button=form.querySelector('[type="submit"]');button.disabled=true;consultPending=true;formStatus.textContent='상담 내용을 전송하고 있습니다…';
+  if(!/^0\d{9,10}$/.test(phone)){formStatus.textContent='연락받을 번호를 확인해 주세요.';q('#cPhone').focus();return;}
+  consultMessage=quoteText()+'\n연락처: '+phone;
+  q('#consult-copy-text').value=consultMessage;
+  // Same payload reuses its id, including after a network timeout.
+  if(requestPayload!==consultMessage){requestId=crypto.randomUUID();requestPayload=consultMessage;}
+  const button=form.querySelector('[type="submit"]');
+  consultPending=true;button.disabled=true;form.setAttribute('aria-busy','true');
+  formStatus.textContent='견적 요청을 접수하고 있습니다…';q('#consultFallback').hidden=true;
   try{
-   await window.meotLeadDb.save({name:q('#cStore').value.trim()||'홈페이지 고객',phone,region,industry,opening:'',channel:'카카오톡',source:'홈페이지 견적 요청',memo:message,page:location.href});
-   // Current opaque Apps Script response cannot prove a DB commit or owner receipt.
-   formStatus.textContent='문의가 접수됐는지 확인되지 않습니다. 아래 버튼을 눌러 카톡으로 내용을 보내주세요.';
-  }catch(error){formStatus.textContent='문의가 접수됐는지 확인되지 않습니다. 적어주신 내용은 그대로 있으니 아래 버튼으로 카톡에 보내주세요.';}
-  finally{consultPending=false;button.textContent='접수 확인 필요';q('#consultFallback').hidden=false;}
+   if(!window.meotLeadDb?.save)throw new Error('service_unavailable');
+   const receipt=await window.meotLeadDb.save({requestId,name:'홈페이지 견적 고객',phone,consent:true,consentVersion:'20261020-v1',channel:'전화',source:'홈페이지 간편 견적',memo:consultMessage,page:location.href});
+   if(receipt.status!=='saved')throw new Error('unconfirmed');
+   completed=true;
+   formStatus.textContent='견적 요청이 접수되었습니다. 남겨주신 번호로 연락드리겠습니다.\n접수번호: '+receipt.requestId;
+   button.textContent='접수 완료';
+   window.meotAnalytics?.track('form_success');
+  }catch(error){
+   formStatus.textContent='접수 완료를 확인하지 못했습니다. 입력한 내용은 그대로 있습니다. 다시 시도하거나 아래 전화·카카오 상담을 이용해 주세요.';
+   button.textContent='다시 접수하기';q('#consultFallback').hidden=false;
+   window.meotAnalytics?.track('form_error');
+  }finally{consultPending=false;form.setAttribute('aria-busy','false');button.disabled=completed;}
  });
  q('#consult-copy-chat').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:consultMessage,href:'https://pf.kakao.com/_BZeSX/chat',button:q('#consult-copy-chat'),status:formStatus,fallback:q('#consult-copy-manual'),textarea:q('#consult-copy-text')}));
- form.addEventListener('input',()=>{if(consultPending)return;const button=form.querySelector('[type="submit"]');if(button.textContent==='접수 확인 필요'){button.disabled=false;button.textContent='견적 요청 보내기';formStatus.textContent='';q('#consultFallback').hidden=true;}});
+ form.addEventListener('input',()=>{if(consultPending)return;if(completed){completed=false;form.querySelector('[type="submit"]').disabled=false;form.querySelector('[type="submit"]').textContent='견적 요청하기';formStatus.textContent='';}});
  renderEstimate();renderBookings();loadBookings();
  window.MeotSite={monthKey,reservationStatus};
 })();
@@ -290,6 +303,7 @@
   });sync();
  });
 })();
+
 
 
 
