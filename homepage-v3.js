@@ -257,7 +257,7 @@
   // Same payload reuses its id, including after a network timeout.
   if(requestPayload!==consultMessage){requestId=crypto.randomUUID();requestPayload=consultMessage;}
   const button=form.querySelector('[type="submit"]');
-  consultPending=true;button.disabled=true;form.setAttribute('aria-busy','true');
+  consultPending=true;button.disabled=true;q('#cPhone').readOnly=true;q('#cPrivacy').disabled=true;form.setAttribute('aria-busy','true');
   formStatus.textContent='견적 요청을 접수하고 있습니다…';q('#consultFallback').hidden=true;
   try{
    if(!window.meotLeadDb?.save)throw new Error('service_unavailable');
@@ -271,7 +271,7 @@
    formStatus.textContent='접수 완료를 확인하지 못했습니다. 입력한 내용은 그대로 있습니다. 다시 시도하거나 아래 전화·카카오 상담을 이용해 주세요.';
    button.textContent='다시 접수하기';q('#consultFallback').hidden=false;
    window.meotAnalytics?.track('form_error');
-  }finally{consultPending=false;form.setAttribute('aria-busy','false');button.disabled=completed;}
+  }finally{consultPending=false;q('#cPhone').readOnly=false;q('#cPrivacy').disabled=false;form.setAttribute('aria-busy','false');button.disabled=completed;}
  });
  q('#consult-copy-chat').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:consultMessage,href:'https://pf.kakao.com/_BZeSX/chat',button:q('#consult-copy-chat'),status:formStatus,fallback:q('#consult-copy-manual'),textarea:q('#consult-copy-text')}));
  form.addEventListener('input',()=>{if(consultPending)return;if(completed){completed=false;form.querySelector('[type="submit"]').disabled=false;form.querySelector('[type="submit"]').textContent='견적 요청하기';formStatus.textContent='';}});
