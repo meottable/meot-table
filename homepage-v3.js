@@ -192,7 +192,7 @@
  function openDialog(selector){qa('dialog[open]').forEach(d=>d.close());q(selector).showModal();}
  qa('[data-close]').forEach(el=>el.addEventListener('click',()=>el.closest('dialog').close()));
  qa('dialog').forEach(d=>d.addEventListener('click',event=>{if(event.target===d){const r=d.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)d.close();}}));
- q('#estimate-confirm').addEventListener('click',openRequest);
+ q('#estimate-confirm').addEventListener('click',openKakaoQuote);
  let toastTimer;
  function toast(text){q('#toast').textContent=text;q('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>q('#toast').hidden=true,2800);}
  q('#copy-quote').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:quoteText(),href:'https://pf.kakao.com/_BZeSX/chat',button:q('#copy-quote'),status:q('#quote-chat-status'),fallback:q('#quote-copy-fallback'),textarea:q('#quote-copy-text')}));
@@ -235,6 +235,15 @@
   }));
  });
 
+ // Existing Kakao channel is the public inquiry route while owner alerts await approval.
+ function openKakaoQuote(){
+  if(!validateConfig())return;
+  q('#estimate-summary').innerHTML=quoteSummary();
+  q('#quote-chat-status').textContent='';
+  q('#quote-copy-fallback').hidden=true;
+  openDialog('#estimate-dialog');
+  window.meotAnalytics?.track('quote_kakao_open');
+ }
  function openRequest(){
   if(!validateConfig())return;
   q('#consult-config-summary').innerHTML=quoteSummary();
@@ -242,8 +251,8 @@
   openDialog('#consult-dialog');
   window.meotAnalytics?.track('quote_request_open');
  }
- qa('[data-contact-form]').forEach(el=>el.addEventListener('click',openRequest));
- q('#quote-request-open').addEventListener('click',openRequest);
+ qa('[data-contact-form]').forEach(el=>el.addEventListener('click',openKakaoQuote));
+ q('#quote-request-open')?.addEventListener('click',openRequest);
  const form=q('#consultForm'),formStatus=q('#consultStatus');
  let formStarted=false,consultMessage='',consultPending=false,requestId='',requestPayload='',completed=false;
  form.addEventListener('focusin',()=>{if(!formStarted){formStarted=true;window.meotAnalytics?.track('form_start',{form:'consult_quick_v1'});}});
