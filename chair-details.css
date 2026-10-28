@@ -1,0 +1,53 @@
+#chair-detail-dialog{--cd-green:#28533f;--cd-paper:#faf8f2;--cd-border:#dcd4c5;position:fixed;inset:0;margin:0;padding:0;border:0;width:100%;max-width:none;height:100%;height:100dvh;max-height:none;background:var(--cd-paper);color:#283c30;overflow:auto;overscroll-behavior:contain;z-index:2000}
+#chair-detail-dialog:not([open]){display:none}
+#chair-detail-dialog *{box-sizing:border-box}
+#chair-detail-dialog::backdrop{background:#192b24b3}
+#chair-detail-dialog[open]{animation:chair-detail-enter .24s ease-out}
+#chair-detail-dialog button{font:inherit;cursor:pointer;min-height:44px}
+#chair-detail-dialog button:focus-visible{outline:3px solid #a77d32;outline-offset:4px}
+#chair-detail-dialog .cd-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--cd-border);background:#faf8f2f5;padding:18px max(22px,calc((100vw - 1100px)/2));backdrop-filter:blur(12px)}
+#chair-detail-dialog .cd-brand{font-size:24px;font-weight:800;letter-spacing:-1px}
+#chair-detail-dialog .cd-close{border:1px solid var(--cd-border);background:transparent;border-radius:30px;padding:8px 20px;color:inherit}
+#chair-detail-dialog .cd-body{max-width:1100px;margin:0 auto;padding:32px 22px 50px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,1fr);gap:44px;align-items:start}
+#chair-detail-dialog .cd-gallery{min-width:0}
+#chair-detail-dialog .cd-stage{position:relative;overflow:hidden;display:grid;place-items:center;aspect-ratio:1;background:#fff;border:1px solid var(--cd-border);border-radius:16px;touch-action:pan-y}
+#chair-detail-dialog .cd-photo{width:100%;height:100%;object-fit:contain;display:block}
+#chair-detail-dialog .cd-angle{position:relative;width:85.45%;aspect-ratio:470/550;overflow:hidden;background:#f7f5ee}
+#chair-detail-dialog .cd-angle img{position:absolute;max-width:none;width:326.81%;height:auto;top:-229.09%;left:var(--cd-left);display:block}
+#chair-detail-dialog [hidden]{display:none!important}
+#chair-detail-dialog .cd-image-motion{animation:chair-photo-enter .28s ease-out}
+#chair-detail-dialog .cd-gallery-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0;color:#706b60;font-size:13px}
+#chair-detail-dialog .cd-arrows{display:flex;gap:8px}
+#chair-detail-dialog .cd-arrows button{border:1px solid var(--cd-border);border-radius:50%;background:#fff;width:44px;color:var(--cd-green);font-size:21px}
+#chair-detail-dialog .cd-tabs{display:flex;gap:8px;flex-wrap:wrap}
+#chair-detail-dialog .cd-tabs button{flex:1;min-width:64px;padding:9px 8px;border:1px solid var(--cd-border);background:transparent;border-radius:8px;color:#536155;font-size:13px;white-space:nowrap}
+#chair-detail-dialog .cd-tabs button[aria-pressed="true"]{background:var(--cd-green);border-color:var(--cd-green);color:#fff}
+#chair-detail-dialog .cd-info{padding:20px 0}
+#chair-detail-dialog .cd-eyebrow{font-size:12px;letter-spacing:2px;color:#85704c;margin:0 0 12px}
+#chair-detail-dialog h2{font-size:40px;letter-spacing:-1px;line-height:1.2;margin:0 0 18px;color:inherit}
+#chair-detail-dialog .cd-description{font-size:16px;line-height:1.8;color:#657164;margin:0 0 25px}
+#chair-detail-dialog .cd-specs{border-top:1px solid var(--cd-border);border-bottom:1px solid var(--cd-border);margin:0 0 26px;padding:8px 0;font-size:14px}
+#chair-detail-dialog .cd-specs div{display:flex;justify-content:space-between;gap:16px;padding:12px 0}
+#chair-detail-dialog dt{color:#71776e}
+#chair-detail-dialog dd{margin:0;text-align:right}
+#chair-detail-dialog .cd-note{color:#777c72;font-size:12px;line-height:1.7}
+#chair-detail-dialog .cd-select{display:block;width:100%;border:0;border-radius:10px;background:var(--cd-green);color:#fff;padding:17px 16px;font-weight:700}
+#chairs .compactCatalogMeta::after{content:'자세히 보기 ↗';font-size:11px;color:#686f63;white-space:nowrap}
+#chairs .compactCatalogMeta{display:flex;justify-content:space-between;gap:4px;align-items:center}
+@keyframes chair-detail-enter{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes chair-photo-enter{from{opacity:.3;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+@media(max-width:700px){
+ #chair-detail-dialog .cd-head{padding:12px 18px}
+ #chair-detail-dialog .cd-brand{font-size:21px}
+ #chair-detail-dialog .cd-close{font-size:13px;padding:6px 14px}
+ #chair-detail-dialog .cd-body{display:flex;flex-direction:column;gap:18px;padding:20px 18px calc(96px + env(safe-area-inset-bottom))}
+ #chair-detail-dialog .cd-gallery{width:100%}
+ #chair-detail-dialog .cd-info{padding:0;width:100%}
+ #chair-detail-dialog h2{font-size:29px;margin-bottom:12px}
+ #chair-detail-dialog .cd-description{font-size:14px;margin-bottom:18px}
+ #chair-detail-dialog .cd-specs{margin-bottom:16px}
+ #chair-detail-dialog .cd-footer{position:fixed;bottom:0;left:0;right:0;background:#faf8f2f5;border-top:1px solid var(--cd-border);padding:12px 18px calc(12px + env(safe-area-inset-bottom));z-index:3}
+ #chair-detail-dialog .cd-note{margin-bottom:0}
+ #chairs .compactCatalogMeta::after{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){#chair-detail-dialog[open],#chair-detail-dialog .cd-image-motion{animation:none}}
