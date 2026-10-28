@@ -9,12 +9,12 @@
  const valid=n=>Number.isSafeInteger(n)&&n>=0;
  const number=n=>n.toLocaleString('ko-KR');
  const localDay=()=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
- let month='',days={},contracts=null,contractDate=null,lastRefresh=0,inFlight=false,visible=false,finished=false,sourceAt=null;
+ let month='',days={},contracts=null,contractDate=null,reportedInquiries=null,reportedAt=null,lastRefresh=0,inFlight=false,visible=false,finished=false,sourceAt=null;
  const cacheKey='meot_public_counts_v1';
  const cards=Object.fromEntries(['visits','inquiries','contracts'].map(key=>[key,{value:root.querySelector('[data-count="'+key+'"]'),unit:root.querySelector('[data-unit="'+key+'"]'),detail:root.querySelector('[data-count-detail="'+key+'"]'),shown:null,raf:0}]));
  function resetMonth(){
   const next=localDay().slice(0,7);if(next===month)return false;
-  month=next;days={};contracts=null;contractDate=null;sourceAt=null;
+  month=next;days={};contracts=null;contractDate=null;reportedInquiries=null;reportedAt=null;sourceAt=null;
   Object.values(cards).forEach(card=>{cancelAnimationFrame(card.raf);card.shown=null;});
   root.querySelector('.cc-period').textContent=Number(month.slice(5))+'월 · 한국 시간 기준';return true;
  }
@@ -32,6 +32,7 @@
  function render(){
   const today=localDay();resetMonth();
   for(const key of Object.keys(metrics)){
+   if(key==='inquiries'&&valid(reportedInquiries)){setValue(key,reportedInquiries,'건');cards[key].detail.textContent='이번 달 · 업체 제공 집계';continue;}
    const entries=Object.entries(days).filter(([day,values])=>day.startsWith(month)&&day<=today&&valid(values[key]));
    const sum=entries.length?entries.reduce((total,[,values])=>total+values[key],0):null;
    const first=[month+'-01',START[key]].sort().pop();
@@ -41,7 +42,7 @@
    cards[key].detail.textContent=key==='visits'?(first>month+'-01'?Number(first.slice(5,7))+'/'+Number(first.slice(8))+'부터 · 방문 세션':'이번 달 · 방문 세션 기준'):'이번 달 · 홈페이지 접수 기록';
   }
   setValue('contracts',valid(contracts)?contracts:null,'명');
-  cards.contracts.detail.textContent=valid(contracts)?'확인된 이번 달 계약 고객':'계약 현황 확인 중';
+  cards.contracts.detail.textContent=valid(contracts)?'이번 달 · 업체 제공 집계':'계약 현황 확인 중';
   const stamp=sourceAt?new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(sourceAt)):'';
   root.querySelector('.cc-update').textContent=stamp?stamp+' 집계 확인':'집계 자료 확인 중';
  }
@@ -52,7 +53,9 @@
    const snapshot=await getJSON(snapshotURL);
    if(snapshot.schemaVersion===1&&snapshot.month===month){
     for(const [day,values] of Object.entries(snapshot.days||{})){if(!/^\d{4}-\d{2}-\d{2}$/.test(day)||!day.startsWith(month)||day>today)continue;days[day]??={};for(const key of Object.keys(metrics))if(valid(values[key])&&!valid(days[day][key]))days[day][key]=values[key];}
-    contracts=valid(snapshot.contracts)?snapshot.contracts:null;contractDate=snapshot.contractsVerifiedAt;
+    contracts=valid(snapshot.contracts)?snapshot.contracts:null;contractDate=snapshot.contractsReportedAt||snapshot.contractsVerifiedAt;
+    reportedAt=snapshot.inquiriesReportedAt;
+    reportedInquiries=valid(snapshot.inquiries)&&Number.isFinite(Date.parse(reportedAt))?snapshot.inquiries:null;
     if(contracts!==null&&!Number.isFinite(Date.parse(contractDate)))contracts=null;
     if(Number.isFinite(Date.parse(snapshot.updatedAt)))sourceAt=snapshot.updatedAt;
    }
@@ -63,7 +66,7 @@
   const jobs=[];
   for(let d=from;d<=Number(today.slice(8));d++){
    const day=month+'-'+String(d).padStart(2,'0');
-   for(const key of Object.keys(metrics))if(day>=START[key])jobs.push({day,key});
+   for(const key of Object.keys(metrics))if(day>=START[key]&&!(key==='inquiries'&&valid(reportedInquiries)))jobs.push({day,key});
   }
   render();let cursor=0,success=false;
   await Promise.all(Array.from({length:Math.min(4,jobs.length)},async()=>{

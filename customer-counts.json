@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "month": "2026-10",
   "updatedAt": "2026-10-28T19:03:32.993747+09:00",
-  "source": "countapi-recorded-events",
+  "source": "Recorded website visits; owner-provided inquiry and contract totals",
   "days": {
     "2026-10-05": {
       "visits": 3
@@ -86,6 +86,8 @@
       "inquiries": null
     }
   },
-  "contracts": null,
-  "contractsVerifiedAt": null
+  "contracts": 42,
+  "inquiries": 121,
+  "inquiriesReportedAt": "2026-10-28",
+  "contractsReportedAt": "2026-10-28"
 }
