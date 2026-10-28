@@ -17,8 +17,8 @@
  #customer-counts .cc-heading{align-items:flex-end}
  #customer-counts .cc-grid{gap:8px}
  #customer-counts .cc-card{padding:17px 10px}
- #customer-counts h3{font-size:11px;letter-spacing:-.5px;white-space:nowrap;margin-bottom:10px}
- #customer-counts .cc-amount{font-size:27px;min-height:36px}
+ #customer-counts h3{font-size:11px;letter-spacing:-.5px;white-space:normal;word-break:keep-all;min-height:2.8em;line-height:1.4;margin-bottom:10px}
+ #customer-counts .cc-amount{font-size:clamp(21px,6vw,27px);min-height:36px}
  #customer-counts .cc-unit{font-size:10px;margin-left:2px}
  #customer-counts .cc-detail{font-size:10px}
  #customer-counts .cc-value.is-unknown{font-size:18px}
