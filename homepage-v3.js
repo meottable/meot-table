@@ -143,10 +143,12 @@
   q('#quote-picked').textContent='선택한 구성 · 상판 '+c.top+' / 의자 '+c.chair;
   saveConfiguration();
  }
+ let chairQtyTouched=false;
+ function syncChairQty(){if(!chairQtyTouched&&q('#estimate-chair').checked&&state.quantity>=1)q('#quote-chair-quantity').value=String(Math.min(9999,state.quantity*4));}
  function validateQuantity(){
   const raw=q('#quantity').value,n=Number(raw),valid=raw.trim()!==''&&Number.isInteger(n)&&n>=1&&n<=999;
   q('#quantity').setAttribute('aria-invalid',String(!valid));q('#qty-error').textContent=valid?'':'수량은 1~999개의 정수로 입력해 주세요.';
-  if(valid){state.quantity=n;renderEstimate();}else{q('#total').textContent='수량 확인';q('#qty-minus').disabled=true;q('#qty-plus').disabled=true;}
+  if(valid){state.quantity=n;syncChairQty();renderEstimate();}else{q('#total').textContent='수량 확인';q('#qty-minus').disabled=true;q('#qty-plus').disabled=true;}
   return valid;
  }
  function validateConfig(){
@@ -166,9 +168,10 @@
  q('#qty-plus').addEventListener('click',()=>{q('#quantity').value=Math.min(999,state.quantity+1);validateQuantity();});
  qa('[data-select-grade]').forEach(el=>el.addEventListener('click',()=>{chooseGrade(el.dataset.selectGrade);scrollToSection(q('#estimate'));}));
  ['quote-size','quote-width','quote-depth','quote-chair-quantity','estimate-cutlery','quote-delivery'].forEach(id=>q('#'+id).addEventListener('input',renderEstimate));
+ q('#quote-chair-quantity').addEventListener('input',()=>{chairQtyTouched=true;});
  q('#quote-top').addEventListener('change',()=>{state.top=q('#quote-top').value;renderEstimate();});
  q('#quote-chair').addEventListener('change',()=>{state.chair=q('#quote-chair').value;q('#estimate-chair').checked=!!state.chair;renderEstimate();});
- q('#estimate-chair').addEventListener('change',()=>{if(!q('#estimate-chair').checked){state.chair='';q('#quote-chair').value='';}renderEstimate();});
+ q('#estimate-chair').addEventListener('change',()=>{if(!q('#estimate-chair').checked){state.chair='';q('#quote-chair').value='';}else syncChairQty();renderEstimate();});
  function selectProduct(el){
   const kind=el.closest('#chairs')?'chair':'top',item=catalog[kind].find(x=>x.el===el);
   if(!item)return;state[kind]=item.name;q(kind==='chair'?'#quote-chair':'#quote-top').value=item.name;
@@ -186,7 +189,7 @@
    ['top','chair'].forEach(kind=>{if(catalog[kind].some(x=>x.name===saved[kind])){state[kind]=saved[kind];q('#quote-'+kind).value=saved[kind];}});
    for(const id of ['quantity','quote-size','quote-width','quote-depth','quote-chair-quantity','estimate-cutlery','quote-delivery'])if(typeof saved.fields?.[id]==='string')q('#'+id).value=saved.fields[id];
    if(!q('#quote-size').value)q('#quote-size').value='1200×800';if(!q('#estimate-cutlery').value)q('#estimate-cutlery').value='undecided';
-   q('#estimate-chair').checked=!!saved.includeChair;state.quantity=Number(q('#quantity').value)||10;
+   q('#estimate-chair').checked=saved.includeChair!==false;state.quantity=Number(q('#quantity').value)||10;chairQtyTouched=q('#quote-chair-quantity').value!==String(state.quantity*4);
   }
  }catch(_){}
  function openDialog(selector){qa('dialog[open]').forEach(d=>d.close());q(selector).showModal();}
@@ -284,7 +287,7 @@
  });
  q('#consult-copy-chat').addEventListener('click',()=>window.meotContactFlow.copyAndOpen({text:consultMessage,href:'https://pf.kakao.com/_BZeSX/chat',button:q('#consult-copy-chat'),status:formStatus,fallback:q('#consult-copy-manual'),textarea:q('#consult-copy-text')}));
  form.addEventListener('input',()=>{if(consultPending)return;if(completed){completed=false;form.querySelector('[type="submit"]').disabled=false;form.querySelector('[type="submit"]').textContent='견적 요청하기';formStatus.textContent='';}});
- renderEstimate();renderBookings();loadBookings();
+ syncChairQty();renderEstimate();renderBookings();loadBookings();
  window.MeotSite={monthKey,reservationStatus};
 })();
 
