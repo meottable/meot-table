@@ -48,7 +48,7 @@
  ['wheel','touchstart','pointerdown'].forEach(type=>window.addEventListener(type,cancelSectionScroll,{passive:true}));
  window.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Escape',' '].includes(event.key))cancelSectionScroll();});
  window.addEventListener('popstate',cancelSectionScroll);
- const prices={basic:{name:'기본형',price:59000},middle:{name:'중급형',price:89000},premium:{name:'고급형',price:129000}};
+ const prices={basic:{name:'스탠다드',price:59000},middle:{name:'프로',price:89000},premium:{name:'시그니처',price:129000}};
  const state={grade:'basic',quantity:10,top:'',chair:''};
  const won=n=>n.toLocaleString('ko-KR')+'원';
  const BOOKING_CAPACITY=10;
@@ -72,7 +72,7 @@
   qa('[data-booking-panel]').forEach(el=>{
    el.classList.toggle('is-unknown',!status.known);
    el.classList.toggle('is-closed',status.closed);
-   el.setAttribute('aria-label',month+' 프리미엄 고급형 제작 예약: 월 10팀 한정, '+(status.known?'확정 '+status.confirmed+'팀, 남은 자리 '+status.remaining+'팀':'현재 예약 현황은 상담으로 안내합니다.'));
+   el.setAttribute('aria-label',month+' 시그니처 등급 제작 예약: 월 10팀 한정, '+(status.known?'확정 '+status.confirmed+'팀, 남은 자리 '+status.remaining+'팀':'현재 예약 현황은 상담으로 안내합니다.'));
   });
   qa('[data-reservation-progress]').forEach(el=>{
    el.hidden=!status.known;
