@@ -12,7 +12,7 @@ function merge(state,feed){
  if(![1,3].includes(feed?.schema)||!feed.source||!Number.isSafeInteger(feed.source.version)||feed.source.version<1)throw Error('원본 연동 자료의 형식이 올바르지 않습니다.');
  M.validate(M.migrate(feed));
  if(feed.source.version<Number(state.sourceVersion||0))throw Error('이전 버전의 원본입니다. 현재 저장본을 유지합니다.');
- if(feed.source.version===Number(state.sourceVersion||0))return {changed:false,state};
+ if(feed.source.version===Number(state.sourceVersion||0)){const next=clone(state);return M.applyTargetPolicy(next)?{changed:true,state:M.validate(next)}:{changed:false,state};}
  const old=state.sourceBaseline||feed.legacy;if(!old?.orders||!old?.cash)throw Error('이전 원본을 확인할 수 없어 자동 반영을 중단했습니다.');
  const next=clone(state),previous=new Map(old.orders.map(o=>[o.number,o])),incoming=new Map(feed.orders.map(o=>[o.number,o]));
  if(previous.size!==old.orders.length||incoming.size!==feed.orders.length)throw Error('원본에 중복된 견적번호가 있습니다.');
@@ -38,10 +38,12 @@ function merge(state,feed){
  for(const [number,o] of incoming)orderResult.push(sourceOrder(o,'source-order-'+encodeURIComponent(number)));
  next.orders=orderResult;
  next.cash=[...feed.cash.map((c,i)=>({...c,id:'source-cash-'+i,orderId:'',imported:true})),...next.cash.filter(c=>!c.imported)];
- for(const r of [...feed.orders,...feed.cash]){const m=r.date.slice(0,7),info=M.ensureMonth(next,m);if(info.status!=='closed'&&info.target===old.target)info.target=feed.target;}
+ M.applyTargetPolicy(next);
+ for(const r of [...feed.orders,...feed.cash]){const m=r.date.slice(0,7),info=M.ensureMonth(next,m);if(info.status!=='closed'&&!info.targetCustomized&&info.target===old.target)info.target=M.monthTarget(next,m,feed.target);}
  next.sourceVersion=feed.source.version;next.sourceMeta=clone(feed.source);next.sourceBaseline=baseline(feed);next.sourceUpdated=feed.updated;M.validate(next);
  return {changed:true,state:next};
 }
 return {merge,baseline};
 });
+
 

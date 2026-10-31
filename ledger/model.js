@@ -7,7 +7,14 @@ function monthOK(s){return typeof s==='string'&&/^20\d{2}-(0[1-9]|1[0-2])$/.test
 function money(n,label='금액'){if(!Number.isSafeInteger(n)||n<0||n>1000000000000)throw Error(label+'은 0 이상의 정수로 입력해주세요.');return n;}
 function today(now=new Date()){const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);return ['year','month','day'].map(k=>p.find(x=>x.type===k).value).join('-');}
 function nextMonth(m,step=1){if(!monthOK(m))throw Error('월을 확인해주세요.');const [y,n]=m.split('-').map(Number),d=new Date(Date.UTC(y,n-1+step,1));const result=d.toISOString().slice(0,7);if(!monthOK(result))throw Error('지원하는 연도 범위를 벗어났습니다.');return result;}
-function ensureMonth(s,m){if(!monthOK(m))throw Error('월을 확인해주세요.');if(!Object.hasOwn(s.months,m))s.months[m]={target:s.defaultTarget,status:'open',history:[]};return s.months[m];}
+function monthTarget(s,m,fallback=s.defaultTarget){return m>='2026-11'?20000000:fallback;}
+function applyTargetPolicy(s){
+ if(s.targetPolicyVersion===1)return false;
+ // The November goal replaces the former default, never a closed or custom goal.
+ for(const [m,info] of Object.entries(s.months))if(m>='2026-11'&&info.status==='open'&&!info.targetCustomized&&info.target===10000000)info.target=20000000;
+ s.targetPolicyVersion=1;return true;
+}
+function ensureMonth(s,m){if(!monthOK(m))throw Error('월을 확인해주세요.');if(!Object.hasOwn(s.months,m))s.months[m]={target:monthTarget(s,m),status:'open',history:[]};return s.months[m];}
 function assertOpen(s,date){if(!dateOK(date))throw Error('날짜를 확인해주세요.');if(s.months[date.slice(0,7)]?.status==='closed')throw Error('마감된 달입니다. 해당 월에서 마감 해제 후 수정해주세요.');}
 function paymentUnknown(o){return o.paymentStatus==='unknown';}
 function importOrder(o,id){
@@ -23,8 +30,8 @@ function outstanding(s,m){return s.orders.filter(o=>o.date.slice(0,7)<=m).map(o=
 function migrate(base,current=today().slice(0,7)){
  if(![1,3].includes(base.schema)||!Array.isArray(base.orders)||!Array.isArray(base.cash))throw Error('기존 장부 형식을 확인해주세요.');
  const s={schema:2,sourceUpdated:String(base.updated||''),updated:new Date().toISOString(),defaultTarget:10000000,orders:base.orders.map((o,i)=>importOrder(o,'import-order-'+i)),cash:base.cash.map((c,i)=>({...c,id:'import-cash-'+i,orderId:'',imported:true})),months:{}};
- for(const r of [...s.orders,...s.cash]){const m=ensureMonth(s,r.date.slice(0,7));if(Number.isSafeInteger(base.target)&&base.target>=0)m.target=base.target;}
- if(base.source){s.sourceVersion=base.source.version;s.sourceMeta=clone(base.source);s.sourceBaseline=clone({schema:base.schema,updated:base.updated,target:base.target,orders:base.orders,cash:base.cash,source:base.source});}ensureMonth(s,current);validate(s);return s;
+ for(const r of [...s.orders,...s.cash]){const month=r.date.slice(0,7),m=ensureMonth(s,month);if(Number.isSafeInteger(base.target)&&base.target>=0)m.target=monthTarget(s,month,base.target);}
+ if(base.source){s.sourceVersion=base.source.version;s.sourceMeta=clone(base.source);s.sourceBaseline=clone({schema:base.schema,updated:base.updated,target:base.target,orders:base.orders,cash:base.cash,source:base.source});}ensureMonth(s,current);applyTargetPolicy(s);validate(s);return s;
 }
 function validate(s){
  if(!s||s.schema!==2||!Array.isArray(s.orders)||!Array.isArray(s.cash)||!s.months||typeof s.months!=='object'||Array.isArray(s.months))throw Error('지원하지 않는 장부 파일입니다.');
@@ -55,6 +62,7 @@ function saveCash(s,input){
 function remove(s,kind,id){const rows=kind==='order'?s.orders:s.cash,r=rows.find(x=>x.id===id);if(!r)throw Error('기록을 찾을 수 없습니다.');assertOpen(s,r.date);if(kind==='order'&&s.cash.some(c=>c.orderId===id))throw Error('연결된 입금 기록을 먼저 확인·삭제해주세요.');rows.splice(rows.indexOf(r),1);}
 function closeMonth(s,m){const v=ensureMonth(s,m);if(v.status==='closed')throw Error('이미 마감된 달입니다.');v.snapshot=clone(totals(s,m));v.closedAt=new Date().toISOString();v.status='closed';ensureMonth(s,nextMonth(m));}
 function reopen(s,m){const v=ensureMonth(s,m);if(v.status!=='closed')throw Error('마감된 달이 아닙니다.');v.history.push({closedAt:v.closedAt,snapshot:v.snapshot});delete v.snapshot;delete v.closedAt;v.status='open';}
-return {paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
+return {paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,monthTarget,applyTargetPolicy,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
 });
+
 
