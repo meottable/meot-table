@@ -1,0 +1,25 @@
+name: 후기 동기화
+on:
+  schedule:
+    - cron: '7 0,3,6,9,12 * * *'   # 한국시간 09:07, 12:07, 15:07, 18:07, 21:07
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: sync-reviews
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pillow
+      - run: python tools/sync_reviews.py
+      - name: 변경 있으면 저장
+        run: |
+          git add reviews
+          if git diff --cached --quiet; then echo "변경 없음"; exit 0; fi
+          git config user.name "meottable-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "후기 동기화"
+          git push
