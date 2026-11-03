@@ -18,7 +18,8 @@ style.textContent=[
 '#meotNovStrip .mns-dday{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;background:#e4cca0;color:#173326;border-radius:999px;padding:2px 9px;font-weight:500}',
 '#meotNovStrip button.mns-go{border:0;background:none;color:#fffdfa;text-decoration:underline;text-underline-offset:3px;font:inherit;font-weight:600;cursor:pointer;padding:4px 2px;min-height:0}',
 '#meotNovStrip .mns-x{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;color:#f5efe5;font-size:22px;width:40px;height:40px;min-height:0;cursor:pointer;opacity:.75}',
-'@media(max-width:600px){#meotNovStrip{font-size:13px}#meotNovStrip .mns-in{padding:8px 44px 8px 14px;gap:6px}}',
+'#meotNovStrip .mns-short{display:none}',
+'@media(max-width:600px){#meotNovStrip{font-size:13px}#meotNovStrip .mns-in{padding:7px 40px 7px 12px;gap:8px;flex-wrap:nowrap;justify-content:flex-start;text-align:left}#meotNovStrip .mns-long{display:none}#meotNovStrip .mns-short{display:inline;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}#meotNovStrip button.mns-go{margin-left:auto;white-space:nowrap;flex:none}#meotNovStrip .mns-x{width:36px;height:36px;right:4px}}',
 '#meotNovEvent{box-sizing:border-box;padding:0;border:0;border-radius:16px;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;background:#fffdfa;color:#243b2e;box-shadow:0 30px 90px #0006;font-family:inherit}',
 '#meotNovEvent::backdrop{background:rgba(16,24,20,.7);backdrop-filter:blur(4px)}',
 '#meotNovEvent *{box-sizing:border-box}',
@@ -54,7 +55,8 @@ style.textContent=[
 '#meotNovEvent footer input{width:18px;height:18px;accent-color:#28523e}',
 '#meotNovEvent footer button{border:0;background:none;padding:12px;color:#3d4a41;font:inherit;font-size:13px;cursor:pointer;min-height:0}',
 '#meotNovEvent button:focus-visible,#meotNovStrip button:focus-visible{outline:2px solid #9a7a45;outline-offset:3px}',
-'@media(max-height:700px){#meotNovEvent .mne-media{height:140px}#meotNovEvent .mne-badge strong{font-size:25px}}'
+'@media(max-height:700px){#meotNovEvent .mne-media{height:140px}#meotNovEvent .mne-badge strong{font-size:25px}}',
+'@media(max-width:600px){#meotNovEvent .mne-media{height:130px}#meotNovEvent .mne-badge strong{font-size:24px}#meotNovEvent .mne-copy{padding:16px 20px 0}#meotNovEvent h2{font-size:19px}#meotNovEvent ul{margin-top:12px}#meotNovEvent footer{margin-top:10px}}'
 ].join('');
 document.head.appendChild(style);
 
@@ -62,24 +64,25 @@ function openChat(source){
   if(window.meotLeadDb&&window.meotLeadDb.openGate){window.meotLeadDb.openGate({href:KAKAO,channel:'카카오톡',source:source,memo:'11월 첫 주 프로→시그니처 무료 업그레이드 문의'})}
   else location.href=KAKAO;
 }
+var isMobile=window.matchMedia&&matchMedia('(max-width:700px)').matches;
 var left=daysLeft(),dday=left===0?'D-DAY':'D-'+left;
 
 /* Top strip: stays visible for the whole event, can be dismissed for the session. */
 var stripHidden=false;try{stripHidden=sessionStorage.getItem(key+'-strip')==='1'}catch(e){}
 if(!stripHidden){
   var strip=document.createElement('div');strip.id='meotNovStrip';strip.setAttribute('role','region');strip.setAttribute('aria-label','11월 첫 주 이벤트 안내');
-  strip.innerHTML='<div class="mns-in"><span class="mns-dday">'+dday+'</span><span><b>11월 첫 주 한정</b> 프로 가격으로 시그니처 등급 제작, 11월 7일(토)까지</span><button type="button" class="mns-go">업그레이드 문의 →</button></div><button type="button" class="mns-x" aria-label="이벤트 안내 닫기">×</button>';
+  strip.innerHTML='<div class="mns-in"><span class="mns-dday">'+dday+'</span><span class="mns-long"><b>11월 첫 주 한정</b> 프로 가격으로 시그니처 등급 제작, 11월 7일(토)까지</span><span class="mns-short"><b>프로 가격에 시그니처</b> · 11/7까지</span><button type="button" class="mns-go">'+(isMobile?'자세히 →':'업그레이드 문의 →')+'</button></div><button type="button" class="mns-x" aria-label="이벤트 안내 닫기">×</button>';
   var header=document.querySelector('.site-header');
   if(header&&header.parentNode)header.parentNode.insertBefore(strip,header);else document.body.insertBefore(strip,document.body.firstChild);
-  strip.querySelector('.mns-go').onclick=function(){openChat('11월 첫 주 이벤트 띠배너')};
+  strip.querySelector('.mns-go').onclick=function(){if(isMobile&&window.meotNovOpen)window.meotNovOpen();else openChat('11월 첫 주 이벤트 띠배너')};
   strip.querySelector('.mns-x').onclick=function(){strip.remove();try{sessionStorage.setItem(key+'-strip','1')}catch(e){}};
 }
 
 /* Popup: once per day unless dismissed for today. */
-try{if(!preview&&localStorage.getItem(key)===day())return}catch(e){}
+var hiddenToday=false;try{hiddenToday=!preview&&localStorage.getItem(key)===day()}catch(e){}
 var d=document.createElement('dialog');d.id='meotNovEvent';d.setAttribute('aria-labelledby','meNovTitle');d.tabIndex=-1;
 d.innerHTML='<div class="mne-media"><img src="/meot-table/images/grades/premium-real-20260928.webp" alt="시그니처 등급 실제 제작 테이블"><button type="button" class="mne-close" aria-label="이벤트 팝업 닫기">×</button><span class="mne-dday">'+dday+'</span><div class="mne-badge"><small>NOVEMBER, WEEK 1</small><strong>프로 → 시그니처<br>무료 업그레이드</strong></div></div>'+
-'<div class="mne-copy"><h2 id="meNovTitle">프로 등급 가격으로<br>시그니처 등급을 받아보세요</h2><p class="mne-period">11월 7일(토)까지 프로 등급 계약 고객</p><div class="mne-price"><div><span>시그니처 정가</span><b>129,000원</b></div><i aria-hidden="true">→</i><div class="is-up"><span>이벤트가 (프로 가격)</span><b>89,000원</b></div></div><p class="mne-body">1200×800 이하 테이블 1개 기준, 부가세·배송비 별도입니다. 프로 가격 그대로 시그니처 등급으로 제작해 드립니다. 시그니처는 한 달 10팀만 제작해 자리가 차면 일찍 마감될 수 있어요.</p>'+
+'<div class="mne-copy"><h2 id="meNovTitle">프로 등급 가격으로<br>시그니처 등급을 받아보세요</h2><p class="mne-period">11월 7일(토)까지 프로 등급 계약 고객</p><div class="mne-price"><div><span>시그니처 정가</span><b>129,000원</b></div><i aria-hidden="true">→</i><div class="is-up"><span>이벤트가 (프로 가격)</span><b>89,000원</b></div></div><p class="mne-body">1200×800 이하 테이블 1개 기준, 부가세·배송비 별도입니다. 프로 가격 그대로 시그니처 등급으로 제작해 드립니다.</p>'+
 '<ul><li>상판 압착 조건 190℃ 200t → 200℃ 400t</li><li>김해 공장 직접 제작, 매장에 맞춘 규격</li><li>테이블 제작 고객 무료 상권분석</li></ul>'+
 '<button type="button" class="mne-cta"><span class="mne-chat" aria-hidden="true"></span>카카오톡으로 업그레이드 문의</button></div>'+
 '<footer><label><input type="checkbox">오늘 하루 보지 않기</label><button type="button" class="mne-dismiss">닫기</button></footer>';
@@ -90,6 +93,7 @@ d.querySelector('.mne-dismiss').onclick=close;
 d.addEventListener('cancel',function(e){e.preventDefault();close()});
 d.addEventListener('click',function(e){if(e.target===d){var r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close()}});
 d.querySelector('.mne-cta').onclick=function(){close();openChat('11월 첫 주 이벤트 팝업')};
+window.meotNovOpen=function(){if(!d.open){d.showModal();d.focus({preventScroll:true})}};
 
 // Never interrupt a visitor who has started navigating or using the estimate.
 var autoShowTimer=null,activityEvents=['pointerdown','keydown','input','scroll','hashchange'];
@@ -107,6 +111,6 @@ function show(){
   if(preview||active()){d.showModal();d.focus({preventScroll:true});}
 }
 if(!preview)activityEvents.forEach(function(type){window.addEventListener(type,stopScheduledShow,{capture:true,passive:true})});
-autoShowTimer=setTimeout(show,900);
+if(preview||(!isMobile&&!hiddenToday))autoShowTimer=setTimeout(show,900);
 if(!preview){var timer=setInterval(function(){if(!active()){if(d.open)d.close();var s=document.getElementById('meotNovStrip');if(s)s.remove();clearInterval(timer)}},30000)}
 })();

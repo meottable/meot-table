@@ -1,0 +1,23 @@
+/* 2026-11-03 fixes: mobile first screen, shorter mobile page, grade limit note */
+.grade-limit{display:block;margin-top:4px;font-size:12px;font-weight:700;color:#9a7a45}
+
+@media(max-width:700px){
+  /* #1 첫 화면: 사진 높이를 줄여 가격·상담 버튼이 바로 보이게 */
+  .rotatingHero .hero-media{height:clamp(250px,68vw,290px)}
+  .rotatingHero .hero-headline{bottom:16px}
+  .rotatingHero .hero-headline .eyebrow{margin-bottom:6px;font-size:12px}
+  .rotatingHero .hero-headline h1{font-size:clamp(24px,7vw,28px);line-height:1.25}
+  .rotatingHero.hero>.wrap{padding:16px 20px 22px}
+  body .hero-copy{padding-top:0;padding-bottom:0}
+  .rotatingHero .hero-desc{display:none}
+  .rotatingHero .price{margin-top:0}
+  .rotatingHero .price-note{margin-top:4px}
+  .rotatingHero .hero-actions{margin-top:12px}
+  .rotatingHero .hero-actions .btn{margin-top:8px;min-height:48px}
+  .rotatingHero .hero-link{display:none}
+
+  /* #2 납품 사례: 접힌 상태에선 대표 사례 1개만, 나머지는 '더보기' */
+  .legacy-home #full-portfolio .portfolioList.portfolioCollapsed .portfolioFeatured~.portfolioFeatured,
+  body #full-portfolio .portfolioCollapsed .portfolioFeatured~.portfolioFeatured{display:none!important}
+  #full-portfolio .portfolioCopy ul{display:none}
+}
