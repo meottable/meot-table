@@ -41,7 +41,7 @@
    setValue(key,sum,(partial?'＋':'')+(key==='visits'?'회':'건'));
    cards[key].detail.textContent=key==='visits'?(first>month+'-01'?Number(first.slice(5,7))+'/'+Number(first.slice(8))+'부터 · 방문 세션':'이번 달 · 방문 세션 기준'):'이번 달 · 홈페이지 접수 기록';
   }
-  setValue('contracts',valid(contracts)?contracts:null,'명');
+  setValue('contracts',valid(contracts)?contracts:null,'건');
   cards.contracts.detail.textContent=valid(contracts)?'이번 달 · 업체 제공 집계':'계약 현황 확인 중';
   const stamp=sourceAt?new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(sourceAt)):'';
   root.querySelector('.cc-update').textContent=stamp?stamp+' 집계 확인':'집계 자료 확인 중';
