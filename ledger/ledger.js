@@ -3,7 +3,7 @@
 const $=id=>document.getElementById(id),M=MeotLedger,S=MeotLedgerStore,ACCESS='meot_ledger_access_v1';
 const won=n=>n===null?'미확인':Number(n||0).toLocaleString('ko-KR')+'원',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const label=m=>m.replace('-','년 ')+'월',stamp=s=>new Date(s).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}),uuid=()=>crypto.randomUUID();
-let data,key='',identity='',revision=0,selected=M.today().slice(0,7),tab='orders',busy=false,confirmAction=null,installEvent=null,dirty=false,backupURL='',syncBusy=false,lastSyncCheck=0;
+let data,key='',identity='',revision=0,selected=M.today().slice(0,7),tab='orders',busy=false,confirmAction=null,dirty=false,backupURL='',syncBusy=false,lastSyncCheck=0;
 function status(message,error=false){$('saveStatus').textContent=message;$('saveStatus').classList.toggle('error',error);}
 function monthMeta(){return M.ensureMonth(data,selected);}
 function report(){return monthMeta().status==='closed'?monthMeta().snapshot:M.totals(data,selected);}
@@ -69,12 +69,8 @@ $('exportBackup').addEventListener('click',()=>{try{downloadBackup();status('모
 $('importBackup').addEventListener('click',()=>{$('backupFile').value='';$('backupFile').click();});
 $('backupFile').addEventListener('change',async()=>{const file=$('backupFile').files[0];if(!file)return;try{if(file.size>25000000)throw Error('백업 파일이 너무 큽니다.');const backup=JSON.parse(await file.text());if(backup.format!=='meot-ledger-backup'||backup.version!==2||backup.identity!==identity)throw Error('이 장부의 백업 파일이 아닙니다. 연결 코드를 확인해주세요.');const restored=M.validate(await S.decrypt(backup.box,key));confirm('전체 장부 복원','백업: '+stamp(backup.exportedAt)+'\n매출 '+restored.orders.length+'건 · 입출금 '+restored.cash.length+'건\n\n현재 모든 달의 기록을 이 백업으로 교체합니다. 복원 전 현재 장부의 백업 파일도 다운로드합니다.',async()=>{downloadBackup();await commit(s=>{for(const k of Object.keys(s))delete s[k];Object.assign(s,M.clone(restored));M.applyTargetPolicy(s);},'백업 복원 완료');goMonth(M.today().slice(0,7));});}catch(e){status('복원하지 않았습니다. '+e.message,true);}});
 $('connectLedger').addEventListener('click',()=>{const k=connectionKey($('accessCode').value);if(!k){$('connectStatus').textContent='연결 코드 또는 전용 링크를 전체 붙여넣어주세요.';return;}unlock(k);});$('retry').addEventListener('click',()=>unlock());$('refresh').addEventListener('click',()=>unlock());
-$('installHelp').addEventListener('click',()=>$('help').showModal());$('closeHelp').addEventListener('click',()=>$('help').close());window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvent=e;$('nativeInstall').hidden=false;});$('nativeInstall').addEventListener('click',async()=>{if(installEvent){await installEvent.prompt();installEvent=null;$('nativeInstall').hidden=true;}});
 window.addEventListener('beforeunload',e=>{if(busy||dirty){e.preventDefault();e.returnValue='저장하지 않은 내용이 있습니다.';}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});
 window.MeotLedgerCanReload=()=>!busy&&!syncBusy&&!dirty&&!document.querySelector('dialog[open]')&&!$('accessCode').value.trim();
 unlock();
 })();
-
-
-
