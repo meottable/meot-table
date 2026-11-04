@@ -10,7 +10,7 @@
  function valid(value){try{const u=new URL(value);return u.origin==='https://script.google.com'&&/^\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u.pathname);}catch(_){return false;}}
  function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
  const GRADE={'기본형':'스탠다드','중급형':'프로','고급형':'시그니처'};
- const PAGE=window.matchMedia("(min-width:1001px)").matches?6:4;
+ const PAGE=window.matchMedia("(min-width:1001px)").matches?6:window.matchMedia("(max-width:700px)").matches?3:4;
 
  function writeUrl(){const u=new URL(config.publicUrl);u.searchParams.set('view','list');return u.href;}
 
