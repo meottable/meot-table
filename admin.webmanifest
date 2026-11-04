@@ -21,5 +21,6 @@
       "type": "image/png",
       "purpose": "any"
     }
-  ]
+  ],
+  "description": "멋테이블 고객 상담과 영업 현황을 관리하는 업무용 앱"
 }
