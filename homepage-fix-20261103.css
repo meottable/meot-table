@@ -60,3 +60,36 @@
 #customer-reviews .rv-list{grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}
 @media(max-width:1000px){#customer-reviews .rv-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){#customer-reviews .rv-list{grid-template-columns:1fr}}
+
+/* 2026-11-04 훅: 별점 띠 + 상권분석 혜택 */
+.hookProof{background:#173326;color:#f5efe5;padding:22px 0 26px}
+.hookProof .hp-inner{display:grid;grid-template-columns:auto 1fr auto;gap:18px 28px;align-items:center}
+.hookProof a{color:inherit;text-decoration:none}
+.hp-rating{display:grid;grid-template-columns:auto auto;gap:2px 10px;align-items:baseline}
+.hp-stars{grid-column:1/-1;color:#e4cca0;font-size:18px;letter-spacing:2px}
+.hp-score{font-size:15px;color:#c9d6c9}.hp-score b{font-size:30px;color:#fffdfa;letter-spacing:-.03em}
+.hp-label{font-size:14px;color:#e0e9df}.hp-label b{color:#e4cca0}
+.hp-go{grid-column:1/-1;font-size:13px;color:#e4cca0;text-decoration:underline;text-underline-offset:3px;margin-top:2px}
+.hp-quotes{position:relative;min-height:74px}
+.hp-quote{position:absolute;inset:0;margin:0;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;display:flex;flex-direction:column;justify-content:center}
+.hp-quote.is-on{opacity:1;transform:none}
+.hp-quote blockquote{margin:0;font-size:17px;line-height:1.5;color:#fffdfa;font-weight:600;letter-spacing:-.02em}
+.hp-quote figcaption{margin-top:6px;font-size:13px;color:#adc0ad}
+.hp-offer{display:block;background:#fffdfa;color:#173326!important;border-radius:14px;padding:16px 20px;max-width:330px;box-shadow:0 10px 30px #0003}
+.hp-badge{display:inline-block;font-size:12px;font-weight:700;color:#9a7a45;background:#f5efe5;border-radius:999px;padding:3px 10px}
+.hp-title{display:block;margin-top:8px;font-size:18px;line-height:1.4;letter-spacing:-.03em}
+.hp-title em{font-style:normal;color:#28523e;background:linear-gradient(transparent 60%,#e4cca0 60%)}
+.hp-list{display:block;margin-top:6px;font-size:12.5px;color:#627165;line-height:1.5}
+.hp-cta{display:block;margin-top:8px;font-size:13.5px;font-weight:700;color:#28523e}
+#customer-counts{display:none}
+@media(max-width:900px){.hookProof .hp-inner{grid-template-columns:1fr}.hp-offer{max-width:none}}
+@media(max-width:700px){
+  .hookProof{padding:18px 0 20px}
+  .hp-rating{grid-template-columns:auto 1fr;align-items:center}
+  .hp-stars{grid-column:auto;font-size:15px}.hp-score b{font-size:24px}
+  .hp-label{grid-column:1/-1}
+  .hp-go{grid-column:1/-1}
+  .hp-quotes{min-height:86px}
+  .hp-quote blockquote{font-size:15.5px}
+  .hp-title{font-size:17px}
+}
