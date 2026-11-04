@@ -108,7 +108,8 @@
  const sizePrices={basic:[59000,110000,145000],middle:[89000,150000,185000],premium:[129000,180000,220000]};
  function tableUnitPrice(grade,width,depth){
   if(!sizePrices[grade]||!Number.isInteger(width)||!Number.isInteger(depth)||width<100||width>10000||depth<100||depth>800)return null;
-  return sizePrices[grade][width<=1200?0:width<=1600?1:2];
+  // 1700 mm uses the 1600 price by the owner's confirmed pricing rule.
+  return sizePrices[grade][width<=1200?0:(width<=1600||width===1700)?1:2];
  }
  function renderSizePrices(){
   qa('#quote-size option[data-size-label]').forEach(option=>{
