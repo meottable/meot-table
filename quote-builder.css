@@ -1,0 +1,62 @@
+/* 견적 직접 맞춰보기 — drives the existing estimate form (kept hidden) */
+#estimate.qb-on .estimate-card{display:none!important}
+.qb{--qb-ink:#17201B;--qb-muted:#5C635E;--qb-line:#CECBC2;--qb-green:#28523e;--qb-tag:#F2C230;--qb-tag-ink:#2A2206;background:#F8F8F5;border-radius:18px;padding:36px 20px 32px;color:var(--qb-ink);word-break:keep-all}
+@media(min-width:900px){.qb{padding:48px 44px}}
+.qb h2{margin:0;font-size:clamp(26px,6.4vw,38px);font-weight:800;letter-spacing:-.035em;line-height:1.22;color:var(--qb-green)}
+.qb-lead{color:var(--qb-muted);margin:10px 0 0;max-width:34em;line-height:1.6}
+.qb-step{margin-top:36px}
+.qb-step h3{margin:0;font-size:20px;font-weight:800;letter-spacing:-.03em;display:flex;align-items:baseline;gap:10px;color:var(--qb-ink)}
+.qb-step h3 em{font-style:normal;font-size:14px;font-weight:600;color:var(--qb-muted)}
+.qb-pick{font-size:14px;color:var(--qb-muted);margin:4px 0 0}
+.qb-pick b{color:var(--qb-ink)}
+.qb-sw{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+@media(min-width:700px){.qb-sw{grid-template-columns:repeat(8,1fr)}}
+.qb-s{position:relative;padding:0;border:0;background:none;cursor:pointer;text-align:left;font:inherit}
+.qb-s img{aspect-ratio:1;object-fit:cover;width:100%;border-radius:6px;outline:2px solid transparent;outline-offset:2px;display:block}
+.qb-s span{display:block;font-size:12px;line-height:1.3;margin-top:5px;color:var(--qb-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qb-s.sig span{color:#5A3D2A;font-weight:700}
+.qb-s[aria-pressed=true] img{outline-color:var(--qb-ink)}
+.qb-s[aria-pressed=true]::after{content:"✓";position:absolute;right:5px;top:5px;width:22px;height:22px;border-radius:50%;background:var(--qb-tag);color:var(--qb-tag-ink);font-size:13px;font-weight:900;display:grid;place-items:center}
+.qb-more{margin-top:14px;background:none;border:1.5px solid var(--qb-line);border-radius:6px;padding:11px 16px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;width:100%;color:var(--qb-ink)}
+.qb-opts{display:grid;gap:10px;margin-top:14px}
+@media(min-width:900px){.qb-opts{grid-template-columns:repeat(3,1fr)}}
+.qb-opt{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:16px;border:1.5px solid var(--qb-line);border-radius:12px;cursor:pointer;background:#fff}
+.qb-opt input{width:20px;height:20px;accent-color:var(--qb-green);margin:0}
+.qb-opt:has(input:checked){border-color:var(--qb-ink);box-shadow:inset 0 0 0 1px var(--qb-ink)}
+.qb-opt .n{font-weight:800;font-size:17px}
+.qb-opt .n i{font-style:normal;font-size:12px;font-weight:800;background:var(--qb-tag);color:var(--qb-tag-ink);border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:2px}
+.qb-opt .s{display:block;font-size:13px;color:var(--qb-muted);margin-top:2px}
+.qb-opt .p{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;font-size:16px}
+.qb-opt .p small{display:block;font-size:12px;font-weight:600;color:var(--qb-muted)}
+.qb-qty{display:flex;align-items:center;margin-top:14px;border:1.5px solid var(--qb-line);border-radius:12px;background:#fff;width:max-content}
+.qb-qty button{width:52px;height:52px;border:0;background:none;font-size:22px;font-weight:700;cursor:pointer;color:var(--qb-ink)}
+.qb-qty output{min-width:70px;text-align:center;font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.qb-rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 20px;padding:4px 20px 12px;margin:14px -20px 0;scrollbar-width:none}
+.qb-rail::-webkit-scrollbar{display:none}
+.qb-c{flex:none;scroll-snap-align:start;width:132px;padding:10px;border:1.5px solid var(--qb-line);border-radius:12px;background:#fff;cursor:pointer;text-align:left;font:inherit;color:var(--qb-ink)}
+.qb-c img{aspect-ratio:1;object-fit:contain;width:100%;display:block}
+.qb-c span{display:block;font-size:13px;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qb-c[aria-pressed=true]{border-color:var(--qb-ink);box-shadow:inset 0 0 0 1px var(--qb-ink)}
+.qb-c.none{display:grid;place-items:center;color:var(--qb-muted);font-weight:700;font-size:14px;min-height:150px}
+.qb-sum{margin-top:40px;display:grid;gap:20px}
+@media(min-width:900px){.qb-sum{grid-template-columns:1.2fr 1fr;align-items:end}}
+.qb-tag{position:relative;background:var(--qb-tag);color:var(--qb-tag-ink);border-radius:6px;padding:20px 22px 22px 44px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.qb-tag::before{content:"";position:absolute;left:16px;top:28px;width:10px;height:10px;border-radius:50%;background:#F8F8F5;box-shadow:inset 0 1px 2px rgba(0,0,0,.35)}
+.qb-tag small{font-size:12px;font-weight:700;opacity:.78}
+.qb-tag b{display:block;font-size:38px;font-weight:900;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums}
+.qb-tag b span{font-size:16px;font-weight:800;margin-left:2px}
+.qb-tag dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:14px 0 0;font-size:14px}
+.qb-tag dt{font-weight:700;opacity:.72}
+.qb-tag dd{margin:0;font-weight:700}
+.qb-bump{animation:qbBump .35s ease}
+@keyframes qbBump{40%{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){.qb-bump{animation:none}}
+.qb-note{font-size:13px;color:var(--qb-muted);margin:0 0 14px;line-height:1.55}
+.qb-send{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;border:0;border-radius:6px;background:var(--qb-green);color:#fff;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+.qb-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(248,248,245,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--qb-line,#CECBC2);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:12px;align-items:center;transform:translateY(110%);transition:transform .2s}
+.qb-bar.show{transform:none}
+.qb-bar div{display:flex;flex-direction:column;line-height:1.2}
+.qb-bar small{font-size:12px;color:#5C635E;font-weight:700}
+.qb-bar b{font-size:19px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.03em;color:#17201B}
+.qb-bar button{flex:1;min-height:48px;border:0;border-radius:6px;background:#28523e;color:#fff;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+@media(min-width:900px){.qb-bar{display:none}}
