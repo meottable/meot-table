@@ -1,0 +1,53 @@
+/* 2026-11-09 문의 동선: 상단 전화, 배치 시안 요청(매장 사진), 전화 요청 */
+.mtCallTop{display:inline-flex;align-items:center;gap:6px;margin-left:auto;margin-right:10px;padding:8px 14px;border-radius:999px;background:#173326;color:#fff!important;font-weight:700;font-size:15px;text-decoration:none;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mtCallTop svg{width:16px;height:16px;flex:none}
+.desktop-nav{margin-left:auto}
+.desktop-nav+.mtCallTop{margin-left:16px}
+@media(max-width:700px){.mtCallTop{padding:8px 12px;font-size:13px;margin-right:6px}.mtCallTop .num{display:none}}
+@media(min-width:701px){.mtCallTop .lbl{display:none}}
+
+.mtLayout{padding:28px 0;background:#f6f1e7}
+.mtLayoutCard{display:grid;gap:18px;align-items:center;background:#173326;color:#fff;border-radius:18px;padding:24px 22px;overflow:hidden;position:relative}
+.mtLayoutCard h2{margin:0;font-size:clamp(22px,5.6vw,30px);line-height:1.3;letter-spacing:-.03em;color:#fff}
+.mtLayoutCard p{margin:8px 0 0;color:#cfdad3;line-height:1.6}
+.mtLayoutSteps{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding:0;list-style:none}
+.mtLayoutSteps li{font-size:13px;font-weight:700;background:rgba(255,255,255,.1);border-radius:999px;padding:6px 11px}
+.mtLayoutBtns{display:flex;gap:10px;flex-wrap:wrap}
+.mtLayoutBtns .btn{min-height:50px}
+.mtLayoutBtns .mtGhost{background:transparent;border:1.5px solid rgba(255,255,255,.7);color:#fff}
+@media(min-width:860px){.mtLayoutCard{grid-template-columns:1fr auto;padding:30px 36px}}
+
+.mtDlg{border:0;border-radius:18px;padding:0;width:min(520px,calc(100vw - 24px));max-height:calc(100vh - 32px);color:#17201b}
+.mtDlg::backdrop{background:rgba(10,20,15,.55)}
+.mtDlgIn{padding:22px 20px 20px;display:grid;gap:14px}
+.mtDlgHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.mtDlgHead h3{margin:0;font-size:21px;letter-spacing:-.03em}
+.mtDlgHead p{margin:4px 0 0;font-size:14px;color:#5c635e;line-height:1.5}
+.mtClose{border:0;background:#f1ede4;width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.mtLabel{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.mtLabel small{font-weight:500;color:#6e6358}
+.mtPhotoAdd{display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed #c9a46a;border-radius:12px;padding:16px;font-weight:700;color:#173326;background:#fbf6ec;cursor:pointer}
+.mtPhotoAdd input{position:absolute;width:1px;height:1px;opacity:0}
+.mtPhotoPlus{font-size:22px;line-height:1}
+.mtThumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.mtThumbs:empty{display:none}
+.mtThumb{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#eee}
+.mtThumb img{width:100%;height:100%;object-fit:cover;display:block}
+.mtThumb button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:15px;line-height:1;cursor:pointer}
+.mtHint{margin:6px 0 0;font-size:12.5px;color:#6e6358;line-height:1.5}
+.mtSeg{display:inline-flex;background:#f1ede4;border-radius:10px;padding:3px;margin-bottom:8px}
+.mtSeg button{border:0;background:transparent;padding:7px 12px;border-radius:8px;font:inherit;font-size:13px;font-weight:700;color:#6e6358;cursor:pointer}
+.mtSeg button[aria-pressed=true]{background:#fff;color:#17201b;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.mtRow{display:flex;align-items:center;gap:8px}
+.mtRow input{flex:1;min-width:0}
+.mtDlg input[type=text],.mtDlg input[type=tel],.mtDlg input[type=number],.mtDlg select{width:100%;box-sizing:border-box;border:1.5px solid #ddd5c6;border-radius:10px;padding:12px;font:inherit;font-size:16px;background:#fff}
+.mtCalc{font-size:13px;color:#27775a;font-weight:700;min-height:18px;margin-top:4px}
+.mtConsent{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#5c635e;line-height:1.5}
+.mtConsent input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:#173326}
+.mtStatus{font-size:14px;color:#b94e43;min-height:20px;margin:0}
+.mtDone{display:grid;gap:4px;background:#e3f2e5;color:#1f5130;border-radius:12px;padding:14px;font-size:14px;line-height:1.5}
+.mtDone b{font-size:16px}
+.mtDlg .btn{width:100%;min-height:52px}
+.mtDirect{display:flex;gap:10px}
+.mtDirect a{flex:1;text-align:center;padding:12px;border-radius:10px;background:#f1ede4;color:#17201b;font-weight:700;text-decoration:none;font-size:14px}
+.mtDlg [hidden],.mtRow[hidden]{display:none!important}
