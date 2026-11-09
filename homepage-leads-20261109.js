@@ -4,7 +4,7 @@
    - 사진 업로드가 안 되면 카톡으로 보내는 버튼이 대신 뜸 */
 (function(){
   'use strict';
-  var PHOTO_API='';
+  var PHOTO_API='https://script.google.com/macros/s/AKfycbwbc6gIET2Qj1eKaBPupUt_-3YUboSnb2XWKeBmrgH7q8_3OONgzkrjLeBo7dm5V_SI/exec';
   var KAKAO='https://pf.kakao.com/_BZeSX/chat', CONSENT='20261020-v1', MAX=3;
   var $=function(id){return document.getElementById(id)};
   function track(n,d){try{if(window.meotAnalytics&&window.meotAnalytics.track)window.meotAnalytics.track(n,d||{})}catch(_){}}
