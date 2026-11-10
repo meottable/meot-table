@@ -6,7 +6,7 @@ const code=fs.readFileSync(__dirname+'/../lead-db.js','utf8');
 const requestId='12345678-1234-4234-8234-123456789abc';
 function setup(response){
  const events=[];let calls=0;
- const ctx={window:{meotAnalytics:{track:n=>events.push(n)}},document:{addEventListener(){},dispatchEvent:e=>events.push(e.type)},location:{href:'https://meottable.github.io/meot-table/'},URLSearchParams,AbortController,setTimeout,clearTimeout,CustomEvent:class{constructor(type){this.type=type;}},fetch:async()=>{calls++;if(response instanceof Error)throw response;return response;}};
+ const ctx={window:{meotAnalytics:{track:n=>events.push(n)}},document:{addEventListener(){},dispatchEvent:e=>events.push(e.type)},location:{href:'https://meottable.com/'},URLSearchParams,AbortController,setTimeout,clearTimeout,CustomEvent:class{constructor(type){this.type=type;}},fetch:async()=>{calls++;if(response instanceof Error)throw response;return response;}};
  vm.runInNewContext(code,ctx);
  return {save:ctx.window.meotLeadDb.save,events,calls:()=>calls};
 }

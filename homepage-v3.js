@@ -83,7 +83,7 @@
  }
  function loadBookings(){
   if(bookingRequest)return bookingRequest;
-  bookingRequest=fetch('/meot-table/production-bookings.json',{cache:'no-store'})
+  bookingRequest=fetch('/production-bookings.json',{cache:'no-store'})
    .then(response=>{if(!response.ok)throw new Error('booking_unavailable');return response.json();})
    .then(data=>{if(data&&data.capacity===BOOKING_CAPACITY&&data.months&&typeof data.months==='object'&&!Array.isArray(data.months)){bookingData=data;renderBookings();}})
    .catch(()=>{})

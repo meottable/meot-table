@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 root=Path(__file__).resolve().parents[2]
 s=(root/'admin.html').read_text()
-base='https://meottable.github.io/meot-table/'
+base='https://meottable.com/'
 def script(m):
     p=root/m.group(1).split('?')[0].removeprefix('./')
     return '<script>\n'+p.read_text()+'\n</script>' if p.is_file() else m.group(0)

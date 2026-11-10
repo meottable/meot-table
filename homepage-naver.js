@@ -5,7 +5,7 @@
     if(!window.wcs)return;
     window.wcs_add=window.wcs_add||{};
     window.wcs_add.wa=ACCOUNT_ID;
-    window.wcs.inflow("meottable.github.io/meot-table");
+    window.wcs.inflow("meottable.com");
     window.wcs_do();
   }
   function sendConversion(type){

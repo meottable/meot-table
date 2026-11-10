@@ -10,7 +10,7 @@ label{display:block;font-size:13px;font-weight:750;margin-top:14px}input,select,
 button,.button{display:inline-block;border:0;background:var(--gold);color:#19130a;padding:14px 18px;font-weight:850;text-decoration:none;cursor:pointer;margin-top:16px}.secondary{background:#ece6dc;margin-left:7px}
 .output{min-height:260px;padding:20px;background:#f7f4ee;border:1px solid var(--line);white-space:pre-wrap;line-height:1.75}.hint{color:var(--muted);font-size:13px;line-height:1.6}.log{margin-top:20px}.log table{width:100%;border-collapse:collapse;font-size:13px}.log th,.log td{text-align:left;padding:11px;border-bottom:1px solid var(--line)}.status{color:#956610;font-weight:800}
 @media(max-width:760px){.intro{display:block}.layout{grid-template-columns:1fr}.panel{padding:20px}.log{overflow:auto}.log table{min-width:650px}}
-</style></head><body><header><b>MEOT : TABLE · LEAD DESK</b><a href="/meot-table/analysis.html" target="_blank">고객 신청 페이지 ↗</a></header>
+</style></head><body><header><b>MEOT : TABLE · LEAD DESK</b><a href="/analysis.html" target="_blank">고객 신청 페이지 ↗</a></header>
 <main><section class="intro"><div><small>10-MINUTE DAILY ROUTINE</small><h1>창업 글 답변 도우미</h1></div><p>공개 글을 확인한 뒤 내용을 붙여 넣으세요. 먼저 도움이 되는 답변을 만들고, 마지막 한 문장에만 무료 상권분석을 자연스럽게 안내합니다.</p></section>
 <div class="layout"><section class="panel"><h2>1. 발견한 글 입력</h2>
 <label>글 URL<input id="url" placeholder="https://..."></label><label>글 제목<input id="title" placeholder="예: 고깃집 자리 계약 전인데 고민입니다"></label>
@@ -29,7 +29,7 @@ else if(/임대|월세|권리/.test(post))insight='임대 조건은 월세만 �
 else if(/테이블|의자|좌석|동선/.test(post))insight='좌석 수를 무리하게 늘리기보다 직원 동선과 테이블 간격을 먼저 잡아야 실제 회전율과 체감 만족도가 좋아집니다.';
 else if(/경쟁|상권|입지/.test(post))insight='반경 내 동종업체 수보다 각 매장의 가격대·주력 메뉴·피크 시간대가 겹치는지를 비교하는 것이 더 중요합니다.';
 const empathy=stage==='계약 전'?'계약 전이라면 지금이 조건을 다시 점검하기 가장 좋은 시점입니다.':stage==='입지 검토'?'후보지를 비교 중이시라면 기준을 먼저 정해두면 판단이 훨씬 선명해집니다.':'준비가 진행된 만큼 운영 동선과 좌석 구성을 실제 상황에 맞춰 점검해보시면 좋겠습니다.';
-return (title?'“'+title+'” 글 잘 읽었습니다.\n\n':'')+empathy+' '+insight+'\n\n'+industry+'은(는) 예상 고객층과 방문 수단, 피크 시간대가 매출 구조에 미치는 영향이 커서 주소를 기준으로 배후 수요와 경쟁 구도를 같이 보는 것을 권합니다.\n\n필요하시면 멋:테이블에서 후보지 주소와 업종을 기준으로 무료 1차 상권분석을 도와드리고 있습니다. 단순 홍보가 아니라 검토할 항목을 정리해드리는 방식이니 참고만 하셔도 괜찮습니다.\n'+location.origin+'/meot-table/analysis.html';
+return (title?'“'+title+'” 글 잘 읽었습니다.\n\n':'')+empathy+' '+insight+'\n\n'+industry+'은(는) 예상 고객층과 방문 수단, 피크 시간대가 매출 구조에 미치는 영향이 커서 주소를 기준으로 배후 수요와 경쟁 구도를 같이 보는 것을 권합니다.\n\n필요하시면 멋:테이블에서 후보지 주소와 업종을 기준으로 무료 1차 상권분석을 도와드리고 있습니다. 단순 홍보가 아니라 검토할 항목을 정리해드리는 방식이니 참고만 하셔도 괜찮습니다.\n'+location.origin+'/analysis.html';
 }
 $('generate').onclick=()=>{$('output').textContent=draft()};$('copy').onclick=async()=>{await navigator.clipboard.writeText($('output').textContent);$('copy').textContent='복사 완료';setTimeout(()=>$('copy').textContent='초안 복사',1200)};
 function load(){const arr=JSON.parse(localStorage.getItem(key)||'[]');$('rows').innerHTML=arr.map(x=>'<tr><td>'+x.time+'</td><td><a href="'+x.url+'" target="_blank">'+(x.title||'제목 없음')+'</a></td><td>'+x.industry+'</td><td>'+x.stage+'</td><td class="status">검토 완료</td></tr>').join('')}

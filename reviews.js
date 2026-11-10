@@ -6,7 +6,7 @@
  'use strict';
  const config=window.MEOT_REVIEWS||{};
  const section=document.getElementById('customer-reviews');
- const BASE='/meot-table/reviews/';
+ const BASE='/reviews/';
  function valid(value){try{const u=new URL(value);return u.origin==='https://script.google.com'&&/^\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u.pathname);}catch(_){return false;}}
  function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
  const GRADE={'기본형':'스탠다드','중급형':'프로','고급형':'시그니처'};

@@ -5,7 +5,7 @@ function env({clipboard,legacy=false,secure=true,fetchImpl}={}){
  const window={isSecureContext:secure,meotAnalytics:{track:n=>events.push(n)}},navigator={};
  if(clipboard)navigator.clipboard={writeText:clipboard};
  const document={activeElement:{focus(){}},addEventListener(){},body:{appendChild(){}},execCommand:()=>legacy,createElement:()=>({style:{},select(){},setSelectionRange(){},remove(){}})};
- const context={window,navigator,document,URL,URLSearchParams,AbortController,Promise,Error,console,location:{href:'https://meottable.github.io/meot-table/',assign:u=>calls.push(u)},setTimeout:fn=>{const id=++seq;timers.set(id,fn);return id;},clearTimeout:id=>timers.delete(id),fetch:fetchImpl||(()=>Promise.resolve({type:'opaque',status:0}))};
+ const context={window,navigator,document,URL,URLSearchParams,AbortController,Promise,Error,console,location:{href:'https://meottable.com/',assign:u=>calls.push(u)},setTimeout:fn=>{const id=++seq;timers.set(id,fn);return id;},clearTimeout:id=>timers.delete(id),fetch:fetchImpl||(()=>Promise.resolve({type:'opaque',status:0}))};
  vm.createContext(context);return {context,window,calls,events,timers};
 }
 function options(){return {text:'[예상견적]\n수저통: 필요해요\n의자 별도',href:'https://pf.kakao.com/_BZeSX/chat?bot=true',button:{disabled:false,setAttribute(){},removeAttribute(){}},status:{textContent:''},fallback:{hidden:true},textarea:{value:'',focus(){},select(){}}};}

@@ -8,7 +8,7 @@
   const m=t.match(/^.{12,58}?[.!~](?=\s|$)/);
   return m?m[0].replace(/[.]$/,'').trim():null;
  }
- fetch('/meot-table/reviews/reviews.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(d=>{
+ fetch('/reviews/reviews.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(d=>{
   const list=(d&&d.reviews||[]).filter(r=>r.body);if(!list.length){box.hidden=true;return;}
   const avg=list.reduce((a,r)=>a+(Number(r.rating)||5),0)/list.length;
   root.querySelector('[data-hp-avg]').textContent=avg.toFixed(1);

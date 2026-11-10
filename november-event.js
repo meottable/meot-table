@@ -81,7 +81,7 @@ if(!stripHidden){
 /* Popup: once per day unless dismissed for today. */
 var hiddenToday=false;try{hiddenToday=!preview&&localStorage.getItem(key)===day()}catch(e){}
 var d=document.createElement('dialog');d.id='meotNovEvent';d.setAttribute('aria-labelledby','meNovTitle');d.tabIndex=-1;
-d.innerHTML='<div class="mne-media"><img src="/meot-table/images/grades/premium-real-20260928.webp" alt="시그니처 등급 실제 제작 테이블"><button type="button" class="mne-close" aria-label="이벤트 팝업 닫기">×</button><span class="mne-dday">'+dday+'</span><div class="mne-badge"><small>NOVEMBER, WEEK 1</small><strong>프로 → 시그니처<br>무료 업그레이드</strong></div></div>'+
+d.innerHTML='<div class="mne-media"><img src="/images/grades/premium-real-20260928.webp" alt="시그니처 등급 실제 제작 테이블"><button type="button" class="mne-close" aria-label="이벤트 팝업 닫기">×</button><span class="mne-dday">'+dday+'</span><div class="mne-badge"><small>NOVEMBER, WEEK 1</small><strong>프로 → 시그니처<br>무료 업그레이드</strong></div></div>'+
 '<div class="mne-copy"><h2 id="meNovTitle">프로 등급 가격으로<br>시그니처 등급을 받아보세요</h2><p class="mne-period">11월 7일(토)까지 프로 등급 계약 고객</p><div class="mne-price"><div><span>시그니처 정가</span><b>129,000원</b></div><i aria-hidden="true">→</i><div class="is-up"><span>이벤트가 (프로 가격)</span><b>89,000원</b></div></div><p class="mne-body">1200×800 이하 테이블 1개 기준, 부가세·배송비 별도입니다. 프로 가격 그대로 시그니처 등급으로 제작해 드립니다.</p>'+
 '<ul><li>상판 압착 조건 190℃ 200t → 200℃ 400t</li><li>김해 공장 직접 제작, 매장에 맞춘 규격</li><li>테이블 제작 고객 무료 상권분석</li></ul>'+
 '<button type="button" class="mne-cta"><span class="mne-chat" aria-hidden="true"></span>카카오톡으로 업그레이드 문의</button></div>'+

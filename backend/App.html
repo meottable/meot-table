@@ -16,14 +16,14 @@
  <button class="gold full" type="submit" id="submit">후기 등록하기 →</button><p class="hint">구매 확인 후 홈페이지에 공개됩니다.</p><p id="submit-status" class="status" role="status" aria-live="polite"></p></form></section>
  <section id="success" class="success" hidden><h2>소중한 후기,<br>감사합니다.</h2><p>후기가 접수되었습니다.<br>구매 확인 후 홈페이지에 공개됩니다.</p><button id="return" type="button" class="gold">후기 목록으로 돌아가기</button></section>
 </main>
-<main id="admin" class="admin" hidden><header class="admin-head"><span class="brand">멋:테이블</span><span>관리자 전용 · Google 계정 확인</span></header><h2>고객 후기 관리</h2><p class="muted">내용과 사진을 확인한 뒤 공개하거나 삭제하세요.</p><button type="button" id="refresh" class="light" style="margin-top:15px">새로고침</button><p id="admin-status" class="status" role="status" aria-live="polite"></p><div id="admin-list" class="cards"></div><a class="inline-link" href="https://meottable.github.io/meot-table/admin.html#reviews">영업관리로 돌아가기</a></main>
+<main id="admin" class="admin" hidden><header class="admin-head"><span class="brand">멋:테이블</span><span>관리자 전용 · Google 계정 확인</span></header><h2>고객 후기 관리</h2><p class="muted">내용과 사진을 확인한 뒤 공개하거나 삭제하세요.</p><button type="button" id="refresh" class="light" style="margin-top:15px">새로고침</button><p id="admin-status" class="status" role="status" aria-live="polite"></p><div id="admin-list" class="cards"></div><a class="inline-link" href="https://meottable.com/admin.html#reviews">영업관리로 돌아가기</a></main>
 <script>
 (function(){
  'use strict';const $=id=>document.getElementById(id),mode=document.body.dataset.mode,bridge=document.body.dataset.bridge;
  let photos=[],busy=false,reading=false,requestId=crypto.randomUUID(),csrf='';const form=$('review-form');
  function rpc(name,...args){return new Promise((resolve,reject)=>google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[name](...args));}
  function status(id,message,error=false){$(id).textContent=message;$(id).classList.toggle('error',error);}
- function resize(){if(mode==='public'&&bridge)window.top.postMessage({type:'meot-review-height',bridge,height:Math.ceil(document.body.getBoundingClientRect().height)},'https://meottable.github.io');}
+ function resize(){if(mode==='public'&&bridge)['https://meottable.com','https://meottable.github.io'].forEach(function(o){window.top.postMessage({type:'meot-review-height',bridge,height:Math.ceil(document.body.getBoundingClientRect().height)},o)});}
  new ResizeObserver(resize).observe(document.body);
  function screen(id){['landing','writing','success'].forEach(s=>$(s).hidden=s!==id);resize();}
  function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}
