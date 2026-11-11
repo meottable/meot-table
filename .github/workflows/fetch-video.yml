@@ -1,0 +1,21 @@
+name: fetch-video
+on:
+  push:
+    branches: [fetch-video]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p tmp-video
+          curl -sSfL -o tmp-video/meottable_v11.mp4 "https://d2ol7oe51mr4n9.cloudfront.net/user_3DUHv9TkN88gztEGOGMMAmJqF1k/92a31a41-ca0e-460c-880e-eb7fad21bac6.mp4"
+          ls -la tmp-video
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tmp-video/meottable_v11.mp4
+          git commit -m "tmp: fetch v11 video"
+          git push
