@@ -12,10 +12,10 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           mkdir -p tmp-video
-          curl -sSfL -o tmp-video/meottable_v12.mp4 "https://d2ol7oe51mr4n9.cloudfront.net/user_3DUHv9TkN88gztEGOGMMAmJqF1k/3afba09b-47b7-461a-b4a1-0bb30326b992.mp4"
+          curl -sSfL -o tmp-video/meottable_v13.mp4 "https://d2ol7oe51mr4n9.cloudfront.net/user_3DUHv9TkN88gztEGOGMMAmJqF1k/26b8db9c-ab8d-41d9-93cc-8204ce60786c.mp4"
           ls -la tmp-video
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tmp-video/meottable_v12.mp4
-          git commit -m "tmp: fetch v12 video"
+          git add tmp-video/meottable_v13.mp4
+          git commit -m "tmp: fetch v13 video"
           git push
