@@ -1,7 +1,7 @@
 """Google 후기 → 홈페이지 저장본(reviews/reviews.json + reviews/photos/*.webp) 동기화.
 사용: python tools/sync_reviews.py   (환경변수 REVIEWS_EXPORT_URL 이 있으면 그 주소 사용)
 """
-import base64, hashlib, io, json, os, re, sys, urllib.request
+import base64, hashlib, io, json, os, re, sys, time, urllib.request
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -17,8 +17,17 @@ def export_url():
 
 def fetch():
     req = urllib.request.Request(export_url(), headers={'User-Agent': 'meottable-review-sync'})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        data = json.loads(r.read().decode('utf-8'))
+    # Apps Script 응답이 가끔 늦어 타임아웃 나는 경우가 있어 3번까지 다시 시도
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                data = json.loads(r.read().decode('utf-8'))
+            break
+        except (TimeoutError, OSError) as e:
+            if attempt == 2:
+                raise
+            print(f'후기 불러오기 실패({e}), {30 * (attempt + 1)}초 뒤 다시 시도', file=sys.stderr)
+            time.sleep(30 * (attempt + 1))
     if not isinstance(data, dict) or not isinstance(data.get('reviews'), list):
         raise SystemExit('후기 응답 형식이 올바르지 않습니다: Apps Script에 format=json 내보내기가 연결됐는지 확인하세요.')
     return data['reviews']
