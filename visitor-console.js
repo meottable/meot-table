@@ -17,20 +17,21 @@ groups.forEach((g,i)=>{const article=document.createElement('article');article.c
 let token=0;
 const core=['sessions','quote','contact','lead_saved'];
 const names=[...new Set([...core,...groups.flatMap(g=>g[1].map(r=>r[1])),...sources.flatMap(s=>['source_'+s[1],'contact_source_'+s[1]])])];
-const show=v=>v===null?'기록 없음':v.toLocaleString();
+const show=(v,failed=false,beforeStart=false)=>failed?'조회 실패':beforeStart?'수집 전':v===null?'기록 없음':v.toLocaleString();
 async function load(){
  const date=selectedDate,request=++token,status=document.getElementById('visitor-status');
- const values=Object.fromEntries(names.map(n=>[n,null]));
+ const values=Object.fromEntries(names.map(n=>[n,null])),failed=new Set();
  status.textContent='방문 행동 통계를 조회하고 있습니다.';
  document.getElementById('visitor-cards').textContent='조회 중';document.getElementById('visitor-sources').textContent='';document.getElementById('visitor-insight').textContent='';groups.forEach((g,i)=>document.getElementById('visitor-group-'+i).textContent='조회 중');
  let failures=0;
- if(date>=start){let cursor=0;await Promise.all(Array.from({length:8},async()=>{while(cursor<names.length){const name=names[cursor++];if(request!==token)return;try{const r=await fetch(API+PREFIX+date+'_v1_'+name,{cache:'no-store',signal:AbortSignal.timeout(8000)});if(r.status===404)continue;if(!r.ok)throw Error();const data=await r.json();if(data.value===null||data.value===undefined||data.value==='')continue;const n=Number(data.value);if(!Number.isFinite(n)||n<0)throw Error();values[name]=n;}catch(_){failures++;}}}));}
+ if(date>=start){let cursor=0;await Promise.all(Array.from({length:8},async()=>{while(cursor<names.length){const name=names[cursor++];if(request!==token)return;try{const r=await fetch(API+PREFIX+date+'_v1_'+name,{cache:'no-store',signal:AbortSignal.timeout(8000)});if(r.status===404)continue;if(!r.ok)throw Error();const data=await r.json();if(data.value===null||data.value===undefined||data.value==='')continue;const n=Number(data.value);if(!Number.isFinite(n)||n<0)throw Error();values[name]=n;}catch(_){failures++;failed.add(name);}}}));}
  if(request!==token)return;
+ const display=name=>show(values[name],failed.has(name),date<start);
  status.textContent=date<start?'수집 시작 전 날짜입니다.':failures?'일부 통계 조회 실패 — 빈 항목은 0건으로 판단하지 마세요.':'조회 완료 · 기록 없음은 미수집·전송 누락·해당 행동 없음 등을 포함합니다.';
  const labels=['방문 세션','견적 사용 세션','상담 클릭 세션','고객 DB 저장 세션'];
- document.getElementById('visitor-cards').innerHTML=core.map((n,i)=>'<div class="card"><div class="label">'+labels[i]+'</div><div class="value" style="font-size:22px">'+show(values[n])+'</div></div>').join('');
- groups.forEach((g,i)=>{const max=Math.max(1,...g[1].map(r=>values[r[1]]||0));document.getElementById('visitor-group-'+i).innerHTML=g[1].map(([label,n])=>'<div class="metric-row" style="grid-template-columns:minmax(95px,1fr) 1fr 65px"><span>'+label+'</span><div class="track"><div class="fill" style="--w:'+((values[n]||0)/max*100)+'%"></div></div><b>'+show(values[n])+'</b></div>').join('');});
- document.getElementById('visitor-sources').innerHTML=sources.map(([label,n])=>{const v=values['source_'+n],c=values['contact_source_'+n];return '<tr><td>'+label+'</td><td>'+show(v)+'</td><td>'+show(c)+'</td><td>'+(v>0&&c!==null&&c<=v?(c/v*100).toFixed(1)+'%':'—')+'</td></tr>';}).join('');
+ document.getElementById('visitor-cards').innerHTML=core.map((n,i)=>'<div class="card"><div class="label">'+labels[i]+'</div><div class="value" style="font-size:22px">'+display(n)+'</div></div>').join('');
+ groups.forEach((g,i)=>{const max=Math.max(1,...g[1].map(r=>values[r[1]]||0));document.getElementById('visitor-group-'+i).innerHTML=g[1].map(([label,n])=>'<div class="metric-row" style="grid-template-columns:minmax(95px,1fr) 1fr 65px"><span>'+label+'</span><div class="track"><div class="fill" style="--w:'+((values[n]||0)/max*100)+'%"></div></div><b>'+display(n)+'</b></div>').join('');});
+ document.getElementById('visitor-sources').innerHTML=sources.map(([label,n])=>{const v=values['source_'+n],c=values['contact_source_'+n];return '<tr><td>'+label+'</td><td>'+display('source_'+n)+'</td><td>'+display('contact_source_'+n)+'</td><td>'+(v>0&&c!==null&&c<=v?(c/v*100).toFixed(1)+'%':'—')+'</td></tr>';}).join('');
  const ranked=groups[2][1].filter(r=>values[r[1]]>0).sort((a,b)=>values[b[1]]-values[a[1]]);
  document.getElementById('visitor-insight').textContent=ranked.length?'가장 많이 관찰된 구간: '+ranked[0][0]+'. 화면에 보였다는 뜻이며 구매 의도나 이탈 이유를 단정할 수 없습니다. 아래 실제 상담 기록과 함께 확인하세요.':'관심 구간 기록이 쌓이면 관찰 결과를 표시합니다. 실제 상담은 아래 확인한 건수를 따로 기록하세요.';
 }

@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const f=quoteForm.elements;
-function orderText(q){return ['[멋:테이블 공장 발주]', '견적번호: '+q.number,'고객/상호: '+q.customer,'','■ 테이블','수량: '+q.tableQty+'개','사이즈: '+q.size,'등급: '+q.grade,'수저통: '+q.cutlery+(q.cutlery==='있음'?' · '+q.cutleryQty+'개':''),'출고일: '+q.shipDate,...(Number(q.chairQty)>0?['','■ 의자','수량: '+q.chairQty+'개']:[]),...(q.memo?['','■ 요청사항',q.memo]:[]),'','위 내용으로 제작 및 출고 일정 확인 부탁드립니다.'].join('\n')}
+function orderText(q){return ['[멋:테이블 공장 발주]', '견적번호: '+q.number,'고객/상호: '+q.customer,'','■ 테이블','수량: '+q.tableQty+'개','사이즈: '+q.size,'수저통: '+q.cutlery+(q.cutlery==='있음'?' · '+q.cutleryQty+'개':''),'출고일: '+q.shipDate,...(Number(q.chairQty)>0?['','■ 의자','수량: '+q.chairQty+'개']:[]),...(q.memo?['','■ 요청사항',q.memo]:[]),'','위 내용으로 제작 및 출고 일정 확인 부탁드립니다.'].join('\n')}
 function complete(q){return ['있음','없음'].includes(q.cutlery)&&/^\d{4}-\d{2}-\d{2}$/.test(q.shipDate||'')&&Number.isInteger(Number(q.tableQty))&&Number(q.tableQty)>0&&String(q.size||'').trim()&&(q.cutlery==='없음'||Number(q.cutleryQty)>0)}
 window.showFactoryOrder=function(id){const q=quotes.find(x=>x.id===id);if(!q)return;if(!complete(q)){editQuote(id);alert('발주문을 만들려면 수저통 유무·수량과 출고일을 입력한 뒤 저장하세요.');return}document.getElementById('factoryOrderText').value=orderText(q);document.getElementById('factoryOrderStatus').textContent='복사 후 카카오톡에서 직접 보내주세요.';document.getElementById('factoryOrderDialog').showModal()};
 const originalRender=renderQuotes;
