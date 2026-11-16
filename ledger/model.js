@@ -27,6 +27,22 @@ function orderView(s,o){if(paymentUnknown(o))return {...o,paid:null,balance:null
 function unconfirmed(s,m){return s.orders.filter(o=>o.date.slice(0,7)<=m&&paymentUnknown(o)).map(o=>orderView(s,o));}
 function totals(s,m){const orders=s.orders.filter(o=>o.date.startsWith(m)).map(o=>orderView(s,o)),cash=s.cash.filter(c=>c.date.startsWith(m));return {orders,cash,revenue:sum(orders,'amount'),received:sum(cash.filter(c=>c.type==='입금'),'amount'),spent:sum(cash.filter(c=>c.type==='출금'),'amount')};}
 function outstanding(s,m){return s.orders.filter(o=>o.date.slice(0,7)<=m).map(o=>orderView(s,o)).filter(o=>o.balance>0);}
+function saveCollection(s,id,input){
+ const o=s.orders.find(o=>o.id===id);if(!o)throw Error('매출 기록을 찾을 수 없습니다.');
+ const dueDate=String(input.dueDate||''),note=String(input.note||'').trim();
+ if(dueDate&&!dateOK(dueDate))throw Error('입금 예정일을 확인해주세요.');
+ if(note.length>3000)throw Error('관리 메모는 3,000자 이내로 입력해주세요.');
+ // Follow-up notes describe the current collection, not the closed month's accounts.
+ o.collection={dueDate,note};return o;
+}
+function collectionRows(s,m,{filter='pending',query='',sort='balance',asOf=today()}={}){
+ const q=query.trim().toLowerCase();
+ const rows=s.orders.filter(o=>o.date.slice(0,7)<=m).map(o=>orderView(s,o)).filter(o=>{
+  const pending=paymentUnknown(o)||o.balance>0,overdue=pending&&o.collection?.dueDate&&o.collection.dueDate<asOf;
+  return ({pending,unpaid:o.balance>0,unknown:paymentUnknown(o),overdue:!!overdue,paid:!pending,all:true}[filter]??false)&&[o.name,o.number,o.note,o.collection?.note].join(' ').toLowerCase().includes(q);
+ });
+ return rows.sort((a,b)=>sort==='name'?a.name.localeCompare(b.name,'ko'):sort==='date'?(a.collection?.dueDate||'9999').localeCompare(b.collection?.dueDate||'9999')||a.date.localeCompare(b.date):Number(paymentUnknown(b))-Number(paymentUnknown(a))||b.balance-a.balance||a.date.localeCompare(b.date));
+}
 function migrate(base,current=today().slice(0,7)){
  if(![1,3].includes(base.schema)||!Array.isArray(base.orders)||!Array.isArray(base.cash))throw Error('기존 장부 형식을 확인해주세요.');
  const s={schema:2,sourceUpdated:String(base.updated||''),updated:new Date().toISOString(),defaultTarget:10000000,orders:base.orders.map((o,i)=>importOrder(o,'import-order-'+i)),cash:base.cash.map((c,i)=>({...c,id:'import-cash-'+i,orderId:'',imported:true})),months:{}};
@@ -37,6 +53,7 @@ function validate(s){
  if(!s||s.schema!==2||!Array.isArray(s.orders)||!Array.isArray(s.cash)||!s.months||typeof s.months!=='object'||Array.isArray(s.months))throw Error('지원하지 않는 장부 파일입니다.');
  money(s.defaultTarget);if(s.orders.length>50000||s.cash.length>100000)throw Error('장부 파일이 너무 큽니다.');
  const ids=new Set(),orders=new Map();
+ for(const o of s.orders)if(o?.collection!==undefined){const c=o.collection;if(!c||typeof c!=='object'||Array.isArray(c)||typeof c.note!=='string'||c.note.length>3000||typeof c.dueDate!=='string'||(c.dueDate&&!dateOK(c.dueDate)))throw Error('미수금 관리 메모 형식을 확인해주세요.');}
  for(const o of s.orders){if(!o||typeof o.id!=='string'||!o.id||ids.has(o.id)||!dateOK(o.date)||typeof o.name!=='string'||!o.name.trim())throw Error('매출 기록 형식을 확인해주세요.');ids.add(o.id);orders.set(o.id,o);money(o.amount);if(o.paymentStatus!==undefined&&!['known','unknown'].includes(o.paymentStatus))throw Error('입금 확인 상태를 확인해주세요.');if(paymentUnknown(o)){if(o.basePaid!==null||o.baseBalance!==null||o.adjustment!==null)throw Error('입금 미확인 금액은 비워두어야 합니다.');}else{['basePaid','baseBalance'].forEach(k=>money(o[k]));if(!Number.isSafeInteger(o.adjustment)||o.amount-o.basePaid-o.baseBalance!==o.adjustment)throw Error('매출·입금·미수금이 일치하지 않습니다.');}}
  for(const c of s.cash){if(!c||typeof c.id!=='string'||!c.id||ids.has(c.id)||!dateOK(c.date)||!['입금','출금'].includes(c.type)||typeof c.name!=='string')throw Error('입출금 기록 형식을 확인해주세요.');ids.add(c.id);money(c.amount);if(c.orderId&&(!orders.has(c.orderId)||c.type!=='입금'))throw Error('연결된 매출을 찾을 수 없습니다.');}
  for(const o of s.orders){const links=s.cash.filter(c=>c.orderId===o.id);if(paymentUnknown(o)&&links.length)throw Error('원본 입금액을 확인한 뒤 매출에 입금을 연결해주세요.');if(sum(links,'amount')>o.baseBalance)throw Error('입금액이 남은 미수금보다 큽니다.');}
@@ -62,7 +79,8 @@ function saveCash(s,input){
 function remove(s,kind,id){const rows=kind==='order'?s.orders:s.cash,r=rows.find(x=>x.id===id);if(!r)throw Error('기록을 찾을 수 없습니다.');assertOpen(s,r.date);if(kind==='order'&&s.cash.some(c=>c.orderId===id))throw Error('연결된 입금 기록을 먼저 확인·삭제해주세요.');rows.splice(rows.indexOf(r),1);}
 function closeMonth(s,m){const v=ensureMonth(s,m);if(v.status==='closed')throw Error('이미 마감된 달입니다.');v.snapshot=clone(totals(s,m));v.closedAt=new Date().toISOString();v.status='closed';ensureMonth(s,nextMonth(m));}
 function reopen(s,m){const v=ensureMonth(s,m);if(v.status!=='closed')throw Error('마감된 달이 아닙니다.');v.history.push({closedAt:v.closedAt,snapshot:v.snapshot});delete v.snapshot;delete v.closedAt;v.status='open';}
-return {paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,monthTarget,applyTargetPolicy,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
+return {saveCollection,collectionRows,paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,monthTarget,applyTargetPolicy,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
 });
+
 
 

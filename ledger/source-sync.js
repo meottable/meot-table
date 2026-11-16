@@ -28,7 +28,7 @@ function merge(state,feed){
   const before=previous.get(o.number),after=incoming.get(o.number);
   if(!before)error('기기에서 원본 견적번호가 바뀌어 자동으로 합칠 수 없습니다.');
   const b=sourceOrder(before,o.id),links=next.cash.filter(c=>c.orderId===o.id);
-  if(!after){if(comparable(o)!==comparable(b)||links.length)error('원본에서 삭제된 '+o.number+'에 기기 수정·입금이 남아 있습니다.');continue;}
+  if(!after){if(comparable(o)!==comparable(b)||links.length||o.collection?.note||o.collection?.dueDate)error('원본에서 삭제된 '+o.number+'에 기기 수정·입금·관리 메모가 남아 있습니다.');continue;}
   const a=sourceOrder(after,o.id);
   if(links.length&&(a.basePaid!==b.basePaid||a.baseBalance!==b.baseBalance||a.amount!==b.amount))error(o.number+'의 원본 정산과 기기 입금이 함께 바뀌었습니다.');
   const combined={...o};
@@ -45,5 +45,6 @@ function merge(state,feed){
 }
 return {merge,baseline};
 });
+
 
 

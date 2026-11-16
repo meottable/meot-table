@@ -13,7 +13,7 @@ async function run(engine,name,viewport){const browser=await engine.launch({head
  await p.click('#addOrder');await p.fill('#orderName','검증용 10월 매장');await p.fill('#orderNumber','QA-OCT');await p.fill('#orderAmount','2000000');await p.fill('#orderSize','테이블 10개');await p.fill('#initialAmount','500000');await p.click('#orderForm button[type=submit]');await hidden(p,'#orderDialog');assert.equal(await p.locator('#revenue').innerText(),'2,000,000원');assert.equal(await p.locator('#received').innerText(),'500,000원');
  await p.reload();await visible(p,'#app');assert.equal(await p.locator('#revenue').innerText(),'2,000,000원');assert.equal(await p.locator('#balance').innerText(),'2,000,000원');
  await p.selectOption('#month','2026-09');await p.click('#closeMonth');await p.click('#confirmYes');await hidden(p,'#confirmDialog');assert.equal(await p.locator('#month').inputValue(),'2026-10');
- await p.click('#showUnpaid');await p.locator('details').filter({hasText:'검증용 기존 매장'}).locator('summary').click();await p.locator('details').filter({hasText:'검증용 기존 매장'}).getByRole('button',{name:'입금 기록'}).click();await p.fill('#cashAmount','500000');await p.click('#cashForm button[type=submit]');await hidden(p,'#cashDialog');assert.equal(await p.locator('#received').innerText(),'1,000,000원');assert.equal(await p.locator('#balance').innerText(),'1,500,000원');
+ await p.click('#showUnpaid');await p.locator('.receivable').filter({hasText:'검증용 기존 매장'}).getByRole('button',{name:'입금 기록'}).click();await p.fill('#cashAmount','500000');await p.click('#cashForm button[type=submit]');await hidden(p,'#cashDialog');assert.equal(await p.locator('#received').innerText(),'1,000,000원');assert.equal(await p.locator('#balance').innerText(),'1,500,000원');
  await p.selectOption('#month','2026-09');assert.equal(await p.locator('#received').innerText(),'500,000원');assert.equal(await p.locator('#addOrder').isDisabled(),true);assert.equal(await p.locator('#balance').innerText(),'0원');
  await p.selectOption('#month','2026-10');await p.click('[data-tab="orders"]');await p.evaluate(()=>scrollTo(0,0));await p.screenshot({path:path.join(out,name+'-october.png'),fullPage:true});
  const downloadPromise=p.waitForEvent('download');await p.click('#exportBackup');const download=await downloadPromise;const backup=path.join(out,name+'-backup.json');await download.saveAs(backup);const raw=fs.readFileSync(backup,'utf8');assert(!raw.includes('검증용'));const envelope=JSON.parse(raw);assert.equal(envelope.format,'meot-ledger-backup');
@@ -37,4 +37,5 @@ async function runSourceSync(){
 }
 
 server.listen(0,'127.0.0.1',async()=>{try{if(!process.env.SOURCE_SYNC_ONLY){await run(chromium,'chrome-mobile',{width:390,height:844});await run(chromium,'chrome-small-mobile',{width:360,height:780});await run(chromium,'chrome-desktop',{width:1440,height:1000});}await runSourceSync();}catch(e){console.error(e);process.exitCode=1;}finally{server.close();}});
+
 
