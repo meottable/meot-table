@@ -31,12 +31,15 @@ function collectionCard(o){
 }
 function renderList(){
  const r=report(),q=$('search').value.trim().toLowerCase(),unpaid=tab==='unpaid';
+ $('orderTools').hidden=tab==='unpaid'||tab==='cash';
+ $('orderFilterNote').textContent=(tab==='paid'?'완납된 거래를 따로 모았습니다. 기록은 삭제하지 않으며 매출 합계에도 그대로 포함됩니다.':'완납된 거래는 ‘정산 완료’ 탭으로 옮겨 표시합니다. 여기에는 미수금·입금 미확인 건만 남습니다.')+(monthMeta().status==='closed'?' 이 달은 마감 당시 입금 상태 기준입니다.':'');
  $('unpaidTools').hidden=!unpaid;
  if(unpaid){const due=M.outstanding(data,selected),unknown=M.unconfirmed(data,selected),late=M.collectionRows(data,selected,{filter:'overdue'});$('collectionSummary').innerHTML='<div><span>확인된 미수금</span><strong>'+won(M.sum(due,'balance'))+'</strong></div><div><span>입금 미확인</span><strong>'+unknown.length+'건</strong></div><div><span>예정일 지남</span><strong>'+late.length+'건</strong></div>';}
- const rows=unpaid?M.collectionRows(data,selected,{filter:$('collectionFilter').value,sort:$('collectionSort').value,query:q}):(tab==='cash'?r.cash:r.orders).filter(x=>[x.name,x.number,x.size,x.note,x.category].join(' ').toLowerCase().includes(q)).slice().sort((a,b)=>b.date.localeCompare(a.date));
- $('listTitle').textContent={orders:'매출 내역',unpaid:'미수금 정리',cash:'입출금 내역'}[tab];
- $('listCount').textContent=rows.length+'건'+(unpaid?' · '+label(selected)+'까지 계약한 고객 · 선택한 보기·검색 기준':'');
- $('records').innerHTML=rows.length?rows.map(x=>unpaid?collectionCard(x):tab==='cash'?cashCard(x):orderCard(x)).join(''):'<div class="panel empty">'+(q?'검색 결과가 없습니다.':unpaid?'선택한 보기에 해당하는 내역이 없습니다.':'아직 기록이 없습니다. 위 입력 버튼으로 추가하세요.')+'</div>';
+ const rows=unpaid?M.collectionRows(data,selected,{filter:$('collectionFilter').value,sort:$('collectionSort').value,query:q}):tab!=='cash'?M.orderListRows(r.orders,{filter:tab==='paid'?'paid':'pending',query:q}):r.cash.filter(x=>[x.name,x.note,x.category].join(' ').toLowerCase().includes(q)).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ $('listTitle').textContent={orders:'매출 내역',paid:'정산 완료',unpaid:'미수금 정리',cash:'입출금 내역'}[tab];
+ $('listCount').textContent=rows.length+'건'+(unpaid?' · '+label(selected)+'까지 계약한 고객 · 선택한 보기·검색 기준':tab!=='cash'?' 표시 · 이달 전체 '+r.orders.length+'건':'');
+ const empty=q?'검색 결과가 없습니다.':tab==='paid'?'이 달에 정산 완료된 거래가 없습니다.':tab==='orders'&&r.orders.length?'남은 미수금·미확인 거래가 없습니다. 완납 내역은 ‘정산 완료’ 탭에서 볼 수 있습니다.':unpaid?'선택한 보기에 해당하는 내역이 없습니다.':'아직 기록이 없습니다. 위 입력 버튼으로 추가하세요.';
+ $('records').innerHTML=rows.length?rows.map(x=>unpaid?collectionCard(x):tab==='cash'?cashCard(x):orderCard(x)).join(''):'<div class="panel empty">'+empty+'</div>';
  document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===tab)));
 }
 function paymentPreview(){
@@ -157,6 +160,7 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js',{scope:
 window.MeotLedgerCanReload=()=>!busy&&!syncBusy&&!dirty&&!document.querySelector('dialog[open]')&&!$('accessCode').value.trim();
 unlock();
 })();
+
 
 
 

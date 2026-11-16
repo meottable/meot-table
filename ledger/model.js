@@ -57,6 +57,14 @@ function clearPaymentConfirmation(s,id){
 function unconfirmed(s,m){return s.orders.filter(o=>o.date.slice(0,7)<=m&&paymentUnknown(o)).map(o=>orderView(s,o));}
 function totals(s,m){const orders=s.orders.filter(o=>o.date.startsWith(m)).map(o=>orderView(s,o)),cash=s.cash.filter(c=>c.date.startsWith(m));return {orders,cash,revenue:sum(orders,'amount'),received:sum(cash.filter(c=>c.type==='입금'),'amount'),spent:sum(cash.filter(c=>c.type==='출금'),'amount')};}
 function outstanding(s,m){return s.orders.filter(o=>o.date.slice(0,7)<=m).map(o=>orderView(s,o)).filter(o=>o.balance>0);}
+function orderListRows(rows,{filter='pending',query=''}={}){
+ const q=query.trim().toLowerCase();
+ // Display filtering only: never remove orders or change financial totals.
+ return rows.filter(o=>{
+  const settled=!paymentUnknown(o)&&o.balance===0;
+  return ({pending:!settled,paid:settled,all:true}[filter]??false)&&[o.name,o.number,o.size,o.note].join(' ').toLowerCase().includes(q);
+ }).slice().sort((a,b)=>b.date.localeCompare(a.date));
+}
 function saveCollection(s,id,input){
  const o=s.orders.find(o=>o.id===id);if(!o)throw Error('매출 기록을 찾을 수 없습니다.');
  const dueDate=String(input.dueDate||''),note=String(input.note||'').trim();
@@ -111,8 +119,9 @@ function saveCash(s,input){
 function remove(s,kind,id){const rows=kind==='order'?s.orders:s.cash,r=rows.find(x=>x.id===id);if(!r)throw Error('기록을 찾을 수 없습니다.');assertOpen(s,r.date);if(kind==='order'&&s.cash.some(c=>c.orderId===id))throw Error('연결된 입금 기록을 먼저 확인·삭제해주세요.');rows.splice(rows.indexOf(r),1);}
 function closeMonth(s,m){const v=ensureMonth(s,m);if(v.status==='closed')throw Error('이미 마감된 달입니다.');v.snapshot=clone(totals(s,m));v.closedAt=new Date().toISOString();v.status='closed';ensureMonth(s,nextMonth(m));}
 function reopen(s,m){const v=ensureMonth(s,m);if(v.status!=='closed')throw Error('마감된 달이 아닙니다.');v.history.push({closedAt:v.closedAt,snapshot:v.snapshot});delete v.snapshot;delete v.closedAt;v.status='open';}
-return {confirmPayment,clearPaymentConfirmation,percentageAmount,receiptPreset,saveCollection,collectionRows,paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,monthTarget,applyTargetPolicy,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
+return {orderListRows,confirmPayment,clearPaymentConfirmation,percentageAmount,receiptPreset,saveCollection,collectionRows,paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,monthTarget,applyTargetPolicy,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
 });
+
 
 
 

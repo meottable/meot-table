@@ -1,10 +1,11 @@
-const CACHE='meot-ledger-shell-v11-20261116-3';
-const ASSETS=['./','ledger.css?v=20261116-3','model.js?v=20261116-3','storage.js?v=20261116-3','source-sync.js?v=20261116-3','ledger.js?v=20261116-3','app-update.js?v=20261116-3','manifest.webmanifest','icon-192.png','icon-512.png','icon.svg'];
+const CACHE='meot-ledger-shell-v12-20261116-4';
+const ASSETS=['./','ledger.css?v=20261116-4','model.js?v=20261116-4','storage.js?v=20261116-4','source-sync.js?v=20261116-4','ledger.js?v=20261116-4','app-update.js?v=20261116-4','manifest.webmanifest','icon-192.png','icon-512.png','icon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(url=>new Request(url,{cache:'reload'})))).then(()=>self.skipWaiting())));
 // Keep encrypted source snapshots across shell updates for first-run offline recovery.
 self.addEventListener('activate',e=>e.waitUntil((async()=>{const current=await caches.open(CACHE);for(const name of await caches.keys()){if(!name.startsWith('meot-ledger-shell-')||name===CACHE)continue;const old=await caches.open(name);for(const req of await old.keys())if(new URL(req.url).pathname.endsWith('/snapshot.enc.json')){const response=await old.match(req);if(response)await current.put(req,response);}await caches.delete(name);}await self.clients.claim();})()));
 self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(u.pathname.endsWith('/snapshot.enc.json')||u.pathname.endsWith('/app-version.json'))return;if(e.request.method!=='GET'||u.origin!==location.origin||!u.pathname.startsWith(new URL('./',location.href).pathname))return;
  e.respondWith((async()=>{try{const response=await fetch(new Request(e.request,{cache:'no-store'}));if(response.ok){const c=await caches.open(CACHE);await c.put(e.request,response.clone());}return response;}catch(_){return await caches.match(e.request)||new Response('인터넷 연결을 확인해주세요.',{status:503});}})());});
+
 
 
 

@@ -16,3 +16,5 @@ button:disabled{opacity:.45;cursor:not-allowed}textarea{font:inherit}button,inpu
 
 .orderQuickPayment{padding:0 19px 18px}.orderQuickPayment .recordActions{margin-top:0}.orderQuickPayment button{flex:1}.localPaymentNote{font-size:12px;color:#965b17;margin:8px 0}.paymentAck{display:flex;align-items:center;gap:10px;font-size:14px;margin:18px 0}.paymentAck input{width:20px;height:20px;flex-shrink:0;accent-color:var(--gold)}#paymentPreview{padding:12px;background:var(--bg);border-radius:10px;font-weight:700;font-size:14px}#paymentCustomer{font-weight:700;overflow-wrap:anywhere}
 
+
+.tabs{grid-template-columns:repeat(4,minmax(0,1fr))}.tabs button{font-size:13px}.orderTools{margin:0 0 18px;padding:14px 18px}.orderTools p{margin:0;line-height:1.7}
