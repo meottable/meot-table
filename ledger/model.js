@@ -24,6 +24,21 @@ function importOrder(o,id){
  delete n.paid;delete n.balance;return n;
 }
 function orderView(s,o){if(paymentUnknown(o))return {...o,paid:null,balance:null};const extra=sum(s.cash.filter(c=>c.orderId===o.id),'amount');return {...o,paid:o.basePaid+extra,balance:Math.max(0,o.baseBalance-extra)};}
+function percentageAmount(total,percent){
+ money(total,'계약금액');if(!total)throw Error('계약금액을 먼저 입력해주세요.');
+ if(![50,100].includes(percent))throw Error('50% 또는 100%를 선택해주세요.');
+ return Math.round(total*percent/100);
+}
+function receiptPreset(s,orderId,percent,editingId=''){
+ const o=s.orders.find(x=>x.id===orderId),old=s.cash.find(x=>x.id===editingId);
+ if(!o)throw Error('연결할 매출을 선택해주세요.');
+ if(paymentUnknown(o))throw Error('원본 입금액을 확인한 뒤 매출에 입금을 연결해주세요.');
+ if(old?.imported)throw Error('원본 입출금에는 비율 입력을 사용할 수 없습니다.');
+ const target=percentageAmount(o.amount,percent),others=sum(s.cash.filter(x=>x.orderId===o.id&&x.id!==editingId),'amount');
+ const paid=o.basePaid+others,balance=o.baseBalance-others;
+ money(balance,'남은 미수금');
+ return {amount:percent===100?balance:Math.max(0,Math.min(balance,target-paid)),paid,balance,adjustment:o.adjustment};
+}
 function unconfirmed(s,m){return s.orders.filter(o=>o.date.slice(0,7)<=m&&paymentUnknown(o)).map(o=>orderView(s,o));}
 function totals(s,m){const orders=s.orders.filter(o=>o.date.startsWith(m)).map(o=>orderView(s,o)),cash=s.cash.filter(c=>c.date.startsWith(m));return {orders,cash,revenue:sum(orders,'amount'),received:sum(cash.filter(c=>c.type==='입금'),'amount'),spent:sum(cash.filter(c=>c.type==='출금'),'amount')};}
 function outstanding(s,m){return s.orders.filter(o=>o.date.slice(0,7)<=m).map(o=>orderView(s,o)).filter(o=>o.balance>0);}
@@ -79,8 +94,9 @@ function saveCash(s,input){
 function remove(s,kind,id){const rows=kind==='order'?s.orders:s.cash,r=rows.find(x=>x.id===id);if(!r)throw Error('기록을 찾을 수 없습니다.');assertOpen(s,r.date);if(kind==='order'&&s.cash.some(c=>c.orderId===id))throw Error('연결된 입금 기록을 먼저 확인·삭제해주세요.');rows.splice(rows.indexOf(r),1);}
 function closeMonth(s,m){const v=ensureMonth(s,m);if(v.status==='closed')throw Error('이미 마감된 달입니다.');v.snapshot=clone(totals(s,m));v.closedAt=new Date().toISOString();v.status='closed';ensureMonth(s,nextMonth(m));}
 function reopen(s,m){const v=ensureMonth(s,m);if(v.status!=='closed')throw Error('마감된 달이 아닙니다.');v.history.push({closedAt:v.closedAt,snapshot:v.snapshot});delete v.snapshot;delete v.closedAt;v.status='open';}
-return {saveCollection,collectionRows,paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,monthTarget,applyTargetPolicy,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
+return {percentageAmount,receiptPreset,saveCollection,collectionRows,paymentUnknown,importOrder,unconfirmed,clone,sum,money,today,dateOK,monthOK,nextMonth,monthTarget,applyTargetPolicy,ensureMonth,assertOpen,orderView,totals,outstanding,migrate,validate,saveOrder,saveCash,remove,closeMonth,reopen};
 });
+
 
 
 
