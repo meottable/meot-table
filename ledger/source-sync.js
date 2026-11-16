@@ -30,9 +30,11 @@ function merge(state,feed){
   const b=sourceOrder(before,o.id),links=next.cash.filter(c=>c.orderId===o.id);
   if(!after){if(comparable(o)!==comparable(b)||links.length||o.collection?.note||o.collection?.dueDate)error('원본에서 삭제된 '+o.number+'에 기기 수정·입금·관리 메모가 남아 있습니다.');continue;}
   const a=sourceOrder(after,o.id);
+  if(o.paymentConfirmation&&a.amount!==b.amount)error(o.number+'의 계약금액이 원본에서 변경되어 직접 확인한 입금액을 다시 대조해야 합니다.');
   if(links.length&&(a.basePaid!==b.basePaid||a.baseBalance!==b.baseBalance||a.amount!==b.amount))error(o.number+'의 원본 정산과 기기 입금이 함께 바뀌었습니다.');
   const combined={...o};
   for(const k of fields){const bv=value(b,k),av=value(a,k),lv=value(o,k);if(av!==bv&&lv!==bv&&lv!==av)error(o.number+'의 '+({amount:'매출액',note:'메모',basePaid:'입금액',baseBalance:'미수금'}[k]||k)+'이 원본과 기기에서 다르게 바뀌었습니다.');if(av!==bv)combined[k]=a[k]===undefined?(numeric.has(k)?0:''):a[k];}
+  if(combined.paymentConfirmation&&!M.paymentUnknown(a))delete combined.paymentConfirmation;
   combined.imported=true;orderResult.push(combined);incoming.delete(o.number);
  }
  for(const [number,o] of incoming)orderResult.push(sourceOrder(o,'source-order-'+encodeURIComponent(number)));
@@ -45,6 +47,7 @@ function merge(state,feed){
 }
 return {merge,baseline};
 });
+
 
 
 
