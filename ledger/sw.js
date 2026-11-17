@@ -1,5 +1,5 @@
-const CACHE='meot-ledger-shell-v12-20261116-4';
-const ASSETS=['./','ledger.css?v=20261116-4','model.js?v=20261116-4','storage.js?v=20261116-4','source-sync.js?v=20261116-4','ledger.js?v=20261116-4','app-update.js?v=20261116-4','manifest.webmanifest','icon-192.png','icon-512.png','icon.svg'];
+const CACHE='meot-ledger-shell-v13-20261117-1';
+const ASSETS=['./','install.js?v=20261117-1','ledger.css?v=20261117-1','model.js?v=20261117-1','storage.js?v=20261117-1','source-sync.js?v=20261117-1','ledger.js?v=20261117-1','app-update.js?v=20261117-1','manifest.webmanifest','icon-192.png','icon-512.png','icon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(url=>new Request(url,{cache:'reload'})))).then(()=>self.skipWaiting())));
 // Keep encrypted source snapshots across shell updates for first-run offline recovery.
 self.addEventListener('activate',e=>e.waitUntil((async()=>{const current=await caches.open(CACHE);for(const name of await caches.keys()){if(!name.startsWith('meot-ledger-shell-')||name===CACHE)continue;const old=await caches.open(name);for(const req of await old.keys())if(new URL(req.url).pathname.endsWith('/snapshot.enc.json')){const response=await old.match(req);if(response)await current.put(req,response);}await caches.delete(name);}await self.clients.claim();})()));

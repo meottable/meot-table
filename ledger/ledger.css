@@ -18,3 +18,20 @@ button:disabled{opacity:.45;cursor:not-allowed}textarea{font:inherit}button,inpu
 
 
 .tabs{grid-template-columns:repeat(4,minmax(0,1fr))}.tabs button{font-size:13px}.orderTools{margin:0 0 18px;padding:14px 18px}.orderTools p{margin:0;line-height:1.7}
+
+/* Desktop and mobile app installation */
+.installDialog{max-width:580px;max-height:calc(100dvh - 32px);overflow-y:auto}
+.installDialog .dialogHead{align-items:center;gap:12px}
+.installDialog .dialogHead h2{font-size:23px;line-height:1.35}
+.installLead{color:var(--muted,#7c7268);line-height:1.6}
+.installSteps{list-style:none;counter-reset:install;padding:0;margin:24px 0;display:grid;gap:20px}
+.installSteps li{counter-increment:install;position:relative;padding-left:44px}
+.installSteps li::before{content:counter(install);position:absolute;left:0;top:0;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#2b2019;color:#f2d18a;font-weight:700}
+.installSteps strong{display:block;font-size:16px;margin-bottom:5px}
+.installSteps span{display:block;font-size:14px;line-height:1.65;color:#756b60}
+.installFallback{padding:12px 14px;border:1px solid #e4daca;border-radius:12px;background:#f7f2e8;line-height:1.7}
+.installStatus{color:#35644f;font-size:14px;line-height:1.6}
+.installNote{margin-top:22px;padding-top:18px;border-top:1px solid #e4daca}
+.installNote>strong{font-size:14px}
+.installNote p{font-size:13px;color:#756b60;line-height:1.7;margin:8px 0}
+@media(max-width:420px){.installDialog .dialogHead h2{font-size:20px}.installSteps{gap:16px}}
