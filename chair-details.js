@@ -15,7 +15,7 @@
   const view=views[index],original=!view.left;
   photo.hidden=!original;angle.hidden=original;
   if(original){photo.src=selected.querySelector('img').src;photo.alt=selected.dataset.productId+' 제품 사진';}
-  else{angle.style.setProperty('--cd-left',view.left);angleImage.src=new URL('yg-001-views.webp',assetBase).href;angleImage.alt='yg-001 '+view.label;}
+  else{angle.style.setProperty('--cd-left',view.left);angleImage.src=new URL('yg-001-views.webp',assetBase).href;angleImage.alt='골드 패브릭 의자 '+view.label;}
   const shown=original?photo:angle;shown.classList.remove('cd-image-motion');void shown.offsetWidth;shown.classList.add('cd-image-motion');
   find('.cd-position').textContent=view.label+' · '+(index+1)+' / '+views.length;
   Array.from(tabs.children).forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
