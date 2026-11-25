@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 Disallow: /lead-monitor.html
+Disallow: /backend/
+Disallow: /review-service/
 
 Sitemap: https://meottable.com/sitemap.xml
