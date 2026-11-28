@@ -15,7 +15,7 @@ from datetime import date
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://meottable.com"
 KAKAO = "https://pf.kakao.com/_BZeSX/chat"
-PHONE = "010-6292-8562"
+PHONE = "0507-1311-8562"
 
 CAT_KO = {
     "RESTAURANT": "식당", "DINING": "다이닝", "K-BBQ": "고깃집", "GROUP DINING": "단체석",

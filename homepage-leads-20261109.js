@@ -113,11 +113,11 @@
     if(!$('mtCPrivacy').checked){st.textContent='개인정보 수집·이용에 동의해 주세요.';return}
     var when=$('mtCWhen').value, memo='[전화 요청] 통화 희망: '+when+' / 연락처: '+phone;
     if(csent!==memo){cid=uuid();csent=memo}
-    if(!window.meotLeadDb||!window.meotLeadDb.save){st.textContent='지금은 접수가 안 돼요. 010-6292-8562로 바로 전화 주세요.';return}
+    if(!window.meotLeadDb||!window.meotLeadDb.save){st.textContent='지금은 접수가 안 돼요. 0507-1311-8562로 바로 전화 주세요.';return}
     cbusy=true;$('mtCSubmit').disabled=true;st.style.color='#5c635e';st.textContent='접수하고 있어요…';
     window.meotLeadDb.save({requestId:cid,name:'전화 요청',phone:phone,consent:true,consentVersion:CONSENT,channel:'전화',source:'홈페이지 전화 요청',memo:memo,page:location.href})
       .then(function(){$('mtCallForm').hidden=true;$('mtCallDone').hidden=false;track('callback_saved')})
-      .catch(function(){st.style.color='';st.textContent='접수가 확인되지 않았어요. 010-6292-8562로 바로 전화 주세요.';track('callback_error')})
+      .catch(function(){st.style.color='';st.textContent='접수가 확인되지 않았어요. 0507-1311-8562로 바로 전화 주세요.';track('callback_error')})
       .finally(function(){cbusy=false;$('mtCSubmit').disabled=false});
   });
 })();

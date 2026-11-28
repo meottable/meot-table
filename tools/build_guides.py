@@ -18,7 +18,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://meottable.com"
 KAKAO = "https://pf.kakao.com/_BZeSX/chat"
-PHONE = "010-6292-8562"
+PHONE = "0507-1311-8562"
 PUBLISHED = "2026-11-25"
 UPDATED = "2026-11-25"
 OG = "/images/og/og-meottable-1200x630.jpg"
